@@ -1,9 +1,29 @@
-<!-- 
 ---
-TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md?plain=1):
-- copy-paste the tags obtained with the online tagging app: https://huggingface.co/spaces/huggingface/datasets-tagging
+annotations_creators:
+- crowdsourced
+language:
+- en
+language_creators:
+- found
+license:
+- apache-2.0
+multilinguality: []
+pretty_name: GraphicDesignEvaluation
+size_categories:
+- n<1K
+source_datasets:
+- original
+tags:
+- graphic design evaluation
+- design principles
+- large multimodal model
+- gpt-based evaluation
+- human annotation
+- human-rated dataset
+task_categories: []
+task_ids: []
 --- 
--->
+
 
 # Dataset Card for GraphicDesignEvaluation
 
@@ -232,12 +252,6 @@ If analyses have been run quantifying these biases, please add brief summaries a
 }
 ```
 
-If the dataset has a [DOI](https://www.doi.org/), please provide it here. -->
-
-```bibtex
-TODO: Add BibTeX citation here
-```
-
 ### Contributions
 
-TODO: Thanks to [@DaichiHaraguchi](https://github.com/DaichiHaraguchi) for adding this dataset.
+Thanks to [@DaichiHaraguchi](https://github.com/DaichiHaraguchi) for adding this dataset.
