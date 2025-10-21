@@ -9,6 +9,7 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "graphic-design-evaluation",
     "huggingface-datasets",
     "object-removal-alpha",
 ]
@@ -478,6 +479,11 @@ wheels = [
 http = [
     { name = "aiohttp" },
 ]
+
+[[package]]
+name = "graphic-design-evaluation"
+version = "0.1.0"
+source = { virtual = "datasets/GraphicDesignEvaluation" }
 
 [[package]]
 name = "hf-xet"
