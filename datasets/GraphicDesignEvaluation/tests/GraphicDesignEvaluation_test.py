@@ -64,6 +64,17 @@ def test_load_dataset(
     assert isinstance(dataset, ds.DatasetDict)
     assert dataset["train"].num_rows == expected_num_train
 
+    if eval_type == "absolute":
+        dataset = dataset.sort(
+            column_names=["image", "perturbation"],
+        )
+    elif eval_type == "relative":
+        dataset = dataset.sort(
+            column_names=["image", "comparative"],
+        )
+    else:
+        raise ValueError(f"Unknown eval_type: {eval_type}")
+
     dataset.push_to_hub(
         repo_id=repo_id,
         config_name=f"{eval_type}-{annotation_type}-{design_principle}",

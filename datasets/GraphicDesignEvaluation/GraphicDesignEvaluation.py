@@ -185,7 +185,9 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
             features = ds.Features(
                 {
                     "image": ds.Image(),
-                    "perturbation": ds.Value("string"),
+                    "perturbation": ds.ClassLabel(
+                        names=["none", "small", "medium", "large"],
+                    ),
                     "scores": ds.Sequence(ds.Value("int32")),
                     "avg": ds.Value("float32"),
                 }
@@ -194,7 +196,9 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
             features = ds.Features(
                 {
                     "image": ds.Image(),
-                    "comparative": ds.Value("string"),
+                    "comparative": ds.ClassLabel(
+                        names=["small", "medium", "large"],
+                    ),
                     "avg": ds.Value("string"),
                     "scores": ds.Sequence(ds.Value("string")),
                 }
@@ -222,6 +226,7 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
     ) -> pd.DataFrame:
         score_columns = list(score_columns)
         df = pd.read_csv(csv_path)
+        df = df.sort_values(by=["id", "perturbation"])
 
         def convert_to_scores(xs):
             if xs.isnull().any():
@@ -252,6 +257,7 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
         target_columns = list(target_columns)
 
         df = pd.read_csv(csv_path)
+        df = df.sort_values(by=["id", "comparative"])
 
         # Combine the target columns into a list and store it in a new column "scores"
         df["scores"] = df[target_columns].apply(list, axis=1)

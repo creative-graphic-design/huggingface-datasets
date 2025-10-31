@@ -66,9 +66,12 @@ task_ids: []
 
 ### Dataset Summary
 
-[More Information Needed]
+The GraphicDesignEvaluation dataset evaluates whether large multimodal models (LMMs), such as GPT-4o, can assess the quality of graphic designs according to core design principles—specifically alignment, overlap, and white space.
 
-<!-- Briefly summarize the dataset, its intended use and the supported tasks. Give an overview of how and why the dataset was created. The summary should explicitly mention the languages present in the dataset (possibly in broad terms, e.g. *translations between several pairs of European languages*), and describe the domain, topic, or genre covered. -->
+It contains 700 banner and poster designs (100 original and 600 perturbed), collected from VistaCreate, each rated by 60 human annotators.
+Each image has associated human scores (1–10 scale) and GPT-based scores for the three principles, enabling the study of correlations between human judgment, heuristic metrics, and LMM-based evaluation.
+
+The dataset was created to benchmark the ability of GPT-based evaluators to perform reliable aesthetic judgment in visual communication design.
 
 ### Supported Tasks and Leaderboards
 
@@ -80,11 +83,7 @@ task_ids: []
 
 ### Languages
 
-[More Information Needed]
-
-<!-- Provide a brief overview of the languages represented in the dataset. Describe relevant details about specifics of the language such as whether it is social media text, African American English,...
-
-When relevant, please provide [BCP-47 codes](https://tools.ietf.org/html/bcp47), which consist of a [primary language subtag](https://tools.ietf.org/html/bcp47#section-2.2.1), with a [script subtag](https://tools.ietf.org/html/bcp47#section-2.2.3) and/or [region subtag](https://tools.ietf.org/html/bcp47#section-2.2.4) if available. -->
+The dataset is in English (en), as both prompts and annotations are written in English. All participants and model instructions use English-language descriptions of design principles and rating guidelines.
 
 ## Dataset Structure
 
