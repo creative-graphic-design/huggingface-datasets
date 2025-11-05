@@ -32,11 +32,18 @@ def repo_id(org_name: str, dataset_name: str) -> str:
 
 @pytest.mark.parametrize(
     argnames="design_principle",
-    argvalues=("alignment", "overlap", "whitespace"),
+    argvalues=(
+        "alignment",
+        "overlap",
+        "whitespace",
+    ),
 )
 @pytest.mark.parametrize(
     argnames="annotation_type",
-    argvalues=("gpt", "human"),
+    argvalues=(
+        "gpt",
+        "human",
+    ),
 )
 @pytest.mark.parametrize(
     argnames=("eval_type", "expected_num_train"),
@@ -66,11 +73,11 @@ def test_load_dataset(
 
     if eval_type == "absolute":
         dataset = dataset.sort(
-            column_names=["image", "perturbation"],
+            column_names=["image_id", "perturbation"],
         )
     elif eval_type == "relative":
         dataset = dataset.sort(
-            column_names=["image", "comparative"],
+            column_names=["image_id", "comparative"],
         )
     else:
         raise ValueError(f"Unknown eval_type: {eval_type}")

@@ -16,6 +16,7 @@
 #
 # TODO: Address all TODOs and remove all explanatory comments
 import pathlib
+from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict, List, Literal, Sequence
 
@@ -184,6 +185,7 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
         if self.config.eval_type == "absolute":
             features = ds.Features(
                 {
+                    "image_id": ds.Value("string"),
                     "image": ds.Image(),
                     "perturbation": ds.ClassLabel(
                         names=["none", "small", "medium", "large"],
@@ -195,6 +197,7 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
         elif self.config.eval_type == "relative":
             features = ds.Features(
                 {
+                    "image_id": ds.Value("string"),
                     "image": ds.Image(),
                     "comparative": ds.ClassLabel(
                         names=["small", "medium", "large"],
@@ -215,14 +218,7 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
     def _preprocess_absolute_evaluation_df(
         self,
         csv_path: str,
-        design_principle: DesignPrinciple,
-        score_columns: Sequence[str] = (
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-        ),
+        score_columns: Sequence[str] = ("0", "1", "2", "3", "4"),
     ) -> pd.DataFrame:
         score_columns = list(score_columns)
         df = pd.read_csv(csv_path)
@@ -237,15 +233,18 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
         # Combine the target columns into a list and store it in a new column "scores"
         df["scores"] = df[score_columns].apply(convert_to_scores, axis=1)
 
-        # In addition to the target columns, also remove the first column "Unnamed: 0"
-        df = df.drop(columns=[df.columns[0]] + score_columns)
+        # If the first column is "Unnamed: 0", include it in the columns to be removed
+        if "Unnamed: 0" in df.columns:
+            score_columns = ["Unnamed: 0"] + score_columns
+
+        # Remove the target columns
+        df = df.drop(columns=score_columns)
 
         return df
 
     def _preprocess_relative_evaluation_df(
         self,
         csv_path: str,
-        design_principle: DesignPrinciple,
         target_columns: Sequence[str] = (
             "better_design_0",
             "better_design_1",
@@ -262,47 +261,89 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
         # Combine the target columns into a list and store it in a new column "scores"
         df["scores"] = df[target_columns].apply(list, axis=1)
 
-        # In addition to the target columns
+        # If the first column is "Unnamed: 0", include it in the columns to be removed
+        if "Unnamed: 0" in df.columns:
+            target_columns = ["Unnamed: 0"] + target_columns
+
+        # Remove the target columns
         df = df.drop(columns=target_columns)
 
         return df
 
     def load_evaluation_df(self, csv_path: str) -> pd.DataFrame:
         if self.config.eval_type == "absolute":
-            return self._preprocess_absolute_evaluation_df(
-                csv_path=csv_path,
-                design_principle=self.config.design_principle,
-            )
+            return self._preprocess_absolute_evaluation_df(csv_path=csv_path)
         elif self.config.eval_type == "relative":
-            return self._preprocess_relative_evaluation_df(
-                csv_path=csv_path,
-                design_principle=self.config.design_principle,
-            )
+            return self._preprocess_relative_evaluation_df(csv_path=csv_path)
         else:
             raise ValueError(f"Unknown eval_type: {self.config.eval_type}")
+
+    def load_image_paths(
+        self, images_dir: pathlib.Path
+    ) -> Dict[str, Dict[str, pathlib.Path]]:
+        def get_glob_pattern(design_principle: DesignPrinciple) -> str:
+            if design_principle == "alignment":
+                return "**/lefttop_*/*.png"
+            elif design_principle in ("overlap", "whitespace"):
+                return "**/size_*/*.png"
+            else:
+                raise ValueError(f"Unknown design_principle: {design_principle}")
+
+        # left-top perturbations for "alignment" and
+        # size-based perturbations for "overlap" and "whitespace"
+        glob_pat = get_glob_pattern(self.config.design_principle)
+
+        image_paths = sorted(
+            # original images
+            list(images_dir.glob("**/org/*.png"))
+            # perturbed images for the target design principle
+            + list(images_dir.glob(glob_pat)),
+            key=lambda p: (p.stem, p.parent.stem),
+        )
+
+        image_paths_dict: Dict[str, Dict[str, pathlib.Path]] = defaultdict(dict)
+
+        for image_path in image_paths:
+            dirname = image_path.parent.name
+            if dirname == "org":
+                perturbation_element, perturbation_size = "none", "none"
+            else:
+                perturbation_element, perturbation_size = dirname.split("_")
+
+                if self.config.design_principle == "alignment":
+                    assert perturbation_element == "lefttop"
+                elif self.config.design_principle in ("overlap", "whitespace"):
+                    assert perturbation_element == "size"
+                else:
+                    raise ValueError(
+                        f"Unknown design_principle: {self.config.design_principle}"
+                    )
+
+            image_paths_dict[image_path.stem][perturbation_size] = image_path
+
+        return image_paths_dict
 
     def _split_generators(
         self, dl_manager: ds.DownloadManager
     ) -> List[ds.SplitGenerator]:
-        # Load evaluation DataFrame
+        # Prepare CSV URL
         eval_type_csv_dict = _URLS[self.config.eval_type]
         ann_type_csv_dict = eval_type_csv_dict[self.config.annotation_type]
         csv_url = ann_type_csv_dict[self.config.design_principle]
 
+        # Load evaluation DataFrame from the URL
         csv_path = dl_manager.download(csv_url)
         assert isinstance(csv_path, str)
         df_eval = self.load_evaluation_df(csv_path=csv_path)
-        image_ids = set(df_eval["id"])
 
         # Load target images
         images_base_dir = dl_manager.download_and_extract(_URLS["images"])
         assert isinstance(images_base_dir, str)
+        image_paths_dict = self.load_image_paths(
+            images_dir=pathlib.Path(images_base_dir) / "images"
+        )
 
-        images_dir = pathlib.Path(images_base_dir) / "images"
-        image_paths = images_dir.glob("**/*.png")
-        image_paths = list(filter(lambda f: f.stem in image_ids, image_paths))
-        image_paths_dict = {p.stem: p for p in image_paths}
-
+        # Return the split generators
         return [
             ds.SplitGenerator(
                 name=ds.Split.TRAIN,
@@ -315,13 +356,28 @@ class GraphicDesignEvaluationDataset(ds.GeneratorBasedBuilder):
 
     # method parameters are unpacked from `gen_kwargs` as given in `_split_generators`
     def _generate_examples(
-        self, image_paths_dict: Dict[str, pathlib.Path], df_eval: pd.DataFrame
+        self,
+        image_paths_dict: Dict[str, Dict[str, pathlib.Path]],
+        df_eval: pd.DataFrame,
     ):
+        def get_perturbation_column_name() -> str:
+            if self.config.eval_type == "absolute":
+                return "perturbation"
+            elif self.config.eval_type == "relative":
+                return "comparative"
+            else:
+                raise ValueError(f"Unknown eval_type: {self.config.eval_type}")
+
         for i in range(len(df_eval)):
             row = df_eval.iloc[i].to_dict()
-            image_id = row.pop("id")
+            row["image_id"] = row.pop("id")  # rename "id" to "image_id"
+            image_id = row["image_id"]
 
-            image_path = image_paths_dict[image_id]
+            perturbation_column = get_perturbation_column_name()
+            perturbation = row[perturbation_column]
+
+            image_path = image_paths_dict[image_id][perturbation]
+
             image = Image.open(image_path)
             row["image"] = image
 
