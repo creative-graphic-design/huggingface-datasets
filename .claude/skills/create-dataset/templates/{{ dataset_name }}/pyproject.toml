@@ -1,0 +1,13 @@
+[project]
+# Module name is automatically generated from dataset_name (lowercase)
+name = "{{ dataset_name }}"
+version = "0.1.0"
+description = "{{ description }}"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    # Add "datasets[vision]>=2.0.0,<4.0.0" if dataset includes images
+    # Leave empty to inherit from workspace root
+]
+
