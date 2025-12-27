@@ -1,3 +1,1 @@
-```shell
-uv run pytest -vsx datasets/ObjectRemovalAlpha/tests
-```
+# Monorepo for Hugging Face Datasets related to Creative Graphic Design
