@@ -21,8 +21,10 @@ Ask user for:
 1. **dataset_name** (required): Dataset name in CamelCase (e.g., MyDataset, BannerRequest400)
 2. **description** (required): Brief description of the dataset
 3. **homepage** (required): Source project URL (e.g., https://github.com/org/project)
-4. **license** (required): License (e.g., MIT, Apache-2.0)
+4. **license** (required): License (e.g., MIT, Apache-2.0, Unknown)
 5. **dataset_version** (optional, default: 1.0.0): Version number
+
+**Important:** If any information is unclear or not immediately available (e.g., exact paper URL, specific license details), use placeholder values and add TODO comments in the generated files. Users can update these later when the information becomes available.
 
 ### Step 2: Generate Files from Templates
 
@@ -45,6 +47,48 @@ Read template files from `.claude/skills/create-dataset/templates/{{ dataset_nam
 - `{{ dataset_version }}` → user provided version (default: 1.0.0)
 
 Note: Template files contain comments explaining additional transformations (e.g., module name lowercase, dependencies based on image usage).
+
+### Step 2.1: Configure Dependencies
+
+After generating template files, update `datasets/{dataset_name}/pyproject.toml` dependencies based on dataset requirements:
+
+**Decision Tree:**
+
+- **Does your dataset include images (ds.Image() features)?**
+  - **YES** → Add `datasets[vision]>=2.0.0,<4.0.0`
+  - **NO** → Leave dependencies empty (inherits from workspace root)
+
+**For Image-Based Datasets:**
+
+Update pyproject.toml:
+
+```toml
+[project]
+name = "{dataset-name}"
+version = "0.1.0"
+description = "..."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+]
+```
+
+**Important Notes:**
+
+- Use `datasets[vision]`, **not** direct `pillow` dependency
+- The `datasets[vision]` extra includes Pillow and related vision dependencies
+- This is required for `ds.Image()` features to work properly
+
+**For Non-Image Datasets:**
+
+Keep dependencies empty:
+
+```toml
+dependencies = []
+```
+
+The workspace root provides base `datasets` package, so non-image datasets inherit all necessary dependencies.
 
 ### Step 3: Gather Dataset-Specific Requirements
 
@@ -172,6 +216,8 @@ def _info(self):
 - `ds.Image()`, `ds.Audio()`
 - `{...}` for nested, `[ds.Value(...)]` for lists
 
+**Important:** If using `ds.Image()` features, ensure you've added `datasets[vision]>=2.0.0,<4.0.0` to your `pyproject.toml` dependencies (see Step 2.1).
+
 #### 4.6 Implement \_split_generators
 
 **Simple:**
@@ -271,6 +317,15 @@ def test_load_dataset(dataset_path: str, config_name: str, expected_num_train: i
 
 ### Step 6: Update README.md
 
+**Dataset README:**
+Review `datasets/{dataset_name}/README.md` and update any placeholder information:
+
+- Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
+- If information is not available, leave TODO comments for future updates
+- Verify license information matches the source repository
+- Add complete citation information if available
+
+**Repository Root README:**
 Add to repository root `README.md`:
 
 ```markdown

@@ -25,6 +25,7 @@ logger = get_logger(__name__)
 
 # TODO: Add BibTeX citation
 # Find for instance the citation on arxiv or on the dataset repo/website
+# If not available yet, keep this TODO and update later
 _CITATION = """\
 TODO: Add BibTeX citation here
 """
@@ -39,6 +40,8 @@ _DESCRIPTION = """\
 _HOMEPAGE = "{{ homepage }}"
 
 # TODO: Add the license for the dataset here if you can find it
+# Check the source repository for LICENSE file
+# Common values: "MIT", "Apache-2.0", "CC-BY-4.0", "Unknown"
 _LICENSE = "{{ license }}"
 
 # TODO: Add link to the official dataset URLs here

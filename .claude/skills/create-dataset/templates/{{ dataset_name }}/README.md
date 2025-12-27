@@ -1,8 +1,11 @@
-<!-- 
----
+## <!--
+
 TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md?plain=1):
+
 - copy-paste the tags obtained with the online tagging app: https://huggingface.co/spaces/huggingface/datasets-tagging
---- 
+
+---
+
 -->
 
 # Dataset Card for {{ dataset_name }}
@@ -11,6 +14,7 @@ TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/ma
 [![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Table of Contents
+
 - [Dataset Card Creation Guide](#dataset-card-creation-guide)
   - [Table of Contents](#table-of-contents)
   - [Dataset Description](#dataset-description)
@@ -44,14 +48,10 @@ TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/ma
 
 - **Homepage:** {{ homepage }}
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/{{ dataset_name }}
-{%- if not arxiv_url.startswith("Please") %}
-- **Paper (Preprint):** {{ arxiv_url }}
-{%- endif %}
-{%- if not publication_url.startswith("Please") and not publication_venue.startswith("Please") %}
-- **Paper ({{ publication_venue }}):** {{ publication_url }}
-{%- endif %}
-- **Leaderboard:** [TODO: If the dataset supports an active leaderboard, add link here]()
-- **Point of Contact:** [TODO: If known, name and email of at least one person the reader can contact for questions about the dataset.]()
+- **Paper (Preprint):** {{ arxiv_url }} <!-- TODO: Add arXiv URL if available -->
+- **Paper ({{ publication_venue }}):** {{ publication_url }} <!-- TODO: Add conference/journal URL when published -->
+- **Leaderboard:** [More Information Needed] <!-- TODO: If the dataset supports an active leaderboard, add link here -->
+- **Point of Contact:** [More Information Needed] <!-- TODO: Add contact information if known -->
 
 ### Dataset Summary
 
@@ -183,7 +183,7 @@ Describe the conditions under which the data was annotated (for example, if the 
 
 <!-- State whether the dataset uses identity categories and, if so, how the information is used. Describe where this information comes from (i.e. self-reporting, collecting from profiles, inferring, etc.). See [Larson 2017](https://www.aclweb.org/anthology/W17-1601.pdf) for using identity categories as a variables, particularly gender. State whether the data is linked to individuals and whether those individuals can be identified in the dataset, either directly or indirectly (i.e., in combination with other data).
 
-State whether the dataset contains other data that might be considered sensitive (e.g., data that reveals racial or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history).  
+State whether the dataset contains other data that might be considered sensitive (e.g., data that reveals racial or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history).
 
 If efforts were made to anonymize the data, describe the anonymization process. -->
 

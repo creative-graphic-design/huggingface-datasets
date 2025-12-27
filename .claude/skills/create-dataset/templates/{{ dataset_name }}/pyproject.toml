@@ -7,7 +7,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 dependencies = [
-    # Add "datasets[vision]>=2.0.0,<4.0.0" if dataset includes images
-    # Leave empty to inherit from workspace root
+    # For image-based datasets, add:
+    # "datasets[vision]>=2.0.0,<4.0.0",
+    #
+    # For non-image datasets, leave empty (inherits from workspace root)
 ]
 
