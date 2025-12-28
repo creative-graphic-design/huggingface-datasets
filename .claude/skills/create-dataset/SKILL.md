@@ -472,9 +472,12 @@ def test_load_dataset(dataset_path: str, config_name: str, expected_num_train: i
     assert dataset["train"].num_rows == expected_num_train
 ```
 
-### Step 6: Update README.md
+### Step 6: Update README Files
 
-**Dataset README:**
+Update both the dataset README and the repository root README.
+
+#### 6.1 Update Dataset README
+
 Review `datasets/{dataset_name}/README.md` and update any placeholder information:
 
 - Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
@@ -482,26 +485,28 @@ Review `datasets/{dataset_name}/README.md` and update any placeholder informatio
 - Verify license information matches the source repository
 - Add complete citation information if available
 
-**Repository Root README:**
-Add to repository root `README.md`:
+#### 6.2 Update Repository Root README
+
+Add an entry for your new dataset to the repository root README.md:
+
+**Location:** `/README.md` (repository root)
+
+**Format:**
 
 ```markdown
-### {DatasetName}
+- **{DatasetName}**: [Brief 1-2 sentence description]. [[Data Source]]({homepage_url}) [[Conference/Journal]]({paper_url}) [[arXiv]]({arxiv_url})
+```
 
-[Brief description]
+**Guidelines:**
 
-**Data Source:** [{homepage}]({homepage})
+1. **Description**: Keep it brief (1-2 sentences) focusing on what the dataset is for and its key features
+2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
+3. **Format**: Bullet list format, one line per dataset
 
-**Test:**
-\`\`\`shell
-uv run pytest -vsx datasets/{DatasetName}/tests
-\`\`\`
+**Example:**
 
-**Load:**
-\`\`\`python
-import datasets as ds
-dataset = ds.load_dataset("creative-graphic-design/{DatasetName}", trust_remote_code=True)
-\`\`\`
+```markdown
+- **BannerRequest400**: Multimodal benchmark for advertising banner generation with 100 logos and 5,200 specifications. [[Data Source]](https://github.com/sony/BannerAgency/tree/main/BannerRequest400) [[EMNLP'25]](https://aclanthology.org/2025.emnlp-main.214/) [[arXiv]](https://arxiv.org/abs/2503.11060)
 ```
 
 ### Step 7: Test and Debug
