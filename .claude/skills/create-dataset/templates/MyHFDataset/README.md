@@ -8,7 +8,7 @@ TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/ma
 
 -->
 
-# Dataset Card for {{ dataset_name }}
+# Dataset Card for MyHFDataset
 
 [![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
 [![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
@@ -46,10 +46,10 @@ TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/ma
 
 ## Dataset Description
 
-- **Homepage:** {{ homepage }}
-- **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/{{ dataset_name }}
-- **Paper (Preprint):** {{ arxiv_url }} <!-- TODO: Add arXiv URL if available -->
-- **Paper ({{ publication_venue }}):** {{ publication_url }} <!-- TODO: Add conference/journal URL when published -->
+- **Homepage:** https://example.com/my-hf-dataset
+- **Repository:** https://github.com/your-org/huggingface-datasets/tree/main/datasets/MyHFDataset
+- **Paper (Preprint):** https://arxiv.org/abs/XXXX.XXXXX <!-- TODO: Add arXiv URL if available -->
+- **Paper (Conference/Journal Name):** https://example.com/paper <!-- TODO: Add conference/journal URL when published -->
 - **Leaderboard:** [More Information Needed] <!-- TODO: If the dataset supports an active leaderboard, add link here -->
 - **Point of Contact:** [More Information Needed] <!-- TODO: Add contact information if known -->
 

@@ -1,4 +1,3 @@
-
 # Copyright 2025 Shunsuke Kitada and the current dataset script contributor.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,16 +32,16 @@ TODO: Add BibTeX citation here
 # TODO: Add description of the dataset here
 # You can copy an official description
 _DESCRIPTION = """\
-{{ description }}
+A sample Hugging Face dataset demonstrating best practices for dataset creation, featuring multi-config support, type-safe enums, and comprehensive documentation.
 """
 
 # TODO: Add a link to an official homepage for the dataset here
-_HOMEPAGE = "{{ homepage }}"
+_HOMEPAGE = "https://example.com/my-hf-dataset"
 
 # TODO: Add the license for the dataset here if you can find it
 # Check the source repository for LICENSE file
 # Common values: "MIT", "Apache-2.0", "CC-BY-4.0", "Unknown"
-_LICENSE = "{{ license }}"
+_LICENSE = "MIT"
 
 # TODO: Add link to the official dataset URLs here
 # The HuggingFace Datasets library doesn't host the datasets but only points to the original files.
@@ -54,10 +53,10 @@ _URLS = {
 
 
 # TODO: Name of the dataset usually matches the script name with CamelCase instead of snake_case
-class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }}Dataset(ds.GeneratorBasedBuilder):
-    """A class for loading {{ dataset_name }} dataset."""
+class MyHFDataset(ds.GeneratorBasedBuilder):
+    """A class for loading MyHFDataset dataset."""
 
-    VERSION = ds.Version("{{ dataset_version }}")
+    VERSION = ds.Version("1.0.0")
 
     # This is an example of a dataset with multiple configurations.
     # If you don't want/need to define several sub-sets in your dataset,
@@ -153,8 +152,8 @@ class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }
 
         if not os.path.exists(dir_path):
             raise FileNotFoundError(
-                "Make sure you have downloaded and placed the {{ dataset_name }} dataset correctly. "
-                'Furthermore, you shoud check that a manual dir via `datasets.load_dataset("creative-graphic-design/{{ dataset_name }}", data_dir=...)` '
+                "Make sure you have downloaded and placed the MyHFDataset dataset correctly. "
+                'Furthermore, you shoud check that a manual dir via `datasets.load_dataset("your-org/MyHFDataset", data_dir=...)` '
                 "that include zip files from the downloaded files. "
                 f"Manual downloaded instructions: {self._manual_download_instructions}"
             )
@@ -236,4 +235,3 @@ class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }
                             ),
                         },
                     )
-

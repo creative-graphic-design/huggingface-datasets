@@ -1,7 +1,9 @@
 import os
 
-import datasets as ds
 import pytest
+from huggingface_hub import HfApi
+
+import datasets as ds
 
 
 @pytest.fixture
@@ -11,12 +13,12 @@ def script_dir() -> str:
 
 @pytest.fixture
 def org_name() -> str:
-    return "creative-graphic-design"
+    return "your-org"
 
 
 @pytest.fixture
 def dataset_name() -> str:
-    return "{{ dataset_name }}"
+    return "MyHFDataset"
 
 
 @pytest.fixture
@@ -27,6 +29,26 @@ def dataset_path(script_dir: str, dataset_name: str) -> str:
 @pytest.fixture
 def repo_id(org_name: str, dataset_name: str) -> str:
     return f"{org_name}/{dataset_name}"
+
+
+@pytest.fixture
+def hf_api() -> HfApi:
+    return HfApi()
+
+
+def test_push_readme_to_hub(
+    hf_api: HfApi,
+    repo_id: str,
+    script_dir: str,
+):
+    readme_path = os.path.join(script_dir, "README.md")
+
+    hf_api.upload_file(
+        path_or_fileobj=readme_path,
+        path_in_repo="README.md",
+        repo_id=repo_id,
+        repo_type="dataset",
+    )
 
 
 @pytest.mark.skipif(
