@@ -262,4 +262,4 @@ If analyses have been run quantifying these biases, please add brief summaries a
 
 ### Contributions
 
-Thanks to [@skitada](https://github.com/skitada) for adding this dataset.
+Thanks to [@nanxuanzhao](https://github.com/nanxuanzhao) for adding this dataset.
