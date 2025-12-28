@@ -103,6 +103,7 @@ After generating template files, ask user:
 
    - Single config or multiple configs?
    - Config names (if multiple)?
+   - **Note:** For multi-config datasets, see Step 4.4.1 for recommended patterns
 
 3. **Data Structure:**
 
@@ -154,6 +155,8 @@ If generic, enhance by fetching from homepage. Otherwise keep user-provided.
 
 #### 4.4 Configure Builder
 
+For multi-config datasets with type safety, see **Step 4.4.1** below for recommended patterns.
+
 **Single config:**
 
 ```python
@@ -189,6 +192,160 @@ BUILDER_CONFIGS = [
     {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION),
 ]
 ```
+
+#### 4.4.1 Best Practices for Multi-Config Datasets
+
+When working with multiple configurations, these patterns improve type safety, enable exhaustiveness checking, and make your code more maintainable.
+
+**Why These Patterns Matter:**
+
+- **Type Safety**: Enums prevent typos and invalid config names at compile time
+- **Exhaustiveness Checking**: Type checker ensures all config cases are handled
+- **Maintainability**: Adding new configs triggers compile errors where implementation is needed
+
+**Pattern 1: StrEnum with Direct `name` Field**
+
+Define config types using StrEnum and use the enum directly in the `name` field:
+
+```python
+from enum import StrEnum, auto
+from dataclasses import dataclass
+
+class {DatasetName}Type(StrEnum):
+    config1 = auto()
+    config2 = auto()
+
+@dataclass
+class {DatasetName}Config(ds.BuilderConfig):
+    name: {DatasetName}Type
+
+BUILDER_CONFIG_CLASS = {DatasetName}Config
+BUILDER_CONFIGS = [
+    {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION, description="..."),
+    {DatasetName}Config(name={DatasetName}Type.config2, version=VERSION, description="..."),
+]
+
+# Optional: Add type hint for better IDE support
+config: {DatasetName}Config
+```
+
+**Pattern 2: `match/case` with `assert_never`**
+
+Use `match/case` statements with `assert_never` to ensure all config cases are handled:
+
+```python
+from typing import assert_never
+
+def _info(self) -> ds.DatasetInfo:
+    match self.config.name:
+        case {DatasetName}Type.config1:
+            features = ds.Features({
+                "field1": ds.Value("string"),
+            })
+        case {DatasetName}Type.config2:
+            features = ds.Features({
+                "field2": ds.Value("int32"),
+            })
+        case _:
+            assert_never(self.config.name)
+
+    return ds.DatasetInfo(
+        description=_DESCRIPTION,
+        features=features,
+        homepage=_HOMEPAGE,
+        license=_LICENSE,
+        citation=_CITATION,
+    )
+```
+
+**Apply this pattern in all config-dependent methods:**
+
+- `_info()` - for defining features per config
+- `_split_generators()` - for config-specific data loading
+- `_generate_examples()` - for config-specific example generation
+
+**Complete Example:**
+
+```python
+from enum import StrEnum, auto
+from dataclasses import dataclass
+from typing import List, assert_never
+import datasets as ds
+
+class MyDatasetType(StrEnum):
+    small = auto()
+    large = auto()
+
+@dataclass
+class MyDatasetConfig(ds.BuilderConfig):
+    name: MyDatasetType
+
+class MyDataset(ds.GeneratorBasedBuilder):
+    VERSION = ds.Version("1.0.0")
+
+    config: MyDatasetConfig
+
+    BUILDER_CONFIG_CLASS = MyDatasetConfig
+    BUILDER_CONFIGS = [
+        MyDatasetConfig(name=MyDatasetType.small, version=VERSION, description="Small subset"),
+        MyDatasetConfig(name=MyDatasetType.large, version=VERSION, description="Full dataset"),
+    ]
+
+    DEFAULT_CONFIG_NAME = "small"
+
+    def _info(self) -> ds.DatasetInfo:
+        match self.config.name:
+            case MyDatasetType.small:
+                features = ds.Features({"text": ds.Value("string")})
+            case MyDatasetType.large:
+                features = ds.Features({
+                    "text": ds.Value("string"),
+                    "metadata": ds.Value("string"),
+                })
+            case _:
+                assert_never(self.config.name)
+
+        return ds.DatasetInfo(
+            description=_DESCRIPTION,
+            features=features,
+            homepage=_HOMEPAGE,
+            license=_LICENSE,
+            citation=_CITATION,
+        )
+
+    def _split_generators(self, dl_manager: ds.DownloadManager) -> List[ds.SplitGenerator]:
+        match self.config.name:
+            case MyDatasetType.small:
+                data_url = _URLS["small"]
+            case MyDatasetType.large:
+                data_url = _URLS["large"]
+            case _:
+                assert_never(self.config.name)
+
+        filepath = dl_manager.download_and_extract(data_url)
+        return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"filepath": filepath})]
+
+    def _generate_examples(self, filepath):
+        with open(filepath) as f:
+            for idx, line in enumerate(f):
+                data = json.loads(line)
+
+                match self.config.name:
+                    case MyDatasetType.small:
+                        yield idx, {"text": data["text"]}
+                    case MyDatasetType.large:
+                        yield idx, {
+                            "text": data["text"],
+                            "metadata": data.get("metadata", ""),
+                        }
+                    case _:
+                        assert_never(self.config.name)
+```
+
+**When to Use:**
+
+- Use StrEnum + direct `name` field for **any multi-config dataset**
+- Use `match/case` with `assert_never` when **config affects behavior** in methods
 
 #### 4.5 Define Features
 

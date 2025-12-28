@@ -63,6 +63,21 @@ class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }
     # If you don't want/need to define several sub-sets in your dataset,
     # just remove the BUILDER_CONFIG_CLASS and the BUILDER_CONFIGS attributes.
 
+    # Recommended pattern for type-safe multi-config datasets (see SKILL.md Step 4.4.1):
+    # from enum import StrEnum, auto
+    # from dataclasses import dataclass
+    # from typing import assert_never
+    #
+    # class MyDatasetType(StrEnum):
+    #     config1 = auto()
+    #     config2 = auto()
+    #
+    # @dataclass
+    # class MyDatasetConfig(ds.BuilderConfig):
+    #     name: MyDatasetType
+    #
+    # BUILDER_CONFIG_CLASS = MyDatasetConfig
+
     # If you need to make complex sub-parts in the datasets with configurable options
     # You can create your own builder configuration class to store attribute, inheriting from datasets.BuilderConfig
     # BUILDER_CONFIG_CLASS = MyBuilderConfig
@@ -84,6 +99,9 @@ class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }
     ]
 
     DEFAULT_CONFIG_NAME = "first_domain"  # It's not mandatory to have a default configuration. Just use one if it make sense.
+
+    # For multi-config datasets, optionally add type hint for better IDE support:
+    # config: MyDatasetConfig
 
     @property
     def _manual_download_instructions(self) -> str:
@@ -184,6 +202,16 @@ class {{ dataset_name.replace('-', '').replace('_', '').replace('Dataset', '') }
     def _generate_examples(self, filepath, split):
         # TODO: This method handles input defined in _split_generators to yield (key, example) tuples from the dataset.
         # The `key` is for legacy reasons (tfds) and is not important in itself, but must be unique for each example.
+
+        # For multi-config datasets, use match/case with assert_never (see SKILL.md Step 4.4.1):
+        # match self.config.name:
+        #     case MyDatasetType.config1:
+        #         # config1-specific implementation
+        #     case MyDatasetType.config2:
+        #         # config2-specific implementation
+        #     case _:
+        #         assert_never(self.config.name)
+
         with open(filepath, encoding="utf-8") as f:
             for key, row in enumerate(f):
                 data = json.loads(row)
