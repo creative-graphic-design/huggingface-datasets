@@ -1,8 +1,8 @@
 [project]
 # Module name is automatically generated from dataset_name (lowercase)
-name = "{{ dataset_name }}"
+name = "my-hf-dataset"
 version = "0.1.0"
-description = "{{ description }}"
+description = "A sample Hugging Face dataset demonstrating best practices for dataset creation, featuring multi-config support, type-safe enums, and comprehensive documentation."
 readme = "README.md"
 requires-python = ">=3.10"
 

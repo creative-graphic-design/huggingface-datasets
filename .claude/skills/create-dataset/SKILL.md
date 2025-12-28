@@ -1,12 +1,12 @@
 ---
 name: create-dataset
-description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo.
-version: 1.0.0
+description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo. Provides a concrete MyHFDataset example to copy and customize.
+version: 2.0.0
 ---
 
 # Create Hugging Face Dataset Skill
 
-Guides the creation of new Hugging Face datasets by generating code from templates stored in `.claude/skills/create-dataset/templates/`.
+Guides the creation of new Hugging Face datasets using a concrete example (`MyHFDataset`) stored in `.claude/skills/create-dataset/templates/MyHFDataset/`. Users copy and customize the example to create their own datasets.
 
 ## When to Use
 
@@ -14,43 +14,60 @@ Activate when user wants to create a new Hugging Face dataset in this monorepo.
 
 ## Workflow
 
-### Step 1: Gather Information
+### Step 1: Copy Example Structure
 
-Ask user for:
+Ask the user for their dataset name (e.g., `CustomDataset`), then copy the MyHFDataset example:
 
-1. **dataset_name** (required): Dataset name in CamelCase (e.g., MyDataset, BannerRequest400)
-2. **description** (required): Brief description of the dataset
-3. **homepage** (required): Source project URL (e.g., https://github.com/org/project)
-4. **license** (required): License (e.g., MIT, Apache-2.0, Unknown)
-5. **dataset_version** (optional, default: 1.0.0): Version number
+1. **Copy the directory structure:**
 
-**Important:** If any information is unclear or not immediately available (e.g., exact paper URL, specific license details), use placeholder values and add TODO comments in the generated files. Users can update these later when the information becomes available.
+   ```bash
+   cp -r .claude/skills/create-dataset/templates/MyHFDataset datasets/{DatasetName}
+   ```
 
-### Step 2: Generate Files from Templates
+2. **Rename files:**
+   ```bash
+   mv datasets/{DatasetName}/MyHFDataset.py datasets/{DatasetName}/{DatasetName}.py
+   mv datasets/{DatasetName}/tests/MyHFDataset_test.py datasets/{DatasetName}/tests/{DatasetName}_test.py
+   ```
 
-Read template files from `.claude/skills/create-dataset/templates/{{ dataset_name }}/` and replace all `{{ xxx }}` placeholders with actual values.
+### Step 2: Customize the Example
 
-**Template files to process:**
+Guide the user to customize the copied files. Ask them for:
 
-1. `{{ dataset_name }}.py` → `datasets/{dataset_name}/{dataset_name}.py`
-2. `tests/{{ dataset_name }}_test.py` → `datasets/{dataset_name}/tests/{dataset_name}_test.py`
-3. `tests/__init__.py` → `datasets/{dataset_name}/tests/__init__.py`
-4. `README.md` → `datasets/{dataset_name}/README.md`
-5. `pyproject.toml` → `datasets/{dataset_name}/pyproject.toml`
+1. **dataset_name**: Their dataset name in CamelCase (e.g., CustomDataset)
+2. **description**: Brief description of the dataset
+3. **homepage**: Source project URL
+4. **license**: License (e.g., MIT, Apache-2.0, Unknown)
+5. **data_urls**: URLs to actual data files
 
-**Replacement rules:**
+**Files to customize:**
 
-- `{{ dataset_name }}` → user provided dataset_name
-- `{{ description }}` → user provided description
-- `{{ homepage }}` → user provided homepage
-- `{{ license }}` → user provided license
-- `{{ dataset_version }}` → user provided version (default: 1.0.0)
+1. **`{DatasetName}.py`** - Main dataset implementation:
 
-Note: Template files contain comments explaining additional transformations (e.g., module name lowercase, dependencies based on image usage).
+   - Replace class name: `MyHFDataset` → `{DatasetName}`
+   - Update `_DESCRIPTION`, `_HOMEPAGE`, `_LICENSE` constants
+   - Update `_URLS` with actual data source URLs
+   - Implement `_info()` with correct features
+   - Implement `_generate_examples()` with correct data parsing
+
+2. **`tests/{DatasetName}_test.py`** - Test file:
+
+   - Update `dataset_name()` fixture return value: `"MyHFDataset"` → `"{DatasetName}"`
+   - Update `org_name()` fixture if needed: `"your-org"` → actual org name
+
+3. **`README.md`** - Documentation:
+
+   - Replace title: `MyHFDataset` → `{DatasetName}`
+   - Update homepage, repository, paper URLs
+   - Fill in dataset-specific details
+
+4. **`pyproject.toml`** - Package configuration:
+   - Update `name`: `"my-hf-dataset"` → `"{dataset-name}"` (kebab-case)
+   - Update `description` with dataset-specific text
 
 ### Step 2.1: Configure Dependencies
 
-After generating template files, update `datasets/{dataset_name}/pyproject.toml` dependencies based on dataset requirements:
+After customizing the example, update `datasets/{DatasetName}/pyproject.toml` dependencies based on dataset requirements:
 
 **Decision Tree:**
 
@@ -116,7 +133,7 @@ After generating template files, ask user:
 
 ### Step 4: Implement Dataset Logic
 
-Update generated `datasets/{dataset_name}/{dataset_name}.py`:
+Update customized `datasets/MyHFDataset/MyHFDataset.py` (or your dataset name):
 
 #### 4.1 Update \_URLS
 
@@ -160,7 +177,7 @@ For multi-config datasets with type safety, see **Step 4.4.1** below for recomme
 **Single config:**
 
 ```python
-class {DatasetName}Dataset(ds.GeneratorBasedBuilder):
+class MyHFDataset(ds.GeneratorBasedBuilder):
     VERSION = ds.Version("1.0.0")
 ```
 
@@ -179,17 +196,17 @@ BUILDER_CONFIGS = [
 from enum import StrEnum, auto
 from dataclasses import dataclass
 
-class {DatasetName}Type(StrEnum):
+class MyHFDatasetType(StrEnum):
     config1 = auto()
     config2 = auto()
 
 @dataclass
-class {DatasetName}Config(ds.BuilderConfig):
-    name: {DatasetName}Type
+class MyHFDatasetConfig(ds.BuilderConfig):
+    name: MyHFDatasetType
 
-BUILDER_CONFIG_CLASS = {DatasetName}Config
+BUILDER_CONFIG_CLASS = MyHFDatasetConfig
 BUILDER_CONFIGS = [
-    {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION),
+    MyHFDatasetConfig(name=MyHFDatasetType.config1, version=VERSION),
 ]
 ```
 
@@ -211,22 +228,22 @@ Define config types using StrEnum and use the enum directly in the `name` field:
 from enum import StrEnum, auto
 from dataclasses import dataclass
 
-class {DatasetName}Type(StrEnum):
+class MyHFDatasetType(StrEnum):
     config1 = auto()
     config2 = auto()
 
 @dataclass
-class {DatasetName}Config(ds.BuilderConfig):
-    name: {DatasetName}Type
+class MyHFDatasetConfig(ds.BuilderConfig):
+    name: MyHFDatasetType
 
-BUILDER_CONFIG_CLASS = {DatasetName}Config
+BUILDER_CONFIG_CLASS = MyHFDatasetConfig
 BUILDER_CONFIGS = [
-    {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION, description="..."),
-    {DatasetName}Config(name={DatasetName}Type.config2, version=VERSION, description="..."),
+    MyHFDatasetConfig(name=MyHFDatasetType.config1, version=VERSION, description="..."),
+    MyHFDatasetConfig(name=MyHFDatasetType.config2, version=VERSION, description="..."),
 ]
 
 # Optional: Add type hint for better IDE support
-config: {DatasetName}Config
+config: MyHFDatasetConfig
 ```
 
 **Pattern 2: `match/case` with `assert_never`**
@@ -238,11 +255,11 @@ from typing import assert_never
 
 def _info(self) -> ds.DatasetInfo:
     match self.config.name:
-        case {DatasetName}Type.config1:
+        case MyHFDatasetType.config1:
             features = ds.Features({
                 "field1": ds.Value("string"),
             })
-        case {DatasetName}Type.config2:
+        case MyHFDatasetType.config2:
             features = ds.Features({
                 "field2": ds.Value("int32"),
             })
@@ -448,7 +465,7 @@ def _generate_examples(self, data):
 
 ### Step 5: Update Tests
 
-Update `datasets/{dataset_name}/tests/{dataset_name}_test.py`:
+Update `datasets/MyHFDataset/tests/MyHFDataset_test.py` (or your dataset name):
 
 **Single config:**
 
@@ -478,7 +495,7 @@ Update both the dataset README and the repository root README.
 
 #### 6.1 Update Dataset README
 
-Review `datasets/{dataset_name}/README.md` and update any placeholder information:
+Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any placeholder information:
 
 - Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
 - If information is not available, leave TODO comments for future updates
@@ -512,7 +529,7 @@ Add an entry for your new dataset to the repository root README.md:
 ### Step 7: Test and Debug
 
 ```bash
-uv run pytest -vsx datasets/{dataset_name}/tests
+uv run pytest -vsx datasets/MyHFDataset/tests
 ```
 
 If errors, fix and re-run.
@@ -521,7 +538,7 @@ Verify loading:
 
 ```python
 import datasets as ds
-ds = ds.load_dataset("datasets/{dataset_name}/{dataset_name}.py", trust_remote_code=True)
+ds = ds.load_dataset("datasets/MyHFDataset/MyHFDataset.py", trust_remote_code=True)
 print(ds["train"][0])
 ```
 
