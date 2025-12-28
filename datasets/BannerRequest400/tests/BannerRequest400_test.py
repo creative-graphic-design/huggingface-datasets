@@ -31,27 +31,42 @@ def repo_id(org_name: str, dataset_name: str) -> str:
 
 
 @pytest.mark.parametrize(
-    argnames=("config_name", "expected_num_train"),
+    argnames=("request_type", "expected_num_train"),
     argvalues=(
-        ("abstract-400", 400),
-        ("concrete-5k", 100),
+        ("abstract_400", 400),
+        ("concrete_5k", 100),
     ),
 )
 def test_load_dataset(
     dataset_path: str,
     repo_id: str,
-    config_name: str,
+    request_type: str,
     expected_num_train: int,
     trust_remote_code: bool = True,
 ):
     dataset = ds.load_dataset(
         path=dataset_path,
-        name=config_name,
+        name=request_type,
         trust_remote_code=trust_remote_code,
     )
     assert isinstance(dataset, ds.DatasetDict)
-    breakpoint()
-
     assert dataset["train"].num_rows == expected_num_train
 
-    # dataset.push_to_hub(repo_id=repo_id, private=True)
+    # Verify key fields exist
+    if request_type == "abstract_400":
+        assert "banner_request" in dataset["train"].features
+        assert "logo_png" in dataset["train"].features
+        assert "logo_svg" in dataset["train"].features
+        assert "id" in dataset["train"].features
+    elif request_type == "concrete_5k":
+        assert "advertising_variations" in dataset["train"].features
+        assert "logo_description" in dataset["train"].features
+        assert "advertiser" in dataset["train"].features
+        assert "logo_name" in dataset["train"].features
+
+    # Optionally push to hub (commented by default)
+    # dataset.push_to_hub(
+    #     repo_id=repo_id,
+    #     config_name=request_type,
+    #     private=True,
+    # )

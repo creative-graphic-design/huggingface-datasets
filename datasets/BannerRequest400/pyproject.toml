@@ -1,7 +1,9 @@
 [project]
-name = "bannerrequest400"
+name = "banner-request-400"
 version = "0.1.0"
-description = "Add your description here"
+description = "BannerRequest400: Multimodal benchmark for advertising banner generation"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+]
