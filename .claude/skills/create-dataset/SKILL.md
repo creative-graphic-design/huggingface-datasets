@@ -1,0 +1,596 @@
+---
+name: create-dataset
+description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo.
+version: 1.0.0
+---
+
+# Create Hugging Face Dataset Skill
+
+Guides the creation of new Hugging Face datasets by generating code from templates stored in `.claude/skills/create-dataset/templates/`.
+
+## When to Use
+
+Activate when user wants to create a new Hugging Face dataset in this monorepo.
+
+## Workflow
+
+### Step 1: Gather Information
+
+Ask user for:
+
+1. **dataset_name** (required): Dataset name in CamelCase (e.g., MyDataset, BannerRequest400)
+2. **description** (required): Brief description of the dataset
+3. **homepage** (required): Source project URL (e.g., https://github.com/org/project)
+4. **license** (required): License (e.g., MIT, Apache-2.0, Unknown)
+5. **dataset_version** (optional, default: 1.0.0): Version number
+
+**Important:** If any information is unclear or not immediately available (e.g., exact paper URL, specific license details), use placeholder values and add TODO comments in the generated files. Users can update these later when the information becomes available.
+
+### Step 2: Generate Files from Templates
+
+Read template files from `.claude/skills/create-dataset/templates/{{ dataset_name }}/` and replace all `{{ xxx }}` placeholders with actual values.
+
+**Template files to process:**
+
+1. `{{ dataset_name }}.py` → `datasets/{dataset_name}/{dataset_name}.py`
+2. `tests/{{ dataset_name }}_test.py` → `datasets/{dataset_name}/tests/{dataset_name}_test.py`
+3. `tests/__init__.py` → `datasets/{dataset_name}/tests/__init__.py`
+4. `README.md` → `datasets/{dataset_name}/README.md`
+5. `pyproject.toml` → `datasets/{dataset_name}/pyproject.toml`
+
+**Replacement rules:**
+
+- `{{ dataset_name }}` → user provided dataset_name
+- `{{ description }}` → user provided description
+- `{{ homepage }}` → user provided homepage
+- `{{ license }}` → user provided license
+- `{{ dataset_version }}` → user provided version (default: 1.0.0)
+
+Note: Template files contain comments explaining additional transformations (e.g., module name lowercase, dependencies based on image usage).
+
+### Step 2.1: Configure Dependencies
+
+After generating template files, update `datasets/{dataset_name}/pyproject.toml` dependencies based on dataset requirements:
+
+**Decision Tree:**
+
+- **Does your dataset include images (ds.Image() features)?**
+  - **YES** → Add `datasets[vision]>=2.0.0,<4.0.0`
+  - **NO** → Leave dependencies empty (inherits from workspace root)
+
+**For Image-Based Datasets:**
+
+Update pyproject.toml:
+
+```toml
+[project]
+name = "{dataset-name}"
+version = "0.1.0"
+description = "..."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+]
+```
+
+**Important Notes:**
+
+- Use `datasets[vision]`, **not** direct `pillow` dependency
+- The `datasets[vision]` extra includes Pillow and related vision dependencies
+- This is required for `ds.Image()` features to work properly
+
+**For Non-Image Datasets:**
+
+Keep dependencies empty:
+
+```toml
+dependencies = []
+```
+
+The workspace root provides base `datasets` package, so non-image datasets inherit all necessary dependencies.
+
+### Step 3: Gather Dataset-Specific Requirements
+
+After generating template files, ask user:
+
+1. **Data Sources:**
+
+   - URLs for data files
+   - Format (JSON, JSONL, CSV, ZIP, images)?
+
+2. **Configuration:**
+
+   - Single config or multiple configs?
+   - Config names (if multiple)?
+   - **Note:** For multi-config datasets, see Step 4.4.1 for recommended patterns
+
+3. **Data Structure:**
+
+   - What fields exist in the data?
+   - Field types (text, numbers, images, nested)?
+   - Sample data (if available)?
+
+4. **Metadata (optional):**
+   - BibTeX citation?
+
+### Step 4: Implement Dataset Logic
+
+Update generated `datasets/{dataset_name}/{dataset_name}.py`:
+
+#### 4.1 Update \_URLS
+
+Replace:
+
+```python
+_URLS = {
+    "first_domain": "https://huggingface.co/great-new-dataset-first_domain.zip",
+    "second_domain": "https://huggingface.co/great-new-dataset-second_domain.zip",
+}
+```
+
+With actual:
+
+```python
+_URLS = {
+    "data": "https://actual-source.com/data.json",
+}
+```
+
+#### 4.2 Update \_CITATION
+
+If user provides:
+
+```python
+_CITATION = """\
+@article{...}
+"""
+```
+
+Otherwise keep placeholder.
+
+#### 4.3 Update \_DESCRIPTION
+
+If generic, enhance by fetching from homepage. Otherwise keep user-provided.
+
+#### 4.4 Configure Builder
+
+For multi-config datasets with type safety, see **Step 4.4.1** below for recommended patterns.
+
+**Single config:**
+
+```python
+class {DatasetName}Dataset(ds.GeneratorBasedBuilder):
+    VERSION = ds.Version("1.0.0")
+```
+
+**Multiple configs:**
+
+```python
+BUILDER_CONFIGS = [
+    ds.BuilderConfig(name="config1", version=VERSION, description="..."),
+    ds.BuilderConfig(name="config2", version=VERSION, description="..."),
+]
+```
+
+**Advanced (with StrEnum):**
+
+```python
+from enum import StrEnum, auto
+from dataclasses import dataclass
+
+class {DatasetName}Type(StrEnum):
+    config1 = auto()
+    config2 = auto()
+
+@dataclass
+class {DatasetName}Config(ds.BuilderConfig):
+    name: {DatasetName}Type
+
+BUILDER_CONFIG_CLASS = {DatasetName}Config
+BUILDER_CONFIGS = [
+    {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION),
+]
+```
+
+#### 4.4.1 Best Practices for Multi-Config Datasets
+
+When working with multiple configurations, these patterns improve type safety, enable exhaustiveness checking, and make your code more maintainable.
+
+**Why These Patterns Matter:**
+
+- **Type Safety**: Enums prevent typos and invalid config names at compile time
+- **Exhaustiveness Checking**: Type checker ensures all config cases are handled
+- **Maintainability**: Adding new configs triggers compile errors where implementation is needed
+
+**Pattern 1: StrEnum with Direct `name` Field**
+
+Define config types using StrEnum and use the enum directly in the `name` field:
+
+```python
+from enum import StrEnum, auto
+from dataclasses import dataclass
+
+class {DatasetName}Type(StrEnum):
+    config1 = auto()
+    config2 = auto()
+
+@dataclass
+class {DatasetName}Config(ds.BuilderConfig):
+    name: {DatasetName}Type
+
+BUILDER_CONFIG_CLASS = {DatasetName}Config
+BUILDER_CONFIGS = [
+    {DatasetName}Config(name={DatasetName}Type.config1, version=VERSION, description="..."),
+    {DatasetName}Config(name={DatasetName}Type.config2, version=VERSION, description="..."),
+]
+
+# Optional: Add type hint for better IDE support
+config: {DatasetName}Config
+```
+
+**Pattern 2: `match/case` with `assert_never`**
+
+Use `match/case` statements with `assert_never` to ensure all config cases are handled:
+
+```python
+from typing import assert_never
+
+def _info(self) -> ds.DatasetInfo:
+    match self.config.name:
+        case {DatasetName}Type.config1:
+            features = ds.Features({
+                "field1": ds.Value("string"),
+            })
+        case {DatasetName}Type.config2:
+            features = ds.Features({
+                "field2": ds.Value("int32"),
+            })
+        case _:
+            assert_never(self.config.name)
+
+    return ds.DatasetInfo(
+        description=_DESCRIPTION,
+        features=features,
+        homepage=_HOMEPAGE,
+        license=_LICENSE,
+        citation=_CITATION,
+    )
+```
+
+**Apply this pattern in all config-dependent methods:**
+
+- `_info()` - for defining features per config
+- `_split_generators()` - for config-specific data loading
+- `_generate_examples()` - for config-specific example generation
+
+**Complete Example:**
+
+```python
+from enum import StrEnum, auto
+from dataclasses import dataclass
+from typing import List, assert_never
+import datasets as ds
+
+class MyDatasetType(StrEnum):
+    small = auto()
+    large = auto()
+
+@dataclass
+class MyDatasetConfig(ds.BuilderConfig):
+    name: MyDatasetType
+
+class MyDataset(ds.GeneratorBasedBuilder):
+    VERSION = ds.Version("1.0.0")
+
+    config: MyDatasetConfig
+
+    BUILDER_CONFIG_CLASS = MyDatasetConfig
+    BUILDER_CONFIGS = [
+        MyDatasetConfig(name=MyDatasetType.small, version=VERSION, description="Small subset"),
+        MyDatasetConfig(name=MyDatasetType.large, version=VERSION, description="Full dataset"),
+    ]
+
+    DEFAULT_CONFIG_NAME = "small"
+
+    def _info(self) -> ds.DatasetInfo:
+        match self.config.name:
+            case MyDatasetType.small:
+                features = ds.Features({"text": ds.Value("string")})
+            case MyDatasetType.large:
+                features = ds.Features({
+                    "text": ds.Value("string"),
+                    "metadata": ds.Value("string"),
+                })
+            case _:
+                assert_never(self.config.name)
+
+        return ds.DatasetInfo(
+            description=_DESCRIPTION,
+            features=features,
+            homepage=_HOMEPAGE,
+            license=_LICENSE,
+            citation=_CITATION,
+        )
+
+    def _split_generators(self, dl_manager: ds.DownloadManager) -> List[ds.SplitGenerator]:
+        match self.config.name:
+            case MyDatasetType.small:
+                data_url = _URLS["small"]
+            case MyDatasetType.large:
+                data_url = _URLS["large"]
+            case _:
+                assert_never(self.config.name)
+
+        filepath = dl_manager.download_and_extract(data_url)
+        return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"filepath": filepath})]
+
+    def _generate_examples(self, filepath):
+        with open(filepath) as f:
+            for idx, line in enumerate(f):
+                data = json.loads(line)
+
+                match self.config.name:
+                    case MyDatasetType.small:
+                        yield idx, {"text": data["text"]}
+                    case MyDatasetType.large:
+                        yield idx, {
+                            "text": data["text"],
+                            "metadata": data.get("metadata", ""),
+                        }
+                    case _:
+                        assert_never(self.config.name)
+```
+
+**When to Use:**
+
+- Use StrEnum + direct `name` field for **any multi-config dataset**
+- Use `match/case` with `assert_never` when **config affects behavior** in methods
+
+#### 4.5 Define Features
+
+```python
+def _info(self):
+    features = ds.Features({
+        "text": ds.Value("string"),
+        "number": ds.Value("int32"),
+        "image": ds.Image(),
+        "nested": {"field": ds.Value("string")},
+    })
+
+    return ds.DatasetInfo(
+        description=_DESCRIPTION,
+        features=features,
+        homepage=_HOMEPAGE,
+        license=_LICENSE,
+        citation=_CITATION,
+    )
+```
+
+**Types:**
+
+- `ds.Value("string")`, `ds.Value("int32")`, `ds.Value("float")`, `ds.Value("bool")`
+- `ds.Image()`, `ds.Audio()`
+- `{...}` for nested, `[ds.Value(...)]` for lists
+
+**Important:** If using `ds.Image()` features, ensure you've added `datasets[vision]>=2.0.0,<4.0.0` to your `pyproject.toml` dependencies (see Step 2.1).
+
+#### 4.6 Implement \_split_generators
+
+**Simple:**
+
+```python
+def _split_generators(self, dl_manager):
+    files = dl_manager.download(_URLS)
+    with open(files["data"]) as f:
+        data = json.load(f)
+
+    return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"data": data})]
+```
+
+**Multiple splits:**
+
+```python
+def _split_generators(self, dl_manager):
+    files = dl_manager.download_and_extract(_URLS[self.config.name])
+
+    return [
+        ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"filepath": os.path.join(files, "train.jsonl")}),
+        ds.SplitGenerator(name=ds.Split.VALIDATION, gen_kwargs={"filepath": os.path.join(files, "dev.jsonl")}),
+    ]
+```
+
+**With images:**
+
+```python
+def _split_generators(self, dl_manager):
+    files = dl_manager.download_and_extract(_URLS)
+    with open(files["metadata"]) as f:
+        data = json.load(f)
+
+    for item in data:
+        item["image_path"] = dl_manager.download(f"{BASE_URL}/{item['image_name']}")
+
+    return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"data": data})]
+```
+
+#### 4.7 Implement \_generate_examples
+
+**Simple:**
+
+```python
+def _generate_examples(self, data):
+    for idx, item in enumerate(data):
+        yield idx, {"text": item["text"], "label": item["label"]}
+```
+
+**From file:**
+
+```python
+def _generate_examples(self, filepath):
+    with open(filepath) as f:
+        for idx, line in enumerate(f):
+            yield idx, json.loads(line)
+```
+
+**With images:**
+
+```python
+from PIL import Image
+
+def _generate_examples(self, data):
+    for idx, item in enumerate(data):
+        yield idx, {
+            "text": item["text"],
+            "image": Image.open(item["image_path"]),
+        }
+```
+
+### Step 5: Update Tests
+
+Update `datasets/{dataset_name}/tests/{dataset_name}_test.py`:
+
+**Single config:**
+
+```python
+def test_load_dataset(dataset_path: str, trust_remote_code: bool = True):
+    dataset = ds.load_dataset(path=dataset_path, trust_remote_code=trust_remote_code)
+    assert isinstance(dataset, ds.DatasetDict)
+    assert dataset["train"].num_rows == EXPECTED_COUNT
+```
+
+**Multiple configs:**
+
+```python
+@pytest.mark.parametrize(
+    argnames=("config_name", "expected_num_train"),
+    argvalues=(("config1", 100), ("config2", 200)),
+)
+def test_load_dataset(dataset_path: str, config_name: str, expected_num_train: int, trust_remote_code: bool = True):
+    dataset = ds.load_dataset(path=dataset_path, name=config_name, trust_remote_code=trust_remote_code)
+    assert isinstance(dataset, ds.DatasetDict)
+    assert dataset["train"].num_rows == expected_num_train
+```
+
+### Step 6: Update README Files
+
+Update both the dataset README and the repository root README.
+
+#### 6.1 Update Dataset README
+
+Review `datasets/{dataset_name}/README.md` and update any placeholder information:
+
+- Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
+- If information is not available, leave TODO comments for future updates
+- Verify license information matches the source repository
+- Add complete citation information if available
+
+#### 6.2 Update Repository Root README
+
+Add an entry for your new dataset to the repository root README.md:
+
+**Location:** `/README.md` (repository root)
+
+**Format:**
+
+```markdown
+- **{DatasetName}**: [Brief 1-2 sentence description]. [[Data Source]]({homepage_url}) [[Conference/Journal]]({paper_url}) [[arXiv]]({arxiv_url})
+```
+
+**Guidelines:**
+
+1. **Description**: Keep it brief (1-2 sentences) focusing on what the dataset is for and its key features
+2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
+3. **Format**: Bullet list format, one line per dataset
+
+**Example:**
+
+```markdown
+- **BannerRequest400**: Multimodal benchmark for advertising banner generation with 100 logos and 5,200 specifications. [[Data Source]](https://github.com/sony/BannerAgency/tree/main/BannerRequest400) [[EMNLP'25]](https://aclanthology.org/2025.emnlp-main.214/) [[arXiv]](https://arxiv.org/abs/2503.11060)
+```
+
+### Step 7: Test and Debug
+
+```bash
+uv run pytest -vsx datasets/{dataset_name}/tests
+```
+
+If errors, fix and re-run.
+
+Verify loading:
+
+```python
+import datasets as ds
+ds = ds.load_dataset("datasets/{dataset_name}/{dataset_name}.py", trust_remote_code=True)
+print(ds["train"][0])
+```
+
+## Example Session
+
+**User:** "Create a dataset called MyData"
+
+**Assistant:**
+
+```
+I'll help you create MyData dataset!
+
+Please provide:
+1. description: Brief description of the dataset
+2. homepage: Source project URL (e.g., https://github.com/org/project)
+3. license: License (e.g., MIT)
+4. dataset_version (optional, default 1.0.0): Version number
+```
+
+**User provides info**
+
+**Assistant:**
+
+```
+Generating dataset structure...
+
+[Read templates, substitute values, create files]
+
+✅ Created:
+- datasets/MyData/MyData.py
+- datasets/MyData/tests/MyData_test.py
+- datasets/MyData/tests/__init__.py
+- datasets/MyData/README.md
+- datasets/MyData/pyproject.toml
+
+Now for dataset-specific info:
+1. Data source URLs?
+2. Data format (JSON, JSONL, CSV, etc.)?
+3. Single config or multiple?
+4. What fields exist in the data?
+```
+
+**User provides data details**
+
+**Assistant:**
+
+```
+Implementing dataset logic...
+
+[Update _URLS, Features, _split_generators, _generate_examples, tests, README.md]
+
+✅ Implementation complete! Running tests...
+```
+
+```bash
+uv run pytest -vsx datasets/MyData/tests
+```
+
+**Result:** Tests pass → Dataset ready!
+
+## Checklist
+
+- [ ] User info collected
+- [ ] Files generated from templates
+- [ ] \_URLS updated
+- [ ] Features defined
+- [ ] \_split_generators implemented
+- [ ] \_generate_examples implemented
+- [ ] Tests updated
+- [ ] README.md updated
+- [ ] Tests passing
+- [ ] Dataset loads correctly
