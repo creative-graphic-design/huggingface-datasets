@@ -1,12 +1,26 @@
-## <!--
-
-TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md?plain=1):
-
-- copy-paste the tags obtained with the online tagging app: https://huggingface.co/spaces/huggingface/datasets-tagging
-
 ---
+# Core fields (based on official HF specification)
+language:
+  - en
+license: mit # String, not list - use HF license identifiers
+pretty_name: MyHFDataset
+tags:
+  - example-tag
+  - your-domain
 
--->
+# Recommended fields
+annotations_creators:
+  - machine-generated
+language_creators:
+  - found
+size_categories:
+  - n<1K
+source_datasets:
+  - original
+task_categories:
+  - other
+task_ids: []
+---
 
 # Dataset Card for MyHFDataset
 
@@ -249,4 +263,10 @@ TODO: Add BibTeX citation here
 
 ### Contributions
 
-<!-- TODO: Thanks to [@github-username](https://github.com/<github-username>) for adding this dataset. -->
+<!-- Choose the appropriate pattern for your dataset: -->
+
+<!-- Pattern A: Credit original dataset authors -->
+<!-- Thanks to [@original-author-username](https://github.com/original-author-username) for creating this dataset. -->
+
+<!-- Pattern B: Credit the HF implementation -->
+<!-- This Hugging Face dataset implementation was created by [your-name/your-org] to make MyHFDataset more accessible to the research community. -->

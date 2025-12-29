@@ -1,22 +1,9 @@
 ---
-annotations_creators:
-  - machine-generated
+# Core fields
 language:
   - en
-language_creators:
-  - found
-license:
-  - unknown
-multilinguality:
-  - monolingual
+license: unknown
 pretty_name: CTXFont
-size_categories:
-  - 1K<n<10K
-source_datasets:
-  - original
-task_categories:
-  - other
-task_ids: []
 tags:
   - design
   - typography
@@ -24,6 +11,19 @@ tags:
   - web-design
   - graphic-design
   - context-aware
+
+# Recommended fields
+annotations_creators:
+  - machine-generated
+language_creators:
+  - found
+size_categories:
+  - 1K<n<10K
+source_datasets:
+  - original
+task_categories:
+  - other
+task_ids: []
 ---
 
 # Dataset Card for CTXFont
