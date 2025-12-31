@@ -57,6 +57,7 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     # Check features
     expected_features = [
         "design_name",
+        "design_image",
         "design_url",
         "awwward_url",
         "design_tags",
@@ -76,6 +77,14 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     ]
     for feature in expected_features:
         assert feature in dataset["train"].features
+
+    # Check that design_image is an Image feature
+    assert dataset["train"].features["design_image"].__class__.__name__ == "Image"
+
+    # Check that we can access the first image
+    first_example = dataset["train"][0]
+    assert "design_image" in first_example
+    assert first_example["design_image"] is not None
 
     dataset.push_to_hub(repo_id=repo_id)
 
