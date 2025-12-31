@@ -13,12 +13,12 @@ def script_dir() -> str:
 
 @pytest.fixture
 def org_name() -> str:
-    return "your-org"
+    return "creative-graphic-design"
 
 
 @pytest.fixture
 def dataset_name() -> str:
-    return "MyHFDataset"
+    return "CTXFont"
 
 
 @pytest.fixture
@@ -36,7 +36,6 @@ def hf_api() -> HfApi:
     return HfApi()
 
 
-# FIRST: This test creates the repository on HF Hub
 @pytest.mark.skipif(
     condition=bool(os.environ.get("CI", False)),
     reason=(
@@ -50,12 +49,37 @@ def test_load_dataset(dataset_path: str, repo_id: str):
         trust_remote_code=True,
     )
     assert isinstance(dataset, ds.DatasetDict)
+    assert "train" in dataset
+    assert "test" in dataset
+    assert dataset["train"].num_rows == 4268
+    assert dataset["test"].num_rows == 625
 
-    # Uncomment to push to hub (creates the repository):
-    # dataset.push_to_hub(repo_id=repo_id, private=True)
+    # Check features
+    expected_features = [
+        "design_name",
+        "design_url",
+        "awwward_url",
+        "design_tags",
+        "text_content",
+        "html_tags",
+        "font_face",
+        "font_size",
+        "font_color_r",
+        "font_color_g",
+        "font_color_b",
+        "font_color_a",
+        "font_face_embedding",
+        "center_x",
+        "center_y",
+        "width",
+        "height",
+    ]
+    for feature in expected_features:
+        assert feature in dataset["train"].features
+
+    dataset.push_to_hub(repo_id=repo_id)
 
 
-# SECOND: This test uploads README to the repository created above
 def test_push_readme_to_hub(
     hf_api: HfApi,
     repo_id: str,
