@@ -47,8 +47,7 @@ _LICENSE = "Unknown"
 # URLs to the raw dataset files on GitHub
 _URLS = {
     "annotations": "https://raw.githubusercontent.com/nanxuanzhao/CTXFont-dataset/master/CTXFont_dataset-PG18/Annotations/annotations.mat",
-    "screenshots": "https://github.com/nanxuanzhao/CTXFont-dataset/tree/master/CTXFont_dataset-PG18/Screenshots",
-    "font_faces": "https://github.com/nanxuanzhao/CTXFont-dataset/tree/master/CTXFont_dataset-PG18/Font_faces_(partial)",
+    "screenshots": "https://github.com/nanxuanzhao/CTXFont-dataset/archive/refs/heads/master.zip",
 }
 
 
@@ -62,6 +61,7 @@ class CTXFont(ds.GeneratorBasedBuilder):
             {
                 # Design information
                 "design_name": ds.Value("string"),
+                "design_image": ds.Image(),
                 "design_url": ds.Value("string"),
                 "awwward_url": ds.Value("string"),
                 "design_tags": ds.Sequence(ds.Value("uint8"), length=54),
@@ -94,15 +94,16 @@ class CTXFont(ds.GeneratorBasedBuilder):
     def _split_generators(
         self, dl_manager: ds.DownloadManager
     ) -> List[ds.SplitGenerator]:
-        # Download annotations.mat file
-
+        # Download annotations.mat file and screenshots
         annotations_path = dl_manager.download(_URLS["annotations"])
+        screenshots_archive = dl_manager.download_and_extract(_URLS["screenshots"])
 
         return [
             ds.SplitGenerator(
                 name=ds.Split.TRAIN,  # type: ignore
                 gen_kwargs={
                     "annotations_path": annotations_path,
+                    "screenshots_dir": screenshots_archive,
                     "split": "train",
                 },
             ),
@@ -110,16 +111,27 @@ class CTXFont(ds.GeneratorBasedBuilder):
                 name=ds.Split.TEST,  # type: ignore
                 gen_kwargs={
                     "annotations_path": annotations_path,
+                    "screenshots_dir": screenshots_archive,
                     "split": "test",
                 },
             ),
         ]
 
-    def _generate_examples(self, annotations_path, split):
+    def _generate_examples(self, annotations_path, screenshots_dir, split):
+        import os
+
         import scipy.io
 
         # Load the .mat file
         mat_data = scipy.io.loadmat(annotations_path)
+
+        # Construct path to screenshots directory
+        screenshots_path = os.path.join(
+            screenshots_dir,
+            "CTXFont-dataset-master",
+            "CTXFont_dataset-PG18",
+            "Screenshots",
+        )
 
         # Get split-specific design names
         if split == "train":
@@ -140,11 +152,15 @@ class CTXFont(ds.GeneratorBasedBuilder):
             if design_name not in split_design_names:
                 continue
 
+            # Construct image path
+            image_path = os.path.join(screenshots_path, design_name)
+
             yield (
                 idx,
                 {
                     # Design information
                     "design_name": design_name,
+                    "design_image": image_path,
                     "design_url": mat_data["selected_design_url"][i, 0][0],
                     "awwward_url": mat_data["selected_awwward_url"][i, 0][0],
                     "design_tags": mat_data["selected_design_tags"][i].tolist(),

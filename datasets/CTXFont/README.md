@@ -73,7 +73,7 @@ task_ids: []
 
 ### Dataset Summary
 
-CTXFont (Context Font) is a dataset for studying font selection in the context of web design. It contains 1,065 professional web designs from awwwards.com with annotations for 4,893 text elements. Each text element is annotated with font properties including font face, color (RGBA), and size, along with contextual information such as HTML tags, design tags, and element positioning. The dataset includes 492 unique font faces and provides 40-dimensional font face embeddings learned using an autoencoder.
+CTXFont (Context Font) is a dataset for studying font selection in the context of web design. It contains 1,065 professional web designs from awwwards.com with annotations for 4,893 text elements. Each text element is annotated with font properties including font face, color (RGBA), and size, along with contextual information such as HTML tags, design tags, and element positioning. The dataset includes 492 unique font faces and provides 40-dimensional font face embeddings learned using an autoencoder. Web design screenshots are included at 768×1366 resolution.
 
 The dataset was created for the task of predicting font properties (face, color, size) that match a given web design context, enabling automatic font selection systems that consider the visual and semantic context of the design.
 
@@ -101,6 +101,7 @@ A typical example from the dataset:
 ```python
 {
   'design_name': '1003_2.png',
+  'design_image': <PIL.Image.Image image mode=RGB size=768x1366>,
   'design_url': 'http://example.com/design',
   'awwward_url': 'https://www.awwwards.com/sites/...',
   'design_tags': [1, 0, 0, ...],  # 54-dimensional binary vector
@@ -123,6 +124,7 @@ A typical example from the dataset:
 ### Data Fields
 
 - `design_name` (string): Filename of the web design screenshot (e.g., "1003_2.png")
+- `design_image` (image): Screenshot of the web design at 768×1366 resolution (PNG format)
 - `design_url` (string): URL of the original website
 - `awwward_url` (string): URL on awwwards.com
 - `design_tags` (sequence of uint8): 54-dimensional binary vector representing design characteristics (e.g., "colorful", "minimalist")
