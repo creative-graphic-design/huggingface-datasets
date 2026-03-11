@@ -1,0 +1,13 @@
+[project]
+# Module name is automatically generated from dataset_name (lowercase)
+name = "ctxfont"
+version = "0.1.0"
+description = "CTXFont dataset containing 1,065 professional web designs with font property annotations (face, color, size) for 4,893 text elements and 492 unique font faces."
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+    "scipy>=1.10.0",
+]
+
