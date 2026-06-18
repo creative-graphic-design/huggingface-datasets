@@ -16,17 +16,15 @@
 #
 # TODO: Address all TODOs and remove all explanatory comments
 import json
-import os
 import pathlib
 from dataclasses import dataclass
 from enum import StrEnum, auto
-from typing import List, Literal, Optional, assert_never
+from typing import List, assert_never
 
 import gdown
 from datasets.utils.logging import get_logger
 from PIL import Image
-from tenacity import retry, wait_exponential
-from tqdm.auto import tqdm
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 import datasets as ds
 
@@ -59,6 +57,19 @@ _URLS = {
     "GenerationResults.zip": "124a7DfG-TNKGJNglKKkPjS8iSqxOSU7P",
     "RepairResults.zip": "1jyiWjUsF6IQFYWeGYCEqE3iXALbuzQMZ",
 }
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    reraise=True,
+)
+def download_google_drive_file(file_id: str, output_path: pathlib.Path) -> pathlib.Path:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    gdown.download(id=file_id, output=str(output_path), quiet=False, resume=True)
+    if not output_path.exists():
+        raise FileNotFoundError(f"Failed to download Google Drive file: {file_id}")
+    return output_path
 
 
 class Task(StrEnum):
@@ -461,9 +472,18 @@ class DesignBenchDataset(ds.GeneratorBasedBuilder):
     def _split_generators(
         self, dl_manager: ds.DownloadManager
     ) -> List[ds.SplitGenerator]:
-        # self._download_files_from_google_drive(dl_manager)
+        cache_dir = pathlib.Path(
+            dl_manager.download_config.cache_dir or ds.config.DOWNLOADED_DATASETS_PATH
+        )
+        archive_path = cache_dir / "designbench" / "data.zip"
+        if not archive_path.exists():
+            logger.info("Downloading DesignBench data.zip from Google Drive.")
+            archive_path = download_google_drive_file(
+                file_id=_URLS["data.zip"],
+                output_path=archive_path,
+            )
 
-        data_base_dir = dl_manager.extract(pathlib.Path.cwd() / "data.zip")
+        data_base_dir = dl_manager.extract(archive_path)
         assert isinstance(data_base_dir, str)
 
         data_dir = pathlib.Path(data_base_dir) / "data"
@@ -491,8 +511,7 @@ class DesignBenchDataset(ds.GeneratorBasedBuilder):
             yield from generate_repair_task_examples(target_dirs, config=self.config)
 
         elif self.config.task is Task.compile:
-            for i, target_dir in enumerate(target_dirs):
-                raise NotImplementedError
+            return
 
         else:
             assert_never(self.config.task)

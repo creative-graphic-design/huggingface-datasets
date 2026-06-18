@@ -41,6 +41,9 @@ def test_push_readme_to_hub(
     repo_id: str,
     script_dir: str,
 ):
+    if not os.environ.get("HF_WRITE_TESTS"):
+        pytest.skip("Set HF_WRITE_TESTS=1 to upload files to Hugging Face Hub.")
+
     readme_path = os.path.join(script_dir, "README.md")
 
     hf_api.upload_file(

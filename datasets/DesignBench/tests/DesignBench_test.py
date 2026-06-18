@@ -1,5 +1,4 @@
 import os
-from enum import StrEnum
 
 import pytest
 
@@ -73,11 +72,12 @@ def test_load_dataset(
     )
     assert isinstance(dataset, ds.DatasetDict)
 
-    dataset.push_to_hub(
-        repo_id=repo_id,
-        config_name=f"{task_name}={framework_name}",
-        # private=True,
-    )
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(
+            repo_id=repo_id,
+            config_name=f"{task_name}={framework_name}",
+            # private=True,
+        )
 
 
 def test_load_invalid_combination(dataset_path: str):

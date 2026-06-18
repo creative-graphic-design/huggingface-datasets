@@ -4,13 +4,24 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["datasets>=2.0.0,<4.0.0"]
+dependencies = ["datasets[vision]>=2.0.0,<4.0.0"]
 
 [dependency-groups]
-dev = ["mypy>=1.0.0", "pytest>=6.0.0", "pytest-cov>=6.0.0", "ruff>=0.1.5"]
+dev = [
+    "gdown>=5.2.0",
+    "mypy>=1.0.0",
+    "pytest>=6.0.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.1.5",
+    "scipy>=1.10.0",
+    "tenacity>=9.1.2",
+]
 
 [tool.uv.workspace]
 members = ["datasets/*"]
 
 # [tool.mypy]
 # strict = true
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]

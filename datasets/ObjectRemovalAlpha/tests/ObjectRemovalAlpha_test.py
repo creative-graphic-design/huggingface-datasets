@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from huggingface_hub import snapshot_download
 
 import datasets as ds
 
@@ -50,4 +49,5 @@ def test_load_dataset(
 
     assert dataset["train"].num_rows == expected_num_train
 
-    dataset.push_to_hub(repo_id=repo_id, private=True)
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(repo_id=repo_id, private=True)

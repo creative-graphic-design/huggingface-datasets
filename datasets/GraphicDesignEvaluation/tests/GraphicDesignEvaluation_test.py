@@ -82,8 +82,9 @@ def test_load_dataset(
     else:
         raise ValueError(f"Unknown eval_type: {eval_type}")
 
-    dataset.push_to_hub(
-        repo_id=repo_id,
-        config_name=f"{eval_type}-{annotation_type}-{design_principle}",
-        private=True,
-    )
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(
+            repo_id=repo_id,
+            config_name=f"{eval_type}-{annotation_type}-{design_principle}",
+            private=True,
+        )
