@@ -86,7 +86,8 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     assert "design_image" in first_example
     assert first_example["design_image"] is not None
 
-    dataset.push_to_hub(repo_id=repo_id)
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(repo_id=repo_id)
 
 
 def test_push_readme_to_hub(
@@ -94,6 +95,9 @@ def test_push_readme_to_hub(
     repo_id: str,
     script_dir: str,
 ):
+    if not os.environ.get("HF_WRITE_TESTS"):
+        pytest.skip("Set HF_WRITE_TESTS=1 to upload files to Hugging Face Hub.")
+
     readme_path = os.path.join(script_dir, "README.md")
 
     hf_api.upload_file(
