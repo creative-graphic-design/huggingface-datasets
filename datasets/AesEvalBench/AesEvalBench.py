@@ -274,7 +274,7 @@ class AesEvalBenchDataset(ds.GeneratorBasedBuilder):
         data_dir = self._get_data_dir(dl_manager)
         return [
             ds.SplitGenerator(
-                name=ds.Split.TRAIN,
+                name=ds.Split.TEST,
                 gen_kwargs={"data_dir": data_dir},
             ),
         ]

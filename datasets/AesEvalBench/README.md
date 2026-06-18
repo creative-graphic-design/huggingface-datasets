@@ -46,7 +46,7 @@ The benchmark spans four dimensions and twelve indicators:
 | Graphics | quality, relevance |
 | Color | harmony, contrast, appeal, psychology |
 
-The original evaluation code supports binary aesthetic judgment, problematic-region choice, and bounding-box localization. This Hugging Face loader exposes the benchmark samples and labels in a single `train` split.
+The original evaluation code supports binary aesthetic judgment, problematic-region choice, and bounding-box localization. This Hugging Face loader exposes the benchmark samples and labels in a single `test` split.
 
 ### Languages
 
@@ -114,7 +114,7 @@ Each row corresponds to one `{sample_id}-perturbs_new` directory from the releas
 
 | Split | Rows |
 | --- | ---: |
-| train | 1,198 |
+| test | 1,198 |
 
 ## Dataset Creation
 

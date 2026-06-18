@@ -46,7 +46,7 @@ def hf_api() -> HfApi:
 def test_load_dataset(
     dataset_path: str,
     repo_id: str,
-    expected_num_train: int = 1198,
+    expected_num_test: int = 1198,
     trust_remote_code: bool = True,
 ):
     load_kwargs = {
@@ -58,16 +58,16 @@ def test_load_dataset(
 
     dataset = ds.load_dataset(**load_kwargs)
     assert isinstance(dataset, ds.DatasetDict)
-    assert dataset["train"].num_rows == expected_num_train
+    assert dataset["test"].num_rows == expected_num_test
 
-    features = dataset["train"].features
+    features = dataset["test"].features
     assert "preview" in features
     assert "preview_highlight" in features
     assert "element_images" in features
     assert "task_labels" in features
     assert "gt_annotations" in features
 
-    sample = dataset["train"][0]
+    sample = dataset["test"][0]
     assert sample["sample_name"].endswith("-perturbs_new")
     assert len(sample["task_labels"]) == 12
     assert {"dimension", "task", "key", "has_issue"} <= set(sample["task_labels"][0])
