@@ -6,7 +6,7 @@ version: 2.0.0
 
 # Create Hugging Face Dataset Skill
 
-Guides the creation of new Hugging Face datasets using a concrete example (`MyHFDataset`) stored in `.claude/skills/create-dataset/templates/MyHFDataset/`. Users copy and customize the example to create their own datasets.
+Guides the creation of new Hugging Face datasets using a concrete example (`MyHFDataset`) stored in `.agents/skills/create-dataset/templates/MyHFDataset/`. Users copy and customize the example to create their own datasets.
 
 ## When to Use
 
@@ -21,7 +21,7 @@ Ask the user for their dataset name (e.g., `CustomDataset`), then copy the MyHFD
 1. **Copy the directory structure:**
 
    ```bash
-   cp -r .claude/skills/create-dataset/templates/MyHFDataset datasets/{DatasetName}
+   cp -r .agents/skills/create-dataset/templates/MyHFDataset datasets/{DatasetName}
    ```
 
 2. **Rename files:**
