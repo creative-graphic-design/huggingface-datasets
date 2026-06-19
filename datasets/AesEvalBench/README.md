@@ -63,9 +63,11 @@ task_ids: []
 - **Homepage:** https://github.com/arctanxarc/AesEval-Bench
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/AesEvalBench
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/AesEvalBench
-- **Paper (ICLR 2026 / arXiv):** https://arxiv.org/abs/2603.01083
+- **Paper (ICLR 2026 / OpenReview):** https://openreview.net/forum?id=QGv6QwDA4z
+- **Paper (arXiv):** https://arxiv.org/abs/2603.01083
 - **Data:** https://drive.google.com/file/d/1W5ocLYW0U-znD1Aq3C2xg_TLxL80jeiJ/view?usp=sharing
 - **Leaderboard:** Not available in the original release.
+- **Point of Contact:** https://github.com/arctanxarc/AesEval-Bench/issues
 
 ### Dataset Summary
 
