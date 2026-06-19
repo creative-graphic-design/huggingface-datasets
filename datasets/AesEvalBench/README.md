@@ -223,7 +223,7 @@ AesEval-Bench was created to provide a systematic and reproducible way to evalua
 
 ### Source Data
 
-The benchmark uses the Crello dataset as its source of professional-quality graphic designs. Crello provides rendered design images, element-level metadata in JSON format, and separated design layers. The AesEval-Bench release packages perturbed samples under a `benchmark_data/` directory.
+The benchmark uses the Crello dataset introduced with CanvasVAE as its source of professional-quality graphic designs. Crello provides rendered design images, element-level metadata in JSON format, and separated design layers. The AesEval-Bench release packages perturbed samples under a `benchmark_data/` directory.
 
 Expected extracted layout:
 
@@ -307,6 +307,8 @@ The upstream AesEval-Bench repository does not declare a dataset license in its 
 
 ### Citation Information
 
+If you use this Hugging Face dataset, cite the AesEval-Bench paper. Because the benchmark is derived from Crello, also cite the Crello / CanvasVAE paper when referring to the source graphic design templates.
+
 ```bibtex
 @misc{an2026canvisionlanguagemodelsassess,
   title={Can Vision Language Models Assess Graphic Design Aesthetics? A Benchmark, Evaluation, and Dataset Perspective},
@@ -316,6 +318,13 @@ The upstream AesEval-Bench repository does not declare a dataset license in its 
   archivePrefix={arXiv},
   primaryClass={cs.CV},
   url={https://arxiv.org/abs/2603.01083}
+}
+
+@article{yamaguchi2021canvasvae,
+  title={CanvasVAE: Learning to Generate Vector Graphic Documents},
+  author={Yamaguchi, Kota},
+  journal={ICCV},
+  year={2021}
 }
 ```
 
