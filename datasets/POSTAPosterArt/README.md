@@ -25,6 +25,15 @@ task_categories:
   - text-to-image
   - image-segmentation
 task_ids: []
+configs:
+  - config_name: text
+    data_files:
+      - split: train
+        path: text/*.parquet
+  - config_name: design
+    data_files:
+      - split: train
+        path: design/*.parquet
 ---
 
 # Dataset Card for POSTA-PosterArt
