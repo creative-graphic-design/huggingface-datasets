@@ -525,6 +525,41 @@ def test_push_readme_to_hub(hf_api: HfApi, repo_id: str, script_dir: str):
 - Pytest runs tests alphabetically by default, so "test_load_dataset" runs before "test_push_readme_to_hub" ✅
 - Having them in the correct order in the file makes the dependency clear to anyone reading the code
 
+#### Hugging Face Hub Data Publishing
+
+When the user asks to push or publish the dataset to Hugging Face Hub, do it through the dataset
+tests with `HF_WRITE_TESTS=1`, not by uploading the local dataset directory.
+
+**Correct: publish generated data with `DatasetDict.push_to_hub()`**
+
+```python
+def test_load_dataset(dataset_path: str, repo_id: str):
+    dataset = ds.load_dataset(path=dataset_path, trust_remote_code=True)
+    assert isinstance(dataset, ds.DatasetDict)
+
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(repo_id=repo_id)
+```
+
+For multi-config datasets, pass the config name explicitly:
+
+```python
+dataset.push_to_hub(repo_id=repo_id, config_name=config_name)
+```
+
+Run the write test directly:
+
+```bash
+HF_WRITE_TESTS=1 uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
+```
+
+**Incorrect for data publishing: `HfApi.upload_file()` / `HfApi.upload_folder()`**
+
+Use `upload_file()` only for metadata files like `README.md`. Uploading `{DatasetName}.py`,
+`README.md`, or the dataset source directory does not publish the generated dataset rows or
+Parquet shards. Always verify Hub data publishing by confirming the repo contains split files
+such as `train-*.parquet` or `{config}/train-*.parquet`.
+
 ### Step 6: Update README Files
 
 Update both the dataset README and the repository root README.
