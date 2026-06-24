@@ -190,6 +190,12 @@ def test_load_text_dataset(dataset_path: str):
     assert isinstance(dataset, ds.DatasetDict)
     assert dataset["train"].num_rows == 2218
 
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(
+            repo_id="creative-graphic-design/POSTAPosterArt",
+            config_name="text",
+        )
+
 
 @pytest.mark.skipif(
     condition=os.environ.get("POSTA_POSTER_ART_RUN_DOWNLOAD_TESTS") != "1",
@@ -203,6 +209,12 @@ def test_load_design_dataset(dataset_path: str):
     )
     assert isinstance(dataset, ds.DatasetDict)
     assert dataset["train"].num_rows == 353
+
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(
+            repo_id="creative-graphic-design/POSTAPosterArt",
+            config_name="design",
+        )
 
 
 def test_push_readme_to_hub(
