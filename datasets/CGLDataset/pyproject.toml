@@ -1,0 +1,11 @@
+[project]
+name = "cgl-dataset"
+version = "0.1.0"
+description = "CGL-Dataset loader for Hugging Face Datasets"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+    "huggingface-datasets-cocoapi-tools>=0.4.0",
+    "tqdm>=4.66.0",
+]

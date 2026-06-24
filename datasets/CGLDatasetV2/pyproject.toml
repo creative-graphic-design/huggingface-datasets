@@ -1,0 +1,14 @@
+[project]
+name = "cgl-dataset-v2"
+version = "0.1.0"
+description = "CGL-Dataset v2 loader for Hugging Face Datasets"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+    "huggingface-datasets-cocoapi-tools[cocoapi]>=0.4.0",
+    "pydantic>=2.0.0",
+    "torch>=1.0.0",
+    "tqdm>=4.66.0",
+    "typing-extensions>=4.0.0",
+]

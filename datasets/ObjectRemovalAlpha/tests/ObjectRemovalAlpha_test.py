@@ -35,6 +35,13 @@ def repo_id(org_name: str, dataset_name: str) -> str:
     return f"{org_name}/{dataset_name}"
 
 
+@pytest.mark.skipif(
+    condition=bool(os.environ.get("CI", False)),
+    reason=(
+        "Because this loading script downloads a dataset from Hugging Face Hub, "
+        "we will skip running it on CI."
+    ),
+)
 def test_load_dataset(
     dataset_path: str,
     repo_id: str,
