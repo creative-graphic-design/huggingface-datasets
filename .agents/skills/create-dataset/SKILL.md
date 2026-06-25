@@ -1,7 +1,6 @@
 ---
 name: create-dataset
 description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo. Provides a concrete MyHFDataset example to copy and customize.
-version: 2.0.0
 ---
 
 # Create Hugging Face Dataset Skill
@@ -155,6 +154,27 @@ _URLS = {
 ```
 
 #### 4.2 Update \_CITATION
+
+Before writing or keeping a citation, verify publication metadata from primary or near-primary
+sources. Do not stop at arXiv when venue information may exist.
+
+Check at least:
+
+- arXiv abstract/html page
+- Official project page or GitHub repository
+- Publisher/conference page such as CVF Open Access, ACL Anthology, ACM DL, PMLR, OpenReview, or the venue website
+- Dataset source page
+
+Search with multiple queries, including:
+
+- `{paper title}`
+- `{paper title} CVPR` / `{paper title} ICCV` / `{paper title} ACL` or the likely venue
+- `{arxiv id} venue`
+- `{paper title} project page`
+
+Only use `@misc`, `Paper-not found`, `[More Information Needed]`, or TODO placeholders after
+these checks fail to find a venue or official paper page. If the paper is accepted/published,
+use the venue-aware BibTeX type and fields, such as `@inproceedings` with `booktitle`.
 
 If user provides:
 
@@ -672,7 +692,7 @@ task_ids: [] # Usually empty
 Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any placeholder information:
 
 - Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
-- If information is not available, leave TODO comments for future updates
+- Before leaving venue or paper information as TODO / `[More Information Needed]` / `Paper-not found`, run the publication metadata verification in Step 4.2
 - Verify license information matches the source repository
 - Add complete citation information if available
 
@@ -733,6 +753,7 @@ Add an entry for your new dataset to the repository root README.md:
 1. **Description**: Keep it brief (1-2 sentences) focusing on what the dataset is for and its key features
 2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
 3. **Format**: Bullet list format, one line per dataset
+4. **Venue check**: Before using `Paper-not found`, verify publication metadata with the Step 4.2 checklist and make the root README badge match `_CITATION` and the dataset README
 
 **Example:**
 
