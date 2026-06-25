@@ -224,7 +224,7 @@ class PosterRewardBench(ds.GeneratorBasedBuilder):
         image_root = _find_image_root(extracted_dir, image_dirname)
         return [
             ds.SplitGenerator(
-                name=ds.Split.TRAIN,
+                name=ds.Split.TEST,
                 gen_kwargs={
                     "metadata_path": metadata_path,
                     "image_root": str(image_root),

@@ -25,12 +25,12 @@ task_ids: []
 configs:
   - config_name: basic
     data_files:
-      - split: train
-        path: basic/train-*
+      - split: test
+        path: basic/test-*
   - config_name: advanced
     data_files:
-      - split: train
-        path: advanced/train-*
+      - split: test
+        path: advanced/test-*
 ---
 
 # Dataset Card for PosterRewardBench
@@ -145,12 +145,12 @@ Each row corresponds to one preference pair from the upstream `PRB_basic_relativ
 
 ### Data Splits
 
-Both configurations expose a single `train` split because the upstream benchmark release does not define train, validation, or test partitions.
+Both configurations expose a single `test` split because PosterRewardBench is an evaluation benchmark and the upstream release does not provide training data partitions.
 
 | Config | Split | Rows | Images |
 | --- | --- | ---: | ---: |
-| `basic` | train | 517 | 1,034 |
-| `advanced` | train | 1,223 | 2,446 |
+| `basic` | test | 517 | 1,034 |
+| `advanced` | test | 1,223 | 2,446 |
 
 ## Dataset Creation
 

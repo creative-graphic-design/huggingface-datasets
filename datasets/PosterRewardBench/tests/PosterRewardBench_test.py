@@ -131,14 +131,14 @@ def test_iter_examples_resolves_pair_paths_and_preserves_messages(
     ),
 )
 @pytest.mark.parametrize(
-    argnames=("config_name", "expected_num_train"),
+    argnames=("config_name", "expected_num_test"),
     argvalues=(("basic", 517), ("advanced", 1223)),
 )
 def test_load_dataset(
     dataset_path: str,
     repo_id: str,
     config_name: str,
-    expected_num_train: int,
+    expected_num_test: int,
 ):
     dataset = ds.load_dataset(
         path=dataset_path,
@@ -146,9 +146,9 @@ def test_load_dataset(
         trust_remote_code=True,
     )
     assert isinstance(dataset, ds.DatasetDict)
-    assert dataset["train"].num_rows == expected_num_train
+    assert dataset["test"].num_rows == expected_num_test
 
-    sample = dataset["train"][0]
+    sample = dataset["test"][0]
     assert sample["prompt"]
     assert sample["chosen_image"] is not None
     assert sample["rejected_image"] is not None
