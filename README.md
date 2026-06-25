@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/teaser.png" alt="Creative Graphic Design Datasets teaser" width="100%">
+</p>
+
 # 🤗 Creative Graphic Design Datasets
 
 A collection of Hugging Face dataset loaders and dataset cards for graphic design research. This repository makes datasets for design generation, layout understanding, typography, editing, and aesthetic evaluation easier to find, load, and cite.
