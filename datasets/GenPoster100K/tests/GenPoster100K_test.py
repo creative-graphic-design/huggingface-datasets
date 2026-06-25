@@ -1,6 +1,8 @@
 import importlib.util
 import os
 import sys
+import tempfile
+from io import BytesIO
 from pathlib import Path
 from types import ModuleType
 
@@ -65,15 +67,15 @@ def test_builder_info(builder):
         "id",
         "background_image",
         "background_image_relpath",
+        "merged_image",
         "layers",
         "regions",
         "psd_path",
     }
     assert expected_root_features.issubset(info.features.keys())
-    assert "merged_image" not in info.features
 
     layer_feature = info.features["layers"].feature
-    assert layer_feature["label"].__class__.__name__ == "Value"
+    assert layer_feature["label"].__class__.__name__ == "ClassLabel"
     assert "layer_image" in layer_feature
     assert "layer_image_relpath" in layer_feature
     assert "fill_color" in layer_feature
@@ -121,6 +123,36 @@ def test_build_image_index_filters_image_files(builder, tmp_path: Path):
     assert "notes.txt" not in basename_index
 
 
+def test_compose_merged_image(builder):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        background_path = os.path.join(tmpdir, "background.png")
+        layer_a_path = os.path.join(tmpdir, "layer_a.png")
+        layer_b_path = os.path.join(tmpdir, "layer_b.png")
+
+        Image.new("RGBA", (4, 4), (255, 255, 255, 255)).save(background_path)
+        Image.new("RGBA", (4, 4), (255, 0, 0, 128)).save(layer_a_path)
+        Image.new("RGBA", (2, 2), (0, 0, 255, 255)).save(layer_b_path)
+
+        merged_image = builder._compose_merged_image(
+            background_path,
+            [layer_a_path, None, layer_b_path],
+        )
+
+    assert isinstance(merged_image, dict)
+    assert merged_image["path"] is None
+    assert isinstance(merged_image["bytes"], bytes)
+
+    with Image.open(BytesIO(merged_image["bytes"])) as image:
+        pixels = image.convert("RGBA")
+        assert pixels.getpixel((0, 0)) == (0, 0, 255, 255)
+        assert pixels.getpixel((3, 3))[:3] == (255, 127, 127)
+
+
+def test_normalize_label_rejects_unknown(builder):
+    with pytest.raises(AssertionError):
+        builder._normalize_label("Unknown Label")
+
+
 @pytest.mark.skipif(
     condition=os.environ.get("RUN_HEAVY_DATASET_TESTS") != "1",
     reason=(
@@ -129,14 +161,18 @@ def test_build_image_index_filters_image_files(builder, tmp_path: Path):
     ),
 )
 def test_load_dataset(dataset_path: str, repo_id: str):
+    os.environ.setdefault("GENPOSTER100K_MAX_EXAMPLES", "64")
+
     dataset = ds.load_dataset(path=dataset_path, trust_remote_code=True)
     assert isinstance(dataset, ds.DatasetDict)
     assert "train" in dataset
     assert dataset["train"].num_rows > 0
+    assert dataset["train"].num_rows <= int(os.environ["GENPOSTER100K_MAX_EXAMPLES"])
 
     sample = dataset["train"][0]
     assert sample["background_image"] is not None
     assert sample["background_image_relpath"]
+    assert sample["merged_image"] is not None
     assert len(sample["regions"]) >= 0
     assert len(sample["layers"]) > 0
     assert isinstance(sample["layers"][0]["layer_name"], str)

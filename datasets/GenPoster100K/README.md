@@ -74,9 +74,10 @@ The paper describes it as a high-quality poster dataset with layer-parseable sou
 This repository provides a Hugging Face `datasets` loader implementation that reads the source release (`BruceW91/GenPoster-100K`) and exposes normalized examples with:
 
 - poster background image (`background_image`)
+- background/layer composite image (`merged_image`)
 - PSD reference path (`psd_path`)
 - region boxes (`regions`)
-- layer-level annotations (`layers`) including text, bbox, typography, color, and per-layer rendered image
+- layer-level annotations (`layers`) including text, bbox, typography, color, class label, and per-layer rendered image
 
 Implementation note: this loader uses `0503_raw_offline.pkl` and `part_*.tar.gz`, yielding 102,703 rows in `train`.
 
@@ -104,6 +105,7 @@ Each example includes image assets and structured layer metadata.
   "id": 0,
   "background_image": "<image>",
   "background_image_relpath": "big_poster/poster_metadata/3841272.psd_0_11775f75bf_bg.png",
+  "merged_image": "<image>",
   "psd_path": "big_poster/meta_psd/3841272.psd",
   "regions": [[1656, 481, 2545, 855]],
   "layers": [
@@ -132,6 +134,7 @@ Each example includes image assets and structured layer metadata.
 - `id` (`int32`): Example identifier assigned by loader order.
 - `background_image` (`Image`): Rendered background image for the poster.
 - `background_image_relpath` (`string`): Relative path of the background image in source assets.
+- `merged_image` (`Image`): Background image composited with available rendered layer images.
 - `psd_path` (`string`): Relative PSD path recorded in annotations.
 - `regions` (`Sequence[Sequence[int32]]`): Region boxes as `[x1, y1, x2, y2]`.
 - `layers` (`Sequence[struct]`): Layer-level annotations.
@@ -148,7 +151,7 @@ Each example includes image assets and structured layer metadata.
   - `fill_color` (`Sequence[float32]`, length=4)
   - `layer_image` (`Image`)
   - `layer_image_relpath` (`string`)
-  - `label` (`string`)
+  - `label` (`ClassLabel`): one of `Bodytext`, `Calls to Action`, `Date`, `Detailed items`, `Location`, `Menu Items`, `Name`, `Others`, `Phone number`, `Social Media`, `Subtitle`, `Title`, or `Website`
 
 ### Data Splits
 
@@ -162,7 +165,7 @@ Notes:
 
 - The paper reports 105,456 posters in the broader GenPoster-100K corpus.
 - The HF source release used by this loader provides `0503_raw_offline.pkl` with 102,703 records.
-- The original source data is `train`-only, but our Hugging Face Hub publication splits it into `train/validation/test = 8:1:1` and pushes that split dataset.
+- The original source data is `train`-only, and this loader preserves that split.
 
 ## Dataset Creation
 

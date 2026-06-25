@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import io
+import os
 import pathlib
 import pickle
 import re
@@ -18,6 +20,7 @@ from typing import Any, List
 
 from datasets.utils.logging import get_logger
 from huggingface_hub import snapshot_download
+from PIL import Image
 
 import datasets as ds
 
@@ -54,6 +57,23 @@ _DATASET_REPO_ID = "BruceW91/GenPoster-100K"
 _ANNOTATION_FILENAME = "0503_raw_offline.pkl"
 _ARCHIVE_GLOB = "part_*.tar.gz"
 _IMAGE_PATH_MARKER = "big_poster/poster_metadata/"
+_MAX_EXAMPLES_ENV = "GENPOSTER100K_MAX_EXAMPLES"
+_LAYER_LABEL_NAMES = [
+    "Bodytext",
+    "Calls to Action",
+    "Date",
+    "Detailed items",
+    "Location",
+    "Menu Items",
+    "Name",
+    "Others",
+    "Phone number",
+    "Social Media",
+    "Subtitle",
+    "Title",
+    "Website",
+]
+_LAYER_LABEL_NAME_SET = set(_LAYER_LABEL_NAMES)
 
 
 class GenPoster100K(ds.GeneratorBasedBuilder):
@@ -77,7 +97,7 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
                 "fill_color": ds.Sequence(ds.Value("float32"), length=4),
                 "layer_image": ds.Image(),
                 "layer_image_relpath": ds.Value("string"),
-                "label": ds.Value("string"),
+                "label": ds.ClassLabel(names=_LAYER_LABEL_NAMES),
             }
         )
 
@@ -86,6 +106,7 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
                 "id": ds.Value("int32"),
                 "background_image": ds.Image(),
                 "background_image_relpath": ds.Value("string"),
+                "merged_image": ds.Image(),
                 "psd_path": ds.Value("string"),
                 "regions": ds.Sequence(ds.Sequence(ds.Value("int32"), length=4)),
                 "layers": ds.Sequence(layer_features),
@@ -151,6 +172,19 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
             values.append(1.0)
         return values
 
+    def _normalize_label(self, label: Any) -> str:
+        candidate = str(label)
+        assert candidate in _LAYER_LABEL_NAME_SET
+        return candidate
+
+    def _max_examples(self) -> int | None:
+        raw_value = os.environ.get(_MAX_EXAMPLES_ENV, "").strip()
+        if raw_value == "":
+            return None
+        max_examples = int(raw_value)
+        assert max_examples > 0
+        return max_examples
+
     def _build_image_index(
         self, extracted_paths: List[str]
     ) -> tuple[dict[str, str], dict[str, str]]:
@@ -191,6 +225,31 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
 
         return absolute_path, relative_path
 
+    def _compose_merged_image(
+        self,
+        background_image_path: str,
+        layer_image_paths: List[str | None],
+    ) -> dict[str, Any]:
+        with Image.open(background_image_path) as background:
+            merged = background.convert("RGBA")
+
+        for layer_image_path in layer_image_paths:
+            if layer_image_path is None:
+                continue
+            with Image.open(layer_image_path) as layer:
+                layer_rgba = layer.convert("RGBA")
+
+            if layer_rgba.size != merged.size:
+                expanded_layer = Image.new("RGBA", merged.size, (0, 0, 0, 0))
+                expanded_layer.paste(layer_rgba, (0, 0), layer_rgba)
+                layer_rgba = expanded_layer
+
+            merged.alpha_composite(layer_rgba)
+
+        with io.BytesIO() as buffer:
+            merged.save(buffer, format="PNG")
+            return {"path": None, "bytes": buffer.getvalue()}
+
     def _split_generators(
         self, dl_manager: ds.DownloadManager
     ) -> List[ds.SplitGenerator]:
@@ -218,8 +277,12 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
             records = pickle.load(f)
 
         image_index, basename_index = self._build_image_index(extracted_archives)
+        max_examples = self._max_examples()
 
         for idx, (background_path, layers, psd_path, regions) in enumerate(records):
+            if max_examples is not None and idx >= max_examples:
+                break
+
             background_image_path, background_relative_path = self._resolve_image_path(
                 background_path,
                 image_index,
@@ -247,11 +310,16 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
                         "fill_color": self._normalize_color(layer.get("FillColor", [])),
                         "layer_image": layer_image_path,
                         "layer_image_relpath": layer_relative_path,
-                        "label": str(layer.get("label", "")),
+                        "label": self._normalize_label(layer.get("label", "")),
                     }
                 )
 
             normalized_regions = [self._normalize_bbox(region) for region in regions]
+            assert background_image_path is not None
+            merged_image = self._compose_merged_image(
+                background_image_path=background_image_path,
+                layer_image_paths=[layer["layer_image"] for layer in normalized_layers],
+            )
 
             yield (
                 idx,
@@ -259,6 +327,7 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
                     "id": idx,
                     "background_image": background_image_path,
                     "background_image_relpath": background_relative_path,
+                    "merged_image": merged_image,
                     "psd_path": str(psd_path),
                     "regions": normalized_regions,
                     "layers": normalized_layers,
