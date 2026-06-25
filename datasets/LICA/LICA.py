@@ -47,6 +47,39 @@ _URLS = {
     "data_archive": "https://storage.googleapis.com/lica-assets/websites/blog/lica-data.zip",
 }
 
+CATEGORY_NAMES = [
+    "Art & Design",
+    "Brochure",
+    "Business Cards",
+    "Business Documents",
+    "Cards & Invitations",
+    "Education",
+    "Flyers",
+    "Infographics",
+    "Instagram Posts",
+    "Logo",
+    "Menu",
+    "Newsletter",
+    "Planner & Calendar",
+    "Posters",
+    "Presentations",
+    "Print Products",
+    "Resume",
+    "Social Media",
+    "Videos",
+]
+
+COMPONENT_TYPE_NAMES = [
+    "GROUP",
+    "IMAGE",
+    "TEXT",
+]
+
+RENDER_TYPE_NAMES = [
+    "png",
+    "mp4",
+]
+
 
 def _read_json(path: pathlib.Path) -> Any:
     with path.open("r", encoding="utf-8") as f:
@@ -135,7 +168,9 @@ def _render_paths(
         render_path = png_path if png_path.exists() else mp4_path
 
     suffix = render_path.suffix.lower().removeprefix(".")
-    render_type = suffix if suffix in {"png", "mp4"} else ""
+    if suffix not in set(RENDER_TYPE_NAMES):
+        raise ValueError(f"Unsupported LICA render type: {render_path}")
+    render_type = suffix
     render_image = str(render_path) if render_type == "png" else None
     return render_path, render_type, render_image
 
@@ -150,13 +185,13 @@ class LICA(ds.GeneratorBasedBuilder):
             {
                 "layout_id": ds.Value("string"),
                 "template_id": ds.Value("string"),
-                "category": ds.Value("string"),
+                "category": ds.ClassLabel(names=CATEGORY_NAMES),
                 "n_template_layouts": ds.Value("int32"),
                 "template_layout_index": ds.Value("int32"),
                 "width": ds.Value("int32"),
                 "height": ds.Value("int32"),
                 "file_name": ds.Value("string"),
-                "render_type": ds.Value("string"),
+                "render_type": ds.ClassLabel(names=RENDER_TYPE_NAMES),
                 "render_path": ds.Value("string"),
                 "render_image": ds.Image(),
                 "render_video_path": ds.Value("string"),
@@ -165,7 +200,7 @@ class LICA(ds.GeneratorBasedBuilder):
                 "layout_background": ds.Value("string"),
                 "layout_duration": ds.Value("float32"),
                 "n_components": ds.Value("int32"),
-                "component_types": [ds.Value("string")],
+                "component_types": [ds.ClassLabel(names=COMPONENT_TYPE_NAMES)],
                 "layout_json": ds.Value("string"),
                 "annotation_json": ds.Value("string"),
                 "template_annotation_json": ds.Value("string"),
@@ -281,9 +316,7 @@ class LICA(ds.GeneratorBasedBuilder):
                     "layout_background": layout.get("background", ""),
                     "layout_duration": _parse_optional_float(layout.get("duration")),
                     "n_components": len(components),
-                    "component_types": [
-                        component.get("type", "") for component in components
-                    ],
+                    "component_types": [component["type"] for component in components],
                     "layout_json": _dump_json(layout),
                     "annotation_json": _dump_json(annotation),
                     "template_annotation_json": _dump_json(template_annotation),

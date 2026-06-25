@@ -135,23 +135,30 @@ def test_load_dataset(
     assert "layout_json" in features
     assert "annotation_json" in features
     assert "template_annotation_json" in features
+    assert isinstance(features["category"], ds.ClassLabel)
+    assert isinstance(features["render_type"], ds.ClassLabel)
+    assert isinstance(features["component_types"][0], ds.ClassLabel)
 
     sample = dataset["test"][0]
     assert sample["layout_id"] == "layout-001"
     assert sample["template_id"] == "template-001"
-    assert sample["category"] == "Posters"
+    assert features["category"].int2str(sample["category"]) == "Posters"
     assert sample["n_template_layouts"] == 1
     assert sample["template_layout_index"] == 0
     assert sample["width"] == 16
     assert sample["height"] == 12
-    assert sample["render_type"] == "png"
+    assert features["render_type"].int2str(sample["render_type"]) == "png"
     assert sample["render_image"] is not None
     assert sample["layout_width"] == 16
     assert sample["layout_height"] == 12
     assert sample["layout_background"] == "rgb(255, 255, 255)"
     assert sample["layout_duration"] == 3
     assert sample["n_components"] == 2
-    assert sample["component_types"] == ["TEXT", "IMAGE"]
+    component_type_feature = features["component_types"][0]
+    assert [
+        component_type_feature.int2str(component_type)
+        for component_type in sample["component_types"]
+    ] == ["TEXT", "IMAGE"]
     assert sample["description"] == "A compact poster layout."
     assert sample["template_description"] == "Template-level description."
 

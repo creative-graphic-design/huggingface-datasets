@@ -95,12 +95,12 @@ Each row corresponds to one layout from `metadata.csv`.
 
 - `layout_id`: Unique layout ID, matching filenames under `layouts/`, `images/`, and `annotations/`.
 - `template_id`: Template UUID shared by related layout variants.
-- `category`: Design category, such as presentations, posters, flyers, or social media.
+- `category`: Design category as a class label, such as presentations, posters, flyers, or social media.
 - `n_template_layouts`: Number of layouts in the template group.
 - `template_layout_index`: Zero-based position within the template group.
 - `width`, `height`: Rendered canvas dimensions in pixels from `metadata.csv`.
 - `file_name`: Relative rendered media path when provided by the source metadata.
-- `render_type`: Rendered media type, currently `png` or `mp4`.
+- `render_type`: Rendered media type class label, currently `png` or `mp4`.
 - `render_path`: Local cached path to the rendered media file.
 - `render_image`: Decoded rendered image for PNG layouts.
 - `render_video_path`: Local cached path for MP4 layouts. This field is empty for PNG rows.
@@ -108,7 +108,7 @@ Each row corresponds to one layout from `metadata.csv`.
 - `layout_background`: Canvas background from the layout JSON.
 - `layout_duration`: Optional slide duration in seconds.
 - `n_components`: Number of components in the layout JSON.
-- `component_types`: Ordered component type labels from the layout JSON.
+- `component_types`: Ordered component type class labels from the layout JSON: `GROUP`, `IMAGE`, and `TEXT`.
 - `layout_json`: Full layout JSON serialized as a string.
 - `annotation_json`: Full per-layout annotation JSON serialized as a string.
 - `template_annotation_json`: Matching template-level annotation JSON serialized as a string.
