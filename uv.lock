@@ -7,8 +7,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-06-18T14:37:00.810600357Z"
-exclude-newer-span = "P7D"
+exclude-newer = "2026-06-18T15:29:18.971717941Z"
 
 [manifest]
 members = [
@@ -28,6 +27,7 @@ members = [
     "pku-poster-layout",
     "posta-poster-art",
     "poster-erase",
+    "poster-reward-bench",
     "publaynet",
     "rico",
 ]
@@ -1505,6 +1505,17 @@ requires-dist = [
     { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
     { name = "pandas", specifier = ">=2.0.0" },
 ]
+
+[[package]]
+name = "poster-reward-bench"
+version = "0.1.0"
+source = { virtual = "datasets/PosterRewardBench" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "propcache"
