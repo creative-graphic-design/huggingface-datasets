@@ -6,6 +6,10 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 
+[options]
+exclude-newer = "2026-06-18T15:29:18.971717941Z"
+exclude-newer-span = "P7D"
+
 [manifest]
 members = [
     "aes-eval-bench",
@@ -14,7 +18,10 @@ members = [
     "design-bench",
     "graphic-design-evaluation",
     "huggingface-datasets",
+    "lica",
     "object-removal-alpha",
+    "posta-poster-art",
+    "poster-reward-bench",
 ]
 
 [[package]]
@@ -591,6 +598,17 @@ wheels = [
 ]
 
 [[package]]
+name = "lica"
+version = "0.1.0"
+source = { virtual = "datasets/LICA" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
+
+[[package]]
 name = "multidict"
 version = "6.6.4"
 source = { registry = "https://pypi.org/simple" }
@@ -977,6 +995,34 @@ sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
 ]
+
+[[package]]
+name = "posta-poster-art"
+version = "0.1.0"
+source = { virtual = "datasets/POSTAPosterArt" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+    { name = "gdown" },
+    { name = "tenacity" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
+    { name = "gdown", specifier = ">=5.2.0" },
+    { name = "tenacity", specifier = ">=9.1.2" },
+]
+
+[[package]]
+name = "poster-reward-bench"
+version = "0.1.0"
+source = { virtual = "datasets/PosterRewardBench" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "propcache"
