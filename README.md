@@ -28,3 +28,7 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
 - **[POSTA-PosterArt](datasets/POSTAPosterArt/)**
   - Customized artistic poster generation data with layout, typography, stylized text, and segmentation annotations.
   - [![arXiv](https://img.shields.io/badge/arXiv-2503.14908-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2503.14908) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-POSTA-0F766E)](https://haoyuchen.com/POSTA) [![HF Hub](https://img.shields.io/badge/HF%20Hub-POSTAPosterArt-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/POSTAPosterArt)
+
+## License
+
+This repository is licensed under the [Apache License 2.0](LICENSE). Dataset contents may be subject to the terms of their original sources; see each dataset card and original source for details.
