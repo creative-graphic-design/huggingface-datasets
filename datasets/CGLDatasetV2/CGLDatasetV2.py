@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Dict, Iterator, List, Optional, Tuple, Type, Union
 
 import datasets as ds
+import gdown
 from datasets.utils.logging import get_logger
 from hfcocoapi.models import CategoryData, ImageData
 from hfcocoapi.processors import InstancesProcessor
@@ -17,6 +18,7 @@ from hfcocoapi.typehint import (
     PathLike,
 )
 from pydantic import BaseModel, Field, model_validator
+from tenacity import retry, stop_after_attempt, wait_exponential
 from tqdm import tqdm
 from typing_extensions import Self
 
@@ -43,6 +45,10 @@ _LICENSE = """\
 Unknown
 """
 
+_URLS = {
+    "radm_dataset": "1ezOzR7MX3MFFIfWgJmmEaqXn3iDFp2si",
+}
+
 # The correspondence of the following category names
 # is referred to https://tianchi.aliyun.com/dataset/142692#json-file-structure
 CATEGORIES: Dict[str, str] = {
@@ -52,6 +58,40 @@ CATEGORIES: Dict[str, str] = {
     "符号元素": "embellishment",
     "强调突出子部分文字": "highlighted text",
 }
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    reraise=True,
+)
+def download_google_drive_file(file_id: str, output_path: pathlib.Path) -> pathlib.Path:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    gdown.download(id=file_id, output=str(output_path), quiet=False, resume=True)
+    if not output_path.exists():
+        raise FileNotFoundError(f"Failed to download Google Drive file: {file_id}")
+    return output_path
+
+
+def find_radm_dataset_dir(path: str | pathlib.Path) -> pathlib.Path:
+    path = pathlib.Path(path)
+
+    if path.name == "RADM_dataset" and path.is_dir():
+        return path
+
+    candidate = path / "RADM_dataset"
+    if candidate.is_dir():
+        return candidate
+
+    for child in path.iterdir():
+        candidate = child / "RADM_dataset"
+        if candidate.is_dir():
+            return candidate
+
+    raise FileNotFoundError(
+        "Could not find RADM_dataset/. Pass either RADM_dataset.tar.gz or an "
+        "extracted directory containing RADM_dataset via data_dir."
+    )
 
 
 class UserSelectedValue(BaseModel):
@@ -402,16 +442,7 @@ class CGLDatasetV2(ds.GeneratorBasedBuilder):
     def _split_generators(
         self, dl_manager: ds.DownloadManager
     ) -> List[ds.SplitGenerator]:
-        assert dl_manager.manual_dir is not None
-        base_dir_path = os.path.expanduser(dl_manager.manual_dir)
-
-        if not os.path.exists(base_dir_path):
-            raise FileNotFoundError()
-
-        base_dir_path = dl_manager.extract(base_dir_path)
-        assert isinstance(base_dir_path, str)
-
-        dir_path = pathlib.Path(base_dir_path) / "RADM_dataset"
+        dir_path = self._get_data_dir(dl_manager)
 
         ann_dir = dir_path / "annotations"
         img_dir = dir_path / "images"
@@ -455,6 +486,30 @@ class CGLDatasetV2(ds.GeneratorBasedBuilder):
                 },
             ),
         ]
+
+    def _get_data_dir(self, dl_manager: ds.DownloadManager) -> pathlib.Path:
+        local_data_dir = getattr(self.config, "data_dir", None) or dl_manager.manual_dir
+        if local_data_dir:
+            local_path = pathlib.Path(os.path.expanduser(local_data_dir))
+            if not local_path.exists():
+                raise FileNotFoundError(local_path)
+            if local_path.is_file():
+                extracted_path = dl_manager.extract(str(local_path))
+                assert isinstance(extracted_path, str)
+                return find_radm_dataset_dir(extracted_path)
+            return find_radm_dataset_dir(local_path)
+
+        cache_dir = pathlib.Path(
+            dl_manager.download_config.cache_dir or ds.config.DOWNLOADED_DATASETS_PATH
+        )
+        archive_path = cache_dir / "cgl_dataset_v2" / "RADM_dataset.tar.gz"
+        if not archive_path.exists():
+            logger.info("Downloading CGL-Dataset V2 RADM dataset from Google Drive.")
+            download_google_drive_file(_URLS["radm_dataset"], archive_path)
+
+        extracted_path = dl_manager.extract(str(archive_path))
+        assert isinstance(extracted_path, str)
+        return find_radm_dataset_dir(extracted_path)
 
     def _generate_examples(
         self,

@@ -29,11 +29,6 @@ def repo_id(org_name: str) -> str:
     return f"{org_name}/CGL-Dataset-v2"
 
 
-@pytest.fixture
-def data_dir() -> str:
-    return "RADM_dataset.tar.gz"
-
-
 @pytest.mark.parametrize("include_text_features", (True, False))
 @pytest.mark.parametrize("decode_rle", (True, False))
 def test_load_dataset_builder(
@@ -48,6 +43,17 @@ def test_load_dataset_builder(
         trust_remote_code=True,
     )
     assert {"image", "annotations"} <= set(builder.info.features)
+
+
+def get_load_kwargs(dataset_path: str, **kwargs):
+    load_kwargs = {
+        "path": dataset_path,
+        "trust_remote_code": True,
+        **kwargs,
+    }
+    if local_archive := os.environ.get("CGL_DATASET_V2_ARCHIVE"):
+        load_kwargs["data_dir"] = local_archive
+    return load_kwargs
 
 
 @pytest.mark.skipif(
@@ -73,17 +79,37 @@ def test_load_dataset_builder(
 )
 def test_load_dataset(
     dataset_path: str,
-    data_dir: str,
     include_text_features: bool,
     decode_rle: bool,
     expected_num_train: int = 60548,
     expected_num_test: int = 1035,
 ):
     dataset = ds.load_dataset(
+        **get_load_kwargs(
+            dataset_path,
+            decode_rle=decode_rle,
+            include_text_features=include_text_features,
+        ),
+    )
+    assert isinstance(dataset, ds.DatasetDict)
+    assert dataset["train"].num_rows == expected_num_train
+    assert dataset["test"].num_rows == expected_num_test
+
+
+def test_load_dataset_with_data_dir(
+    dataset_path: str,
+    expected_num_train: int = 60548,
+    expected_num_test: int = 1035,
+):
+    local_archive = os.environ.get("CGL_DATASET_V2_ARCHIVE")
+    if not local_archive:
+        pytest.skip("Set CGL_DATASET_V2_ARCHIVE to test loading a local archive.")
+
+    dataset = ds.load_dataset(
         path=dataset_path,
-        data_dir=data_dir,
-        decode_rle=decode_rle,
-        include_text_features=include_text_features,
+        data_dir=local_archive,
+        decode_rle=False,
+        include_text_features=False,
         trust_remote_code=True,
     )
     assert isinstance(dataset, ds.DatasetDict)
@@ -94,18 +120,17 @@ def test_load_dataset(
 def test_push_to_hub(
     repo_id: str,
     dataset_path: str,
-    data_dir: str,
 ):
     if not os.environ.get("HF_WRITE_TESTS"):
         pytest.skip("Set HF_WRITE_TESTS=1 to push to Hugging Face Hub.")
 
     dataset = ds.load_dataset(
-        path=dataset_path,
-        data_dir=data_dir,
-        decode_rle=True,
-        include_text_features=True,
-        rename_category_names=True,
-        trust_remote_code=True,
+        **get_load_kwargs(
+            dataset_path,
+            decode_rle=True,
+            include_text_features=True,
+            rename_category_names=True,
+        ),
     )
     assert isinstance(dataset, ds.DatasetDict)
 

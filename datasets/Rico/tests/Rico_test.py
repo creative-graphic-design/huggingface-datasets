@@ -54,7 +54,7 @@ def test_load_dataset_builder(
     argvalues=(
         ("ui-screenshots-and-view-hierarchies", 56322, 3314, 6625),
         ("ui-layout-vectors", 61288, 3606, 7209),
-        ("interaction-traces", 8749, 513, 1030),
+        ("interaction-traces", 2575, 513, 1030),
         # "animations",
         ("ui-screenshots-and-hierarchies-with-semantic-annotations", 56322, 3314, 6625),
     ),

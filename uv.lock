@@ -225,8 +225,10 @@ version = "0.1.0"
 source = { virtual = "datasets/CGLDatasetV2" }
 dependencies = [
     { name = "datasets", extra = ["vision"] },
+    { name = "gdown" },
     { name = "huggingface-datasets-cocoapi-tools", extra = ["cocoapi"] },
     { name = "pydantic" },
+    { name = "tenacity" },
     { name = "torch" },
     { name = "tqdm" },
     { name = "typing-extensions" },
@@ -235,8 +237,10 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
+    { name = "gdown", specifier = ">=5.2.0" },
     { name = "huggingface-datasets-cocoapi-tools", extras = ["cocoapi"], specifier = ">=0.4.0" },
     { name = "pydantic", specifier = ">=2.0.0" },
+    { name = "tenacity", specifier = ">=9.1.2" },
     { name = "torch", specifier = ">=1.0.0" },
     { name = "tqdm", specifier = ">=4.66.0" },
     { name = "typing-extensions", specifier = ">=4.0.0" },
