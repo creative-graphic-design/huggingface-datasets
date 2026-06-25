@@ -31,7 +31,7 @@ task_ids: []
 - **Homepage:** https://modelscope.cn/datasets/song322/CreativePSD
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/CreativePSD
 - **Paper (Preprint):** https://arxiv.org/abs/2603.25738
-- **Paper (Conference/Journal Name):** [More Information Needed]
+- **Paper (Conference/Journal Name):** https://openaccess.thecvf.com/content/CVPR2026/html/Shuai_PSDesigner_Automated_Graphic_Design_with_a_Human-Like_Creative_Workflow_CVPR_2026_paper.html
 - **Point of Contact:** [More Information Needed]
 
 ### Dataset Summary
@@ -124,13 +124,11 @@ The source dataset card lists `CC-BY-NC-4.0`.
 ### Citation Information
 
 ```bibtex
-@misc{shuai2026psdesigner,
+@inproceedings{shuai2026psdesigner,
   title={PSDesigner: Automated Graphic Design with a Human-Like Creative Workflow},
   author={Shuai, Xincheng and Tang, Song and Huang, Yutong and Ding, Henghui and Tao, Dacheng},
+  booktitle={CVPR},
   year={2026},
-  eprint={2603.25738},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
 }
 ```
 

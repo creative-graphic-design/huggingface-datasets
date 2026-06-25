@@ -24,13 +24,11 @@ import datasets as ds
 logger = get_logger(__name__)
 
 _CITATION = """\
-@misc{shuai2026psdesigner,
+@inproceedings{shuai2026psdesigner,
   title={PSDesigner: Automated Graphic Design with a Human-Like Creative Workflow},
   author={Shuai, Xincheng and Tang, Song and Huang, Yutong and Ding, Henghui and Tao, Dacheng},
+  booktitle={CVPR},
   year={2026},
-  eprint={2603.25738},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
 }
 """
 
