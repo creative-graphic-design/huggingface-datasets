@@ -9,6 +9,7 @@ This is a Python monorepo for Hugging Face datasets focused on graphic design an
 ## Documentation
 
 - In the root README dataset list, describe each entry as dataset contents, not as a paper task. Prefer concise noun-phrase descriptions such as "Graphic design aesthetic evaluation data..." over wording like "Benchmark for..." or "Dataset for...".
+- In the root README dataset badges, set the `Original` badge `logo` to the source medium using Simple Icons slugs: use `github` for GitHub repositories, `githubpages` for GitHub Pages project sites, `huggingface` for upstream Hugging Face datasets, and `homepage` for independent project pages when no more specific Simple Icons brand applies.
 
 ## Development Commands
 
