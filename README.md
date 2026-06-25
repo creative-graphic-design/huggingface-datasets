@@ -1,17 +1,62 @@
-# Monorepo for Hugging Face Datasets related to Creative Graphic Design
+<p align="center">
+  <img src=".github/teaser.png" alt="Creative Graphic Design Datasets teaser" width="100%">
+</p>
+
+# 🤗 Creative Graphic Design Datasets
+
+A collection of Hugging Face dataset loaders and dataset cards for graphic design research. This repository makes datasets for design generation, layout understanding, typography, editing, and aesthetic evaluation easier to find, load, and cite.
 
 ## Datasets
 
-- **AesEvalBench**: Benchmark for evaluating whether vision-language models can assess graphic design aesthetics across 4 dimensions, 12 indicators, and 1,198 perturbed design samples. [[Data Source]](https://github.com/arctanxarc/AesEval-Bench) [[ICLR 2026]](https://arxiv.org/abs/2603.01083) [[arXiv]](https://arxiv.org/abs/2603.01083)
-- **BannerRequest400**: Multimodal benchmark for advertising banner generation with 100 brand logos and 5,200 specifications. [[Data Source]](https://github.com/sony/BannerAgency/tree/main/BannerRequest400) [[EMNLP'25]](https://aclanthology.org/2025.emnlp-main.214/) [[arXiv]](https://arxiv.org/abs/2503.11060)
-- **Camera**: CAMERA (CyberAgent Multimodal Evaluation for Ad Text GeneRAtion), a Japanese ad text generation dataset. [[Data Source]](https://github.com/CyberAgentAILab/camera)
-- **CGLDataset**: CGL-Dataset for automatic graphic layout design of advertising posters. [[Data Source]](https://github.com/minzhouGithub/CGL-GAN) [[IJCAI'22]](https://www.ijcai.org/proceedings/2022/692) [[arXiv]](https://arxiv.org/abs/2205.00303)
-- **CGLDatasetV2**: CGL-Dataset v2 for automatic poster layout generation with text annotations and clean background images. [[Data Source]](https://github.com/liuan0803/RADM) [[CIKM'23]](https://dl.acm.org/doi/10.1145/3583780.3615028) [[arXiv]](https://arxiv.org/abs/2306.09086)
-- **CTXFont**: Dataset for context-aware font prediction on web designs with 1,065 professional web designs, 4,893 text element annotations, and 492 unique font faces. [[Data Source]](https://github.com/nanxuanzhao/CTXFont-dataset) [[Pacific Graphics'18]](https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.13576)
-- **GraphicDesignEvaluation**: Evaluation dataset for assessing whether LMMs can evaluate graphic design quality based on design principles (alignment, overlap, white space). [[Data Source]](https://cyberagentailab.github.io/Graphic-design-evaluation/) [[SIGGRAPH Asia'24]](https://dl.acm.org/doi/10.1145/3680528.3687588) [[arXiv]](https://arxiv.org/abs/2410.10022)
-- **Magazine**: Magazine layout dataset with fine-grained layout annotations and keyword labeling. [[Data Source]](https://xtqiao.com/projects/content_aware_layout/) [[SIGGRAPH'19]](https://dl.acm.org/doi/10.1145/3306346.3322971)
-- **ObjectRemovalAlpha**: Dataset for object removal and image inpainting with paired images. [[Data Source]](https://huggingface.co/datasets/lrzjason/ObjectRemovalAlpha)
-- **PKUPosterLayout**: PKU PosterLayout benchmark for content-aware visual-textual presentation layout. [[Data Source]](http://59.108.48.34/tiki/PosterLayout/) [[CVPR'23]](https://openaccess.thecvf.com/content/CVPR2023/html/Hsu_PosterLayout_A_New_Benchmark_and_Approach_for_Content-Aware_Visual-Textual_Presentation_CVPR_2023_paper.html) [[arXiv]](https://arxiv.org/abs/2303.15937)
-- **PosterErase**: Poster text erasing dataset for self-supervised text erasing in the wild. [[Data Source]](https://github.com/alimama-creative/Self-supervised-Text-Erasing) [[ACM MM'22]](https://dl.acm.org/doi/abs/10.1145/3503161.3547905) [[arXiv]](https://arxiv.org/abs/2204.12743)
-- **PubLayNet**: Document layout analysis dataset with image and COCO-style layout annotations. [[Data Source]](https://developer.ibm.com/exchanges/data/all/publaynet/)
-- **Rico**: Mobile app UI dataset for data-driven design applications. [[Data Source]](http://www.interactionmining.org/rico.html) [[UIST'17]](https://dl.acm.org/doi/10.1145/3126594.3126651)
+- **[AesEvalBench](datasets/AesEvalBench/)**
+  - Graphic design aesthetic evaluation data for vision-language models.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2603.01083-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.01083) [![Paper](https://img.shields.io/badge/Paper-ICLR%2726-blue)](https://arxiv.org/abs/2603.01083) [![Original](https://img.shields.io/badge/Original-AesEval--Bench-0F766E)](https://github.com/arctanxarc/AesEval-Bench) [![HF Hub](https://img.shields.io/badge/HF%20Hub-AesEvalBench-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/AesEvalBench)
+- **[BannerRequest400](datasets/BannerRequest400/)**
+  - Advertising banner requests with brand logos and multimodal design instructions.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2503.11060-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2503.11060) [![Paper](https://img.shields.io/badge/Paper-EMNLP%2725-blue)](https://aclanthology.org/2025.emnlp-main.214/) [![Original](https://img.shields.io/badge/Original-BannerAgency-0F766E)](https://github.com/sony/BannerAgency/tree/main/BannerRequest400) [![HF Hub](https://img.shields.io/badge/HF%20Hub-BannerRequest400-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/BannerRequest400)
+- **[Camera](datasets/Camera/)**
+  - Japanese advertising text generation data for image-conditioned copywriting.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-camera-0F766E)](https://github.com/CyberAgentAILab/camera) [![HF Hub](https://img.shields.io/badge/HF%20Hub-Camera-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/Camera)
+- **[CGLDataset](datasets/CGLDataset/)**
+  - Advertising poster layout data with image assets and layout annotations.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2205.00303-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2205.00303) [![Paper](https://img.shields.io/badge/Paper-IJCAI%2722-blue)](https://www.ijcai.org/proceedings/2022/692) [![Original](https://img.shields.io/badge/Original-CGL--GAN-0F766E)](https://github.com/minzhouGithub/CGL-GAN) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CGLDataset-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CGLDataset)
+- **[CGLDatasetV2](datasets/CGLDatasetV2/)**
+  - Poster layout generation data with text annotations and clean background images.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2306.09086-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2306.09086) [![Paper](https://img.shields.io/badge/Paper-CIKM%2723-blue)](https://dl.acm.org/doi/10.1145/3583780.3615028) [![Original](https://img.shields.io/badge/Original-RADM-0F766E)](https://github.com/liuan0803/RADM) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CGLDatasetV2-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CGLDatasetV2)
+- **[CTXFont](datasets/CTXFont/)**
+  - Context-aware font prediction data for web designs and text elements.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) [![Paper](https://img.shields.io/badge/Paper-Pacific%20Graphics%2718-blue)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.13576) [![Original](https://img.shields.io/badge/Original-CTXFont--dataset-0F766E)](https://github.com/nanxuanzhao/CTXFont-dataset) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CTXFont-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CTXFont)
+- **[DesignBench](datasets/DesignBench/)**
+  - Web design task data for generation, editing, repair, and compilation.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2506.06251-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2506.06251) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-DesignBench-0F766E)](https://webpai.github.io/DesignBench/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-DesignBench-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/DesignBench)
+- **[GraphicDesignEvaluation](datasets/GraphicDesignEvaluation/)**
+  - Graphic design quality data focused on alignment, overlap, and white space.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2410.10022-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2410.10022) [![Paper](https://img.shields.io/badge/Paper-SIGGRAPH%20Asia%2724-blue)](https://dl.acm.org/doi/10.1145/3680528.3687588) [![Original](https://img.shields.io/badge/Original-Project%20page-0F766E)](https://cyberagentailab.github.io/Graphic-design-evaluation/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-GraphicDesignEvaluation-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/GraphicDesignEvaluation)
+- **[LICA](datasets/LICA/)**
+  - Graphic design layout dataset with rendered compositions, component-level layout specifications, and natural-language annotations.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2603.16098-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.16098) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-LICA-0F766E)](https://github.com/lica-world/lica-dataset) [![HF Hub](https://img.shields.io/badge/HF%20Hub-LICA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/LICA)
+- **[Magazine](datasets/Magazine/)**
+  - Magazine layout data with fine-grained layout annotations and keyword labels.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) [![Paper](https://img.shields.io/badge/Paper-SIGGRAPH%2719-blue)](https://dl.acm.org/doi/10.1145/3306346.3322971) [![Original](https://img.shields.io/badge/Original-Content--Aware%20Layout-0F766E)](https://xtqiao.com/projects/content_aware_layout/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-Magazine-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/Magazine)
+- **[ObjectRemovalAlpha](datasets/ObjectRemovalAlpha/)**
+  - Paired image data for object removal and image inpainting.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-lrzjason%2FObjectRemovalAlpha-0F766E)](https://huggingface.co/datasets/lrzjason/ObjectRemovalAlpha) [![HF Hub](https://img.shields.io/badge/HF%20Hub-ObjectRemovalAlpha-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/ObjectRemovalAlpha)
+- **[PKUPosterLayout](datasets/PKUPosterLayout/)**
+  - Visual-textual presentation layout data for content-aware poster composition.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2303.15937-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2303.15937) [![Paper](https://img.shields.io/badge/Paper-CVPR%2723-blue)](https://openaccess.thecvf.com/content/CVPR2023/html/Hsu_PosterLayout_A_New_Benchmark_and_Approach_for_Content-Aware_Visual-Textual_Presentation_CVPR_2023_paper.html) [![Original](https://img.shields.io/badge/Original-PosterLayout-0F766E)](http://59.108.48.34/tiki/PosterLayout/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PKUPosterLayout-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PKUPosterLayout)
+- **[POSTA-PosterArt](datasets/POSTAPosterArt/)**
+  - Customized artistic poster generation data with layout, typography, stylized text, and segmentation annotations.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2503.14908-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2503.14908) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-POSTA-0F766E)](https://haoyuchen.com/POSTA) [![HF Hub](https://img.shields.io/badge/HF%20Hub-POSTAPosterArt-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/POSTAPosterArt)
+- **[PosterErase](datasets/PosterErase/)**
+  - Poster text erasing data for self-supervised text removal in the wild.
+  - [![arXiv](https://img.shields.io/badge/arXiv-2204.12743-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2204.12743) [![Paper](https://img.shields.io/badge/Paper-ACM%20MM%2722-blue)](https://dl.acm.org/doi/abs/10.1145/3503161.3547905) [![Original](https://img.shields.io/badge/Original-Self--supervised--Text--Erasing-0F766E)](https://github.com/alimama-creative/Self-supervised-Text-Erasing) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PosterErase-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PosterErase)
+- **[PubLayNet](datasets/PubLayNet/)**
+  - Document layout analysis data with images and COCO-style annotations.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-PubLayNet-0F766E)](https://developer.ibm.com/exchanges/data/all/publaynet/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PubLayNet-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PubLayNet)
+- **[Rico](datasets/Rico/)**
+  - Mobile app UI data for data-driven interaction and interface design.
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) [![Paper](https://img.shields.io/badge/Paper-UIST%2717-blue)](https://dl.acm.org/doi/10.1145/3126594.3126651) [![Original](https://img.shields.io/badge/Original-Rico-0F766E)](http://www.interactionmining.org/rico.html) [![HF Hub](https://img.shields.io/badge/HF%20Hub-Rico-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/Rico)
+
+## License
+
+This repository is licensed under the [Apache License 2.0](LICENSE). Dataset contents may be subject to the terms of their original sources; see each dataset card and original source for details.

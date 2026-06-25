@@ -1,0 +1,12 @@
+[project]
+name = "posta-poster-art"
+version = "0.1.0"
+description = "POSTA-PosterArt dataset for artistic poster layout, typography, text stylization, and segmentation"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "datasets[vision]>=2.0.0,<4.0.0",
+    "gdown>=5.2.0",
+    "tenacity>=9.1.2",
+]
