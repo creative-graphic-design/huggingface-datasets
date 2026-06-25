@@ -18,6 +18,7 @@ members = [
     "cgl-dataset",
     "cgl-dataset-v2",
     "ctxfont",
+    "desigen",
     "design-bench",
     "graphic-design-evaluation",
     "huggingface-datasets",
@@ -500,6 +501,21 @@ wheels = [
 [package.optional-dependencies]
 vision = [
     { name = "pillow" },
+]
+
+[[package]]
+name = "desigen"
+version = "0.1.0"
+source = { virtual = "datasets/Desigen" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+    { name = "pyarrow" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
+    { name = "pyarrow", specifier = ">=15.0.0" },
 ]
 
 [[package]]
