@@ -12,6 +12,16 @@ from PIL import Image
 import datasets as ds
 
 _HUB_MAX_SHARD_SIZE = "50MB"
+# Counts reported in the PosterReward paper supplementary PosterRewardBench section.
+_PAPER_EXPECTED_NUM_TEST_BY_CONFIG = {
+    "basic": 517,
+    "advanced": 1223,
+}
+_PAPER_EXPECTED_TOTAL_PAIRS = 1740
+_PAPER_EXPECTED_NUM_IMAGES_BY_CONFIG = {
+    config_name: num_pairs * 2
+    for config_name, num_pairs in _PAPER_EXPECTED_NUM_TEST_BY_CONFIG.items()
+}
 
 
 @pytest.fixture
@@ -123,6 +133,14 @@ def test_iter_examples_resolves_pair_paths_and_preserves_messages(
     assert example["rejected_messages"][1] == {"role": "assistant", "content": ""}
 
 
+def test_paper_reported_counts_are_consistent():
+    assert sum(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.values()) == _PAPER_EXPECTED_TOTAL_PAIRS
+    assert _PAPER_EXPECTED_NUM_IMAGES_BY_CONFIG == {
+        "basic": 1034,
+        "advanced": 2446,
+    }
+
+
 @pytest.mark.skipif(
     condition=os.environ.get("POSTER_REWARD_BENCH_RUN_DOWNLOAD_TESTS") != "1",
     reason=(
@@ -132,7 +150,7 @@ def test_iter_examples_resolves_pair_paths_and_preserves_messages(
 )
 @pytest.mark.parametrize(
     argnames=("config_name", "expected_num_test"),
-    argvalues=(("basic", 517), ("advanced", 1223)),
+    argvalues=tuple(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.items()),
 )
 def test_load_dataset(
     dataset_path: str,
@@ -146,6 +164,7 @@ def test_load_dataset(
         trust_remote_code=True,
     )
     assert isinstance(dataset, ds.DatasetDict)
+    assert list(dataset) == ["test"]
     assert dataset["test"].num_rows == expected_num_test
 
     sample = dataset["test"][0]

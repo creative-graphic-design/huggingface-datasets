@@ -516,6 +516,48 @@ def test_load_dataset(dataset_path: str, config_name: str, expected_num_train: i
     assert dataset["train"].num_rows == expected_num_train
 ```
 
+#### Paper and Source Statistics Parity
+
+Before finalizing tests, verify dataset statistics from primary or near-primary sources such
+as the paper, supplementary material, official project page, or upstream repository. Encode
+those values as named constants in the test file, then assert the loaded dataset matches them.
+
+Include checks for every applicable statistic:
+
+- Per-config and per-split row counts from the paper or official release
+- Total row count across configs or splits
+- Image, audio, annotation, pair, or conversation counts when the source reports them
+- Split names, especially for benchmark-only datasets that should expose `test`, not `train`
+
+Prefer explicit names that document provenance:
+
+```python
+_PAPER_EXPECTED_NUM_TEST_BY_CONFIG = {
+    "basic": 517,
+    "advanced": 1223,
+}
+_PAPER_EXPECTED_TOTAL_PAIRS = 1740
+
+
+def test_paper_reported_counts_are_consistent():
+    assert sum(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.values()) == _PAPER_EXPECTED_TOTAL_PAIRS
+
+
+@pytest.mark.parametrize(
+    argnames=("config_name", "expected_num_test"),
+    argvalues=tuple(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.items()),
+)
+def test_load_dataset(dataset_path: str, config_name: str, expected_num_test: int):
+    dataset = ds.load_dataset(path=dataset_path, name=config_name, trust_remote_code=True)
+    assert list(dataset) == ["test"]
+    assert dataset["test"].num_rows == expected_num_test
+```
+
+Do not leave row counts as unexplained literals like `100` or `EXPECTED_COUNT` when the paper
+or source release states concrete values. If the full load test is gated behind an environment
+variable because downloads are large, still keep a fast test that verifies the paper-derived
+constants are internally consistent.
+
 #### Test Ordering
 
 **IMPORTANT: Test function order matters!**
