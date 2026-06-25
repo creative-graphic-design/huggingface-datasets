@@ -67,8 +67,8 @@ class URLs(TypedDict):
 
 
 _URLS: URLs = {
-    "image": "https://huggingface.co/datasets/creative-graphic-design/Magazine-private/resolve/main/MagImage.zip",
-    "layout": "https://huggingface.co/datasets/creative-graphic-design/Magazine-private/resolve/main/MagLayout.zip",
+    "image": "https://huggingface.co/datasets/creative-graphic-design/private-Magazine/resolve/main/MagImage.zip",
+    "layout": "https://huggingface.co/datasets/creative-graphic-design/private-Magazine/resolve/main/MagLayout.zip",
 }
 
 
