@@ -108,7 +108,7 @@ Each row corresponds to one layout from `metadata.csv`.
 - `layout_background`: Canvas background from the layout JSON.
 - `layout_duration`: Optional slide duration in seconds.
 - `n_components`: Number of components in the layout JSON.
-- `component_types`: Ordered component type class labels from the layout JSON: `GROUP`, `IMAGE`, and `TEXT`.
+- `component_types`: Ordered component type class labels from the layout JSON: `GROUP`, `IMAGE`, `TEXT`, and `TEXT_NEW`.
 - `layout_json`: Full layout JSON serialized as a string.
 - `annotation_json`: Full per-layout annotation JSON serialized as a string.
 - `template_annotation_json`: Matching template-level annotation JSON serialized as a string.
@@ -119,7 +119,7 @@ Each row corresponds to one layout from `metadata.csv`.
 
 | Split | Rows |
 | --- | ---: |
-| `test` | 1,183 |
+| `test` | 1,148 |
 
 ## Dataset Creation
 

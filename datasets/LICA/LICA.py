@@ -73,6 +73,7 @@ COMPONENT_TYPE_NAMES = [
     "GROUP",
     "IMAGE",
     "TEXT",
+    "TEXT_NEW",
 ]
 
 RENDER_TYPE_NAMES = [

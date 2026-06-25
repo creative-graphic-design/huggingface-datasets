@@ -177,13 +177,14 @@ def test_load_dataset(
 def test_load_full_dataset(
     dataset_path: str,
     trust_remote_code: bool = True,
+    expected_num_test: int = 1148,
 ):
     dataset = ds.load_dataset(
         path=dataset_path,
         trust_remote_code=trust_remote_code,
     )
     assert isinstance(dataset, ds.DatasetDict)
-    assert dataset["test"].num_rows == 1183
+    assert dataset["test"].num_rows == expected_num_test
 
 
 def test_push_readme_to_hub(
