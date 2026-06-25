@@ -57,10 +57,10 @@ _LICENSE = "cc-by-sa-4.0"
 # This can be an arbitrary nested dict/list of URLs (see below in `_split_generators` method)
 _URLS = {
     "layout_images": [
-        "https://huggingface.co/datasets/shunk031-private/CGL-Dataset-private/resolve/main/layout_imgs_6w_1.zip",
-        "https://huggingface.co/datasets/shunk031-private/CGL-Dataset-private/resolve/main/layout_imgs_6w_2.zip",
+        "https://huggingface.co/datasets/creative-graphic-design/private-CGL-Dataset/resolve/main/layout_imgs_6w_1.zip",
+        "https://huggingface.co/datasets/creative-graphic-design/private-CGL-Dataset/resolve/main/layout_imgs_6w_2.zip",
     ],
-    "layout_json": "https://huggingface.co/datasets/shunk031-private/CGL-Dataset-private/resolve/main/layout_json_yinhe.zip",
+    "layout_json": "https://huggingface.co/datasets/creative-graphic-design/private-CGL-Dataset/resolve/main/layout_json_yinhe.zip",
 }
 
 # The correspondence of the following category names

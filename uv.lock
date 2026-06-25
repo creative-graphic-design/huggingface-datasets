@@ -1423,13 +1423,17 @@ version = "0.1.0"
 source = { virtual = "datasets/PKUPosterLayout" }
 dependencies = [
     { name = "datasets", extra = ["vision"] },
+    { name = "gdown" },
     { name = "pandas" },
+    { name = "tenacity" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
+    { name = "gdown", specifier = ">=5.2.0" },
     { name = "pandas", specifier = ">=2.0.0" },
+    { name = "tenacity", specifier = ">=9.1.2" },
 ]
 
 [[package]]
