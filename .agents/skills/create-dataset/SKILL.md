@@ -1,7 +1,6 @@
 ---
 name: create-dataset
 description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo. Provides a concrete MyHFDataset example to copy and customize.
-version: 2.0.0
 ---
 
 # Create Hugging Face Dataset Skill
@@ -393,6 +392,13 @@ def _info(self):
 **Important:** If using `ds.Image()` features, ensure you've added `datasets[vision]>=2.0.0,<4.0.0` to your `pyproject.toml` dependencies (see Step 2.1).
 
 #### 4.6 Implement \_split_generators
+
+**Split selection rule:**
+
+- Use `ds.Split.TEST` for evaluation-only datasets, benchmarks, leaderboards, and test sets. Do **not** put all rows in `train` just because the source release has a single file or no official split; that makes benchmark data look like training data.
+- Use `ds.Split.TRAIN` only when the data is intended for model training, pretraining, or general corpus use.
+- If the upstream release has explicit split files, preserve those names (`train`, `validation`, `test`) in the loader.
+- Keep tests and README metadata aligned with the chosen split name (for example, assert `dataset["test"].num_rows` and use `test-*` paths in README frontmatter for benchmark-only datasets).
 
 **Simple:**
 
