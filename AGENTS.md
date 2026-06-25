@@ -6,6 +6,10 @@ This file provides guidance to coding agents when working with code in this repo
 
 This is a Python monorepo for Hugging Face datasets focused on graphic design and creative AI evaluation. The repository uses `uv` as the package manager and follows a workspace structure where each dataset is independently managed under `datasets/`.
 
+## Documentation
+
+- In the root README dataset list, describe each entry as dataset contents, not as a paper task. Prefer concise noun-phrase descriptions such as "Graphic design aesthetic evaluation data..." over wording like "Benchmark for..." or "Dataset for...".
+
 ## Development Commands
 
 ### Testing
