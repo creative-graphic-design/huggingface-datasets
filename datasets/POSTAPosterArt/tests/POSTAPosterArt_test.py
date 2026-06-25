@@ -11,6 +11,16 @@ from PIL import Image
 
 import datasets as ds
 
+# Keep Hub Parquet row groups comfortably below the Dataset Viewer scan limit
+# (300MB). The default push_to_hub shard size can create single row groups above
+# that limit for image-heavy examples, which makes the Hub preview fail.
+_HUB_DESIGN_MAX_SHARD_SIZE = "100MB"
+
+# POSTA text has heavy image triplets. Even with a small max_shard_size, the
+# writer still emitted 100-row Parquet row groups just over the viewer limit.
+# Use num_shards for this config so each shard stays below that 100-row boundary.
+_HUB_TEXT_NUM_SHARDS = {"train": 40}
+
 
 @pytest.fixture
 def script_dir() -> str:
@@ -194,6 +204,7 @@ def test_load_text_dataset(dataset_path: str):
         dataset.push_to_hub(
             repo_id="creative-graphic-design/POSTAPosterArt",
             config_name="text",
+            num_shards=_HUB_TEXT_NUM_SHARDS,
         )
 
 
@@ -214,6 +225,7 @@ def test_load_design_dataset(dataset_path: str):
         dataset.push_to_hub(
             repo_id="creative-graphic-design/POSTAPosterArt",
             config_name="design",
+            max_shard_size=_HUB_DESIGN_MAX_SHARD_SIZE,
         )
 
 

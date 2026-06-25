@@ -538,14 +538,28 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     assert isinstance(dataset, ds.DatasetDict)
 
     if os.environ.get("HF_WRITE_TESTS"):
-        dataset.push_to_hub(repo_id=repo_id)
+        dataset.push_to_hub(repo_id=repo_id, max_shard_size="50MB")
 ```
 
 For multi-config datasets, pass the config name explicitly:
 
 ```python
-dataset.push_to_hub(repo_id=repo_id, config_name=config_name)
+dataset.push_to_hub(
+    repo_id=repo_id,
+    config_name=config_name,
+    max_shard_size="50MB",
+)
 ```
+
+Set `max_shard_size` explicitly for image-heavy datasets. The Hugging Face Dataset Viewer has
+a Parquet scan limit, and the default shard size can create row groups that are too large for
+the preview. Use a small value such as `50MB`, then verify the generated Parquet row groups;
+large image examples can still produce row groups noticeably larger than the requested shard
+size.
+
+If row groups remain too large, use `num_shards` instead of `max_shard_size` to force more
+shards. `push_to_hub()` accepts either `max_shard_size` or `num_shards`, not both. This matters
+when the Parquet writer keeps multiple heavy image rows in the same row group.
 
 Run the write test directly:
 
