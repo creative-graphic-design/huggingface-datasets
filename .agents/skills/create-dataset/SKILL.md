@@ -596,8 +596,12 @@ def test_push_readme_to_hub(hf_api: HfApi, repo_id: str, script_dir: str):
 
 #### Hugging Face Hub Data Publishing
 
-When the user asks to push or publish the dataset to Hugging Face Hub, do it through the dataset
-tests with `HF_WRITE_TESTS=1`, not by uploading the local dataset directory.
+When implementing dataset tests, keep Hub publishing behind `HF_WRITE_TESTS=1` and publish
+generated rows with `DatasetDict.push_to_hub()`. Do not upload the local dataset source
+directory to publish dataset rows.
+
+When the user asks to push, publish, upload, release, or verify Hub publication state, use
+`$publish-dataset` instead of continuing in this skill.
 
 **Correct: publish generated data with `DatasetDict.push_to_hub()`**
 
@@ -629,19 +633,6 @@ size.
 If row groups remain too large, use `num_shards` instead of `max_shard_size` to force more
 shards. `push_to_hub()` accepts either `max_shard_size` or `num_shards`, not both. This matters
 when the Parquet writer keeps multiple heavy image rows in the same row group.
-
-Run the write test directly:
-
-```bash
-HF_WRITE_TESTS=1 uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
-```
-
-**Incorrect for data publishing: `HfApi.upload_file()` / `HfApi.upload_folder()`**
-
-Use `upload_file()` only for metadata files like `README.md`. Uploading `{DatasetName}.py`,
-`README.md`, or the dataset source directory does not publish the generated dataset rows or
-Parquet shards. Always verify Hub data publishing by confirming the repo contains split files
-such as `train-*.parquet` or `{config}/train-*.parquet`.
 
 ### Step 6: Update README Files
 
