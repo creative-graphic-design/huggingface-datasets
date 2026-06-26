@@ -1,5 +1,6 @@
 import importlib.util
 import os
+import pickle
 import sys
 import tempfile
 from io import BytesIO
@@ -151,6 +152,55 @@ def test_compose_merged_image(builder):
 def test_normalize_label_rejects_unknown(builder):
     with pytest.raises(AssertionError):
         builder._normalize_label("Unknown Label")
+
+
+def test_generate_examples_keeps_rows_with_missing_background(
+    builder,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    annotation_path = tmp_path / "annotations.pkl"
+    records = [
+        (
+            "big_poster/poster_metadata/missing_bg.png",
+            [
+                {
+                    "LayerName": "title-layer",
+                    "Text": "Poster title",
+                    "Bounding Box": [1, 2, 3, 4],
+                    "Angle": 0,
+                    "psd_size": [10, 20],
+                    "StrokeWidth": 0,
+                    "Font": "Arial",
+                    "FontSize": 12,
+                    "Tracking": 0,
+                    "Justification": 0,
+                    "FillColor": [1, 1, 1, 1],
+                    "img": "big_poster/poster_metadata/missing_layer.png",
+                    "label": "Title",
+                }
+            ],
+            "big_poster/meta_psd/missing.psd",
+            [],
+        )
+    ]
+    with annotation_path.open("wb") as f:
+        pickle.dump(records, f)
+
+    monkeypatch.setattr(builder, "_build_image_index", lambda _: ({}, {}))
+
+    examples = list(builder._generate_examples(annotation_path, [tmp_path.as_posix()]))
+
+    assert len(examples) == 1
+    key, row = examples[0]
+    assert key == 0
+    assert row["background_image"] is None
+    assert (
+        row["background_image_relpath"] == "big_poster/poster_metadata/missing_bg.png"
+    )
+    assert row["merged_image"] is None
+    assert row["layers"][0]["layer_image"] is None
+    assert row["layers"][0]["label"] == "Title"
 
 
 @pytest.mark.skipif(

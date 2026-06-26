@@ -247,7 +247,7 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
             merged.alpha_composite(layer_rgba)
 
         with io.BytesIO() as buffer:
-            merged.save(buffer, format="PNG")
+            merged.save(buffer, format="PNG", compress_level=1)
             return {"path": None, "bytes": buffer.getvalue()}
 
     def _split_generators(
@@ -315,11 +315,20 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
                 )
 
             normalized_regions = [self._normalize_bbox(region) for region in regions]
-            assert background_image_path is not None
-            merged_image = self._compose_merged_image(
-                background_image_path=background_image_path,
-                layer_image_paths=[layer["layer_image"] for layer in normalized_layers],
-            )
+            if background_image_path is None:
+                logger.warning(
+                    "Missing background image for example %d: %s",
+                    idx,
+                    background_relative_path,
+                )
+                merged_image = None
+            else:
+                merged_image = self._compose_merged_image(
+                    background_image_path=background_image_path,
+                    layer_image_paths=[
+                        layer["layer_image"] for layer in normalized_layers
+                    ],
+                )
 
             yield (
                 idx,
