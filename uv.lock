@@ -28,6 +28,7 @@ members = [
     "object-removal-alpha",
     "pku-poster-layout",
     "posta-poster-art",
+    "poster-dna",
     "poster-erase",
     "poster-iq",
     "poster-reward-bench",
@@ -1498,6 +1499,17 @@ requires-dist = [
     { name = "gdown", specifier = ">=5.2.0" },
     { name = "tenacity", specifier = ">=9.1.2" },
 ]
+
+[[package]]
+name = "poster-dna"
+version = "0.1.0"
+source = { virtual = "datasets/PosterDNA" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "poster-erase"
