@@ -51,6 +51,7 @@ task_ids: []
 
 - **Homepage:** https://github.com/CyberAgentAILab/camera
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Camera
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/CAMERA
 - **Paper (NLP2023):** https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf
 
 ### Dataset Summary

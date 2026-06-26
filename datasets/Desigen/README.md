@@ -14,7 +14,8 @@ size_categories:
 
 - **Homepage:** https://whaohan.github.io/desigen/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Desigen
-- **Paper:** https://arxiv.org/abs/2403.09093
+- **Paper (Preprint):** https://arxiv.org/abs/2403.09093
+- **Paper (CVPR2024):** https://doi.org/10.1109/CVPR52733.2024.01209
 
 ### Dataset Summary
 
@@ -41,10 +42,14 @@ Desigen contains web advertisement design data with background images, content p
 ## Citation
 
 ```bibtex
-@article{xiao2024desigen,
-  title={Desigen: A Pipeline for Controllable Design Template Generation},
-  author={Xiao, Shishi and Wang, Yufei and Zhou, Rui and Hao, Haohan and Chen, Kai and Chen, Xi and Wei, Zhongyu},
-  journal={arXiv preprint arXiv:2403.09093},
-  year={2024}
+@inproceedings{Weng_2024_CVPR,
+  title = {Desigen: A Pipeline for Controllable Design Template Generation},
+  author = {Weng, Haohan and Huang, Danqing and Qiao, Yu and Hu, Zheng and Lin, Chin-Yew and Zhang, Tong and Chen, C. L. Philip},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  year = {2024},
+  pages = {12721--12732},
+  doi = {10.1109/CVPR52733.2024.01209},
+  url = {https://openaccess.thecvf.com/content/CVPR2024/html/Weng_Desigen_A_Pipeline_for_Controllable_Design_Template_Generation_CVPR_2024_paper.html}
 }
 ```

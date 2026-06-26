@@ -1,0 +1,7 @@
+[project]
+name = "design-bench-prompts"
+version = "0.1.0"
+description = "DEsignBench visual design text-to-image prompts"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
