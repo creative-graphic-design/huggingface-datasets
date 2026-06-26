@@ -32,7 +32,9 @@ _CITATION = """
 _HOMEPAGE = "https://github.com/alimama-creative/Self-supervised-Text-Erasing"
 
 _LICENSE = """\
-The dataset is distributed under the CC BY-SA 4.0 license.
+The upstream source has shown conflicting CC BY-SA 4.0 and CC BY-NC-SA 4.0
+license indicators. This packaging uses the more restrictive CC BY-NC-SA 4.0
+metadata and users should verify the current upstream terms before use.
 """
 
 _URL_BASE = (

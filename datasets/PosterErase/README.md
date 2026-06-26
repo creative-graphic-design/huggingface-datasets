@@ -1,170 +1,178 @@
 ---
 annotations_creators:
-- machine-generated
+  - machine-generated
 language:
-- zh
+  - zh
 language_creators:
-- found
+  - found
 license:
-- cc-by-sa-4.0
+  - cc-by-nc-sa-4.0
 multilinguality:
-- monolingual
+  - monolingual
 pretty_name: PosterErase
-size_categories: []
+size_categories:
+  - 10K<n<100K
 source_datasets:
-- original
+  - original
 tags:
-- graphic design
+  - graphic-design
+  - poster
+  - text-erasing
+  - image-inpainting
 task_categories:
-- other
+  - image-to-image
 task_ids: []
+configs:
+  - config_name: default
+    data_files:
+      - split: train
+        path: data/train-*
+      - split: validation
+        path: data/validation-*
+      - split: test
+        path: data/test-*
 ---
 
 # Dataset Card for PosterErase
 
-
-## Table of Contents
-- [Dataset Card Creation Guide](#dataset-card-creation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Dataset Description](#dataset-description)
-    - [Dataset Summary](#dataset-summary)
-    - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
-    - [Languages](#languages)
-  - [Dataset Structure](#dataset-structure)
-    - [Data Instances](#data-instances)
-    - [Data Fields](#data-fields)
-    - [Data Splits](#data-splits)
-  - [Dataset Creation](#dataset-creation)
-    - [Curation Rationale](#curation-rationale)
-    - [Source Data](#source-data)
-      - [Initial Data Collection and Normalization](#initial-data-collection-and-normalization)
-      - [Who are the source language producers?](#who-are-the-source-language-producers)
-    - [Annotations](#annotations)
-      - [Annotation process](#annotation-process)
-      - [Who are the annotators?](#who-are-the-annotators)
-    - [Personal and Sensitive Information](#personal-and-sensitive-information)
-  - [Considerations for Using the Data](#considerations-for-using-the-data)
-    - [Social Impact of Dataset](#social-impact-of-dataset)
-    - [Discussion of Biases](#discussion-of-biases)
-    - [Other Known Limitations](#other-known-limitations)
-  - [Additional Information](#additional-information)
-    - [Dataset Curators](#dataset-curators)
-    - [Licensing Information](#licensing-information)
-    - [Citation Information](#citation-information)
-    - [Contributions](#contributions)
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
+[![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Dataset Description
 
 - **Homepage:** https://github.com/alimama-creative/Self-supervised-Text-Erasing
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/PosterErase
-- **Paper (Preprint):** https://arxiv.org/abs/2204.12743
-- **Paper (ACMMM2022):** https://dl.acm.org/doi/abs/10.1145/3503161.3547905
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/PosterErase
+- **Original Data:** https://tianchi.aliyun.com/dataset/134810
+- **Paper (arXiv):** https://arxiv.org/abs/2204.12743
+- **Paper (ACM MM 2022):** https://doi.org/10.1145/3503161.3547905
 
 ### Dataset Summary
 
+PosterErase is a poster text-erasing dataset released with *Self-supervised Text Erasing with Controllable Image Synthesis*. It contains high-resolution poster images with text regions and structured annotations for text-erasing research.
+
+This Hugging Face version exposes the original train, validation, and test splits as parquet files. The validation and test splits include ground-truth erased poster images; the training split contains source posters and annotations only.
+
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
+PosterErase is intended for image-to-image text erasing and inpainting on graphic design posters. A model receives a poster image and text-region annotations, then predicts a poster with the text removed while preserving the surrounding visual design.
+
+No public leaderboard is bundled with this Hugging Face dataset. Use the upstream paper and repository for the original training and evaluation protocol.
 
 ### Languages
 
-The language data in PKU-PosterLayout is in Chinese (BCP-47 zh).
+Poster text is primarily Chinese (`zh`).
 
 ## Dataset Structure
 
 ### Data Instances
 
-To use PosterErase dataset, you need to download the dataset via [Alibaba Cloud](https://tianchi.aliyun.com/dataset/134810).
-Then place the downloaded files in the following structure and specify its path.
+Each row contains a poster image, the original relative image path, and parsed annotation fields. Validation and test rows also include `gt_image`.
 
-```
-/path/to/datasets
-├── erase_1.zip
-├── erase_2.zip
-├── erase_3.zip
-├── erase_4.zip
-├── erase_5.zip
-└── erase_6.zip
-```
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/PosterErase",
-    data_dir="/path/to/datasets/",
-)
+```json
+{
+  "number": 0,
+  "path": "train/000000.png",
+  "image": "<image>",
+  "gt_image": null,
+  "annotation": {
+    "masks": [
+      {
+        "x1": 0,
+        "x2": 0,
+        "y1": 0,
+        "y2": 0
+      }
+    ],
+    "place": {
+      "objs": [
+        {
+          "text": "...",
+          "size": 0,
+          "direction": 0
+        }
+      ],
+      "texts": [
+        [
+          {
+            "x": 0,
+            "y": 0,
+            "cs": [
+              {
+                "c1": 0,
+                "c2": 0,
+                "c3": 0
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  }
+}
 ```
 
 ### Data Fields
 
-[More Information Needed]
+- `number` (`int32`): Original numeric example identifier from the annotation file.
+- `path` (`string`): Original relative path of the source poster image.
+- `image` (`Image`): Source poster image with text.
+- `gt_image` (`Image`, nullable): Ground-truth erased poster image. This field is populated for validation and test rows and is `null` for training rows.
+- `annotation.masks` (`list`): Text mask bounding boxes with `x1`, `x2`, `y1`, and `y2` integer coordinates.
+- `annotation.place.objs` (`list`): Parsed text object metadata with `text`, `size`, and `direction`.
+- `annotation.place.texts` (`list`): Parsed text placement and color metadata. Each text item contains `x`, `y`, and `cs`; each color has `c1`, `c2`, and `c3` integer channels.
 
 ### Data Splits
 
-[More Information Needed]
+| Split | Rows | Ground-truth erased images |
+| --- | ---: | ---: |
+| train | 58,114 | 0 |
+| validation | 148 | 148 |
+| test | 146 | 146 |
 
 ## Dataset Creation
 
-### Curation Rationale
-
-[More Information Needed]
-
 ### Source Data
 
-[More Information Needed]
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-#### Who are the source language producers?
-
-[More Information Needed]
+The original data was released by alimama-creative for the PosterErase text-erasing task. The original distribution uses six zip files named `erase_1.zip` through `erase_6.zip`.
 
 ### Annotations
 
-[More Information Needed]
+The loader parses the upstream tab-separated annotation files:
 
-#### Annotation process
+- `train.txt` for the training split.
+- `ps_valid.txt` for the validation split.
+- `ps_test.txt` for the test split.
 
-[More Information Needed]
-
-#### Who are the annotators?
-
-[More Information Needed]
+The validation and test annotation files include a `gt_path` column that points to the ground-truth erased image.
 
 ### Personal and Sensitive Information
 
-[More Information Needed]
+The dataset contains poster images and rendered text from the upstream release. The dataset card does not identify personal information in the annotations, but posters may contain names, brands, faces, or culturally specific visual/textual content.
 
 ## Considerations for Using the Data
 
 ### Social Impact of Dataset
 
-[More Information Needed]
+PosterErase can support better text erasing and design editing systems for poster images. It should be used with care when editing copyrighted, branded, or identity-bearing poster content.
 
 ### Discussion of Biases
 
-[More Information Needed]
+The dataset is centered on Chinese poster designs from the upstream release. Models evaluated on this dataset may not generalize to other writing systems, design cultures, poster genres, or typography styles.
 
 ### Other Known Limitations
 
-[More Information Needed]
+The training split does not include ground-truth erased images in this loader. The original task relies on the paper's self-supervised setup for training and uses validation/test ground truth for evaluation.
 
 ## Additional Information
 
 ### Dataset Curators
 
-[More Information Needed]
+The original dataset was created by alimama-creative. This Hugging Face packaging is maintained by the creative-graphic-design project.
 
 ### Licensing Information
 
-You can find the following statement in [the license section](https://tianchi.aliyun.com/dataset/134810#license) of t[he dataset distribution location](https://tianchi.aliyun.com/dataset/134810).
-
-> The dataset is distributed under the CC BY-SA 4.0 license.
-
-However, the license setting on that page appears to be set to [CC-BY-SA-NC 4.0](http://creativecommons.org/licenses/by-sa/4.0/?spm=a2c22.12282016.0.0.7abc5a92qnyxdR).
+The upstream Tianchi page has shown conflicting license indicators: the page text has stated CC BY-SA 4.0, while the page license selector has appeared to indicate a non-commercial ShareAlike Creative Commons license. This dataset card uses the more restrictive `cc-by-nc-sa-4.0` metadata and users should verify the current upstream terms before redistribution or commercial use.
 
 ### Citation Information
 
@@ -180,4 +188,4 @@ However, the license setting on that page appears to be set to [CC-BY-SA-NC 4.0]
 
 ### Contributions
 
-Thanks to [alimama-creative](https://github.com/alimama-creative) for creating this dataset.
+Thanks to [alimama-creative](https://github.com/alimama-creative) for creating the original dataset.
