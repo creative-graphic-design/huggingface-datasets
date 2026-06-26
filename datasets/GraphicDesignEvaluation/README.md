@@ -1,174 +1,123 @@
 ---
 annotations_creators:
-- crowdsourced
+  - crowdsourced
 language:
-- en
+  - en
 language_creators:
-- found
+  - found
 license:
-- apache-2.0
-multilinguality: []
+  - apache-2.0
 pretty_name: GraphicDesignEvaluation
 size_categories:
-- n<1K
+  - n<1K
 source_datasets:
-- original
+  - original
 tags:
-- graphic design evaluation
-- design principles
-- large multimodal model
-- gpt-based evaluation
-- human annotation
-- human-rated dataset
-task_categories: []
+  - graphic-design-evaluation
+  - design-principles
+  - human-annotation
+task_categories:
+  - image-to-text
 task_ids: []
---- 
-
+configs:
+  - config_name: absolute-gpt-alignment
+    data_files:
+      - split: train
+        path: absolute-gpt-alignment/train-*
+  - config_name: absolute-gpt-overlap
+    data_files:
+      - split: train
+        path: absolute-gpt-overlap/train-*
+  - config_name: absolute-gpt-whitespace
+    data_files:
+      - split: train
+        path: absolute-gpt-whitespace/train-*
+  - config_name: absolute-human-alignment
+    data_files:
+      - split: train
+        path: absolute-human-alignment/train-*
+  - config_name: absolute-human-overlap
+    data_files:
+      - split: train
+        path: absolute-human-overlap/train-*
+  - config_name: absolute-human-whitespace
+    data_files:
+      - split: train
+        path: absolute-human-whitespace/train-*
+  - config_name: relative-gpt-alignment
+    data_files:
+      - split: train
+        path: relative-gpt-alignment/train-*
+  - config_name: relative-gpt-overlap
+    data_files:
+      - split: train
+        path: relative-gpt-overlap/train-*
+  - config_name: relative-gpt-whitespace
+    data_files:
+      - split: train
+        path: relative-gpt-whitespace/train-*
+  - config_name: relative-human-alignment
+    data_files:
+      - split: train
+        path: relative-human-alignment/train-*
+  - config_name: relative-human-overlap
+    data_files:
+      - split: train
+        path: relative-human-overlap/train-*
+  - config_name: relative-human-whitespace
+    data_files:
+      - split: train
+        path: relative-human-whitespace/train-*
+---
 
 # Dataset Card for GraphicDesignEvaluation
 
-## Table of Contents
-- [Dataset Card Creation Guide](#dataset-card-creation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Dataset Description](#dataset-description)
-    - [Dataset Summary](#dataset-summary)
-    - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
-    - [Languages](#languages)
-  - [Dataset Structure](#dataset-structure)
-    - [Data Instances](#data-instances)
-    - [Data Fields](#data-fields)
-    - [Data Splits](#data-splits)
-  - [Dataset Creation](#dataset-creation)
-    - [Curation Rationale](#curation-rationale)
-    - [Source Data](#source-data)
-      - [Initial Data Collection and Normalization](#initial-data-collection-and-normalization)
-      - [Who are the source language producers?](#who-are-the-source-language-producers)
-    - [Annotations](#annotations)
-      - [Annotation process](#annotation-process)
-      - [Who are the annotators?](#who-are-the-annotators)
-    - [Personal and Sensitive Information](#personal-and-sensitive-information)
-  - [Considerations for Using the Data](#considerations-for-using-the-data)
-    - [Social Impact of Dataset](#social-impact-of-dataset)
-    - [Discussion of Biases](#discussion-of-biases)
-    - [Other Known Limitations](#other-known-limitations)
-  - [Additional Information](#additional-information)
-    - [Dataset Curators](#dataset-curators)
-    - [Licensing Information](#licensing-information)
-    - [Citation Information](#citation-information)
-    - [Contributions](#contributions)
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
+[![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Dataset Description
 
 - **Homepage:** https://cyberagentailab.github.io/Graphic-design-evaluation/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/GraphicDesignEvaluation
-- **Paper (Preprint):** https://arxiv.org/abs/2410.08885
-- **Paper (SIGGRAPH Asia'24):** https://doi.org/10.1145/3681758.3698010
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/GraphicDesignEvaluation
+- **Paper (arXiv):** https://arxiv.org/abs/2410.08885
+- **Paper (SIGGRAPH Asia 2024):** https://doi.org/10.1145/3681758.3698010
 
 ### Dataset Summary
 
-The GraphicDesignEvaluation dataset evaluates whether large multimodal models (LMMs), such as GPT-4o, can assess the quality of graphic designs according to core design principles—specifically alignment, overlap, and white space.
-
-It contains 700 banner and poster designs (100 original and 600 perturbed), collected from VistaCreate, each rated by 60 human annotators.
-Each image has associated human scores (1–10 scale) and GPT-based scores for the three principles, enabling the study of correlations between human judgment, heuristic metrics, and LMM-based evaluation.
-
-The dataset was created to benchmark the ability of GPT-based evaluators to perform reliable aesthetic judgment in visual communication design.
+GraphicDesignEvaluation is a human-rated benchmark released with *Can GPTs Evaluate Graphic Design Based on Design Principles?*. The paper compares GPT-based evaluation and heuristic metrics against human ratings for three representative design principles: alignment, overlap, and white space. The dataset contains graphic banner designs curated from an online service, perturbed low-quality variants, and human annotations collected from 60 subjects.
 
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
-
+The dataset supports graphic design quality evaluation, human/model score correlation analysis, and design-principle-specific assessment. No public leaderboard is bundled with this Hugging Face dataset.
 
 ### Languages
 
-The dataset is in English (en), as both prompts and annotations are written in English. All participants and model instructions use English-language descriptions of design principles and rating guidelines.
+Annotations and evaluation descriptions are in English (`en`).
 
 ## Dataset Structure
 
-### Data Instances
-
-[More Information Needed]
-
-
 ### Data Fields
 
-[More Information Needed]
-
+Absolute configs contain `image_id`, `image`, `perturbation`, `scores`, and `avg`. Relative configs contain `image_id`, `image`, `comparative`, `scores`, and `avg`.
 
 ### Data Splits
 
-[More Information Needed]
-
+All configs expose a single `train` split. Absolute configs have 400 rows each; relative configs have 300 rows each.
 
 ## Dataset Creation
 
-### Curation Rationale
-
-[More Information Needed]
-
-
-### Source Data
-
-[More Information Needed]
-
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-
-#### Who are the source language producers?
-
-[More Information Needed]
-
-
-### Annotations
-
-[More Information Needed]
-
-
-#### Annotation process
-
-[More Information Needed]
-
-
-#### Who are the annotators?
-
-[More Information Needed]
-
-
-### Personal and Sensitive Information
-
-[More Information Needed]
-
+The dataset was created to study whether GPT-based evaluators can assess graphic design quality according to core design principles and how those scores compare with human annotations.
 
 ## Considerations for Using the Data
 
-### Social Impact of Dataset
-
-[More Information Needed]
-
-
-### Discussion of Biases
-
-[More Information Needed]
-
-
-### Other Known Limitations
-
-[More Information Needed]
-
+The dataset is small and principle-specific. It should be used as an evaluation resource rather than a complete measure of graphic design quality.
 
 ## Additional Information
 
-### Dataset Curators
-
-[More Information Needed]
-
-
 ### Licensing Information
 
-[More Information Needed]
-
+The local loader lists the dataset license as Apache 2.0.
 
 ### Citation Information
 
@@ -181,7 +130,3 @@ The dataset is in English (en), as both prompts and annotations are written in E
   year={2024}
 }
 ```
-
-### Contributions
-
-Thanks to [@DaichiHaraguchi](https://github.com/DaichiHaraguchi) for adding this dataset.

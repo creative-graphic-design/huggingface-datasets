@@ -1,178 +1,90 @@
 ---
 annotations_creators:
-- machine-generated
+  - machine-generated
 language:
-- en
+  - en
 language_creators:
-- found
+  - found
 license:
-- cdla-permissive-1.0
-multilinguality:
-- monolingual
+  - cdla-permissive-1.0
 pretty_name: PubLayNet
-size_categories: []
+size_categories:
+  - 100K<n<1M
 source_datasets:
-- original
+  - original
 tags:
-- graphic design
-- layout-generation
+  - document-layout-analysis
+  - object-detection
+  - segmentation
 task_categories:
-- image-classification
-- image-segmentation
-- image-to-text
-- question-answering
-- other
-- multiple-choice
-- token-classification
-- tabular-to-text
-- object-detection
-- table-question-answering
-- text-classification
-- table-to-text
-task_ids:
-- multi-label-image-classification
-- multi-class-image-classification
-- semantic-segmentation
-- image-captioning
-- extractive-qa
-- closed-domain-qa
-- multiple-choice-qa
-- named-entity-recognition
+  - object-detection
+  - image-segmentation
+task_ids: []
+configs:
+  - config_name: default
+    data_files:
+      - split: train
+        path: data/train-*
+      - split: validation
+        path: data/validation-*
+      - split: test
+        path: data/test-*
 ---
 
 # Dataset Card for PubLayNet
 
-
-## Table of Contents
-- [Dataset Card Creation Guide](#dataset-card-creation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Dataset Description](#dataset-description)
-    - [Dataset Summary](#dataset-summary)
-    - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
-    - [Languages](#languages)
-  - [Dataset Structure](#dataset-structure)
-    - [Data Instances](#data-instances)
-    - [Data Fields](#data-fields)
-    - [Data Splits](#data-splits)
-  - [Dataset Creation](#dataset-creation)
-    - [Curation Rationale](#curation-rationale)
-    - [Source Data](#source-data)
-      - [Initial Data Collection and Normalization](#initial-data-collection-and-normalization)
-      - [Who are the source language producers?](#who-are-the-source-language-producers)
-    - [Annotations](#annotations)
-      - [Annotation process](#annotation-process)
-      - [Who are the annotators?](#who-are-the-annotators)
-    - [Personal and Sensitive Information](#personal-and-sensitive-information)
-  - [Considerations for Using the Data](#considerations-for-using-the-data)
-    - [Social Impact of Dataset](#social-impact-of-dataset)
-    - [Discussion of Biases](#discussion-of-biases)
-    - [Other Known Limitations](#other-known-limitations)
-  - [Additional Information](#additional-information)
-    - [Dataset Curators](#dataset-curators)
-    - [Licensing Information](#licensing-information)
-    - [Citation Information](#citation-information)
-    - [Contributions](#contributions)
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
+[![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Dataset Description
 
 - **Homepage:** https://developer.ibm.com/exchanges/data/all/publaynet/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/PubLayNet
-- **Paper (Preprint):** https://arxiv.org/abs/1908.07836
-- **Paper (ICDAR2019):** https://ieeexplore.ieee.org/document/8977963
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/PubLayNet
+- **Paper (arXiv):** https://arxiv.org/abs/1908.07836
+- **Paper (ICDAR 2019):** https://ieeexplore.ieee.org/document/8977963
 
 ### Dataset Summary
 
-PubLayNet is a dataset for document layout analysis. It contains images of research papers and articles and annotations for various elements in a page such as "text", "list", "figure" etc in these research paper images. The dataset was obtained by automatically matching the XML representations and the content of over 1 million PDF articles that are publicly available on PubMed Central.
+PubLayNet is a large document layout analysis dataset built by automatically matching XML representations and PDF content from more than one million PubMed Central Open Access articles. It contains more than 360,000 document images with COCO-style annotations for common layout elements such as text, title, list, table, and figure regions.
 
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
+The dataset supports document layout object detection and segmentation. No leaderboard is bundled with this Hugging Face packaging.
 
 ### Languages
 
-[More Information Needed]
+Document content is primarily English (`en`), but the task is visual document layout analysis.
 
 ## Dataset Structure
 
-### Data Instances
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/PubLayNet",
-    decode_rle=True, # True if Run-length Encoding (RLE) is to be decoded and converted to binary mask.
-)
-```
-
 ### Data Fields
 
-[More Information Needed]
+Rows contain `image_id`, `file_name`, `width`, `height`, `image`, and COCO-style `annotations`.
 
 ### Data Splits
 
-[More Information Needed]
+| Split | Rows |
+| --- | ---: |
+| train | 335,703 |
+| validation | 11,245 |
+| test | 11,405 |
 
 ## Dataset Creation
 
-### Curation Rationale
-
-[More Information Needed]
-
-### Source Data
-
-[More Information Needed]
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-#### Who are the source language producers?
-
-[More Information Needed]
-
-### Annotations
-
-[More Information Needed]
-
-#### Annotation process
-
-[More Information Needed]
-
-#### Who are the annotators?
-
-[More Information Needed]
-
-### Personal and Sensitive Information
-
-[More Information Needed]
+PubLayNet was created from automatically parsed document layouts and released for large-scale document layout analysis.
 
 ## Considerations for Using the Data
 
-### Social Impact of Dataset
-
-[More Information Needed]
-
-### Discussion of Biases
-
-[More Information Needed]
-
-### Other Known Limitations
-
-[More Information Needed]
+The dataset is document-centric and may not represent all document domains or non-English layout conventions.
 
 ## Additional Information
 
-### Dataset Curators
-
-[More Information Needed]
-
 ### Licensing Information
 
-- [CDLA-Permissive](https://cdla.io/permissive-1-0/)
+This dataset card uses the CDLA Permissive 1.0 license metadata from the local loader.
 
 ### Citation Information
-
 
 ```bibtex
 @inproceedings{zhong2019publaynet,
@@ -180,11 +92,6 @@ dataset = ds.load_dataset(
   author={Zhong, Xu and Tang, Jianbin and Yepes, Antonio Jimeno},
   booktitle={2019 International Conference on Document Analysis and Recognition (ICDAR)},
   pages={1015--1022},
-  year={2019},
-  organization={IEEE}
+  year={2019}
 }
 ```
-
-### Contributions
-
-Thanks to [ibm-aur-nlp/PubLayNet](https://github.com/ibm-aur-nlp/PubLayNet) for creating this dataset.

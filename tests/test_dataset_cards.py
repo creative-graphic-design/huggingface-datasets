@@ -62,7 +62,7 @@ EXPECTED_CITATION_TEXT = {
     ],
     "DesignBench": [
         "DesignBench: A Comprehensive Benchmark for MLLM-based Front-end Code Generation",
-        "Jingyu Xiao and Jiawei Liu",
+        "Michael R. Lyu",
     ],
     "POSTAPosterArt": [
         "Chen, Haoyu and Xu, Xiaojie and Li, Wenbo",

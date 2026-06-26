@@ -1,183 +1,97 @@
 ---
 annotations_creators:
-- machine-generated
+  - machine-generated
 language:
-- en
+  - en
 language_creators:
-- found
+  - found
 license:
-- unknown
+  - unknown
 multilinguality:
-- monolingual
+  - monolingual
 pretty_name: Magazine
-size_categories: []
+size_categories:
+  - 1K<n<10K
 source_datasets:
-- original
+  - original
 tags:
-- graphic design
-- layout
-- content-aware
+  - graphic-design
+  - layout
+  - content-aware
 task_categories:
-- image-to-image
-- text-to-image
-- unconditional-image-generation
+  - image-to-image
+  - text-to-image
 task_ids: []
+configs:
+  - config_name: default
+    data_files:
+      - split: train
+        path: data/train-*
 ---
 
-# Dataset Card for Magazine dataset
+# Dataset Card for Magazine
 
-
-## Table of Contents
-- [Dataset Card Creation Guide](#dataset-card-creation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Dataset Description](#dataset-description)
-    - [Dataset Summary](#dataset-summary)
-    - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
-    - [Languages](#languages)
-  - [Dataset Structure](#dataset-structure)
-    - [Data Instances](#data-instances)
-    - [Data Fields](#data-fields)
-    - [Data Splits](#data-splits)
-  - [Dataset Creation](#dataset-creation)
-    - [Curation Rationale](#curation-rationale)
-    - [Source Data](#source-data)
-      - [Initial Data Collection and Normalization](#initial-data-collection-and-normalization)
-      - [Who are the source language producers?](#who-are-the-source-language-producers)
-    - [Annotations](#annotations)
-      - [Annotation process](#annotation-process)
-      - [Who are the annotators?](#who-are-the-annotators)
-    - [Personal and Sensitive Information](#personal-and-sensitive-information)
-  - [Considerations for Using the Data](#considerations-for-using-the-data)
-    - [Social Impact of Dataset](#social-impact-of-dataset)
-    - [Discussion of Biases](#discussion-of-biases)
-    - [Other Known Limitations](#other-known-limitations)
-  - [Additional Information](#additional-information)
-    - [Dataset Curators](#dataset-curators)
-    - [Licensing Information](#licensing-information)
-    - [Citation Information](#citation-information)
-    - [Contributions](#contributions)
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
+[![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Dataset Description
 
 - **Homepage:** https://xtqiao.com/projects/content_aware_layout/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Magazine
-- **Paper (SIGGRAPH2019):** https://dl.acm.org/doi/10.1145/3306346.3322971
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/Magazine
+- **Paper (SIGGRAPH 2019):** https://dl.acm.org/doi/10.1145/3306346.3322971
 
 ### Dataset Summary
 
-A large-scale magazine layout dataset with fine-grained layout annotations and keyword labeling.
+Magazine is a magazine layout dataset released with *Content-aware Generative Modeling of Graphic Design Layouts*. The paper studies graphic layout generation conditioned on visual and textual content and introduces a large-scale magazine layout dataset with fine-grained layout annotations and keyword labels.
 
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
+The dataset supports content-aware layout generation, graphic layout modeling, and image-conditioned design generation. No public leaderboard is bundled with this Hugging Face packaging.
 
 ### Languages
 
-[More Information Needed]
+The source magazine pages and keywords are primarily English (`en`).
 
 ## Dataset Structure
 
-### Data Instances
-
-To use Magazine dataset, you need to download the image and layout annotations from the [OneDrive](https://portland-my.sharepoint.com/:f:/g/personal/xqiao6-c_my_cityu_edu_hk/EhmRh5SFoQ9Hjl_aRjCOltkBKFYefiSagR6QLJ7pWvs3Ww?e=y8HO5Q) in the [official page](https://xtqiao.com/projects/content_aware_layout/).
-Then place the downloaded files in the following structure and specify its path.
-
-```shell
-/path/to/datasets
-├── MagImage.zip
-└── MagLayout.zip
-```
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Magazine",
-    data_dir="/path/to/datasets/", # Specify the path of the downloaded directory.
-)
-```
-
 ### Data Fields
 
-[More Information Needed]
+Each row contains `filename`, `category`, `size`, `elements`, `keywords`, and `images`.
 
 ### Data Splits
 
-[More Information Needed]
+| Config | Split | Rows |
+| --- | --- | ---: |
+| default | train | 3,919 |
 
 ## Dataset Creation
 
-### Curation Rationale
-
-[More Information Needed]
-
-### Source Data
-
-[More Information Needed]
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-#### Who are the source language producers?
-
-[More Information Needed]
-
-### Annotations
-
-[More Information Needed]
-
-#### Annotation process
-
-[More Information Needed]
-
-#### Who are the annotators?
-
-[More Information Needed]
-
-### Personal and Sensitive Information
-
-[More Information Needed]
+The original release includes magazine images and fine-grained layout annotations for content-aware layout modeling.
 
 ## Considerations for Using the Data
 
-### Social Impact of Dataset
-
-[More Information Needed]
-
-### Discussion of Biases
-
-[More Information Needed]
-
-### Other Known Limitations
-
-[More Information Needed]
+The dataset represents magazine layouts from the upstream collection and may not cover all editorial styles, languages, or publication domains.
 
 ## Additional Information
 
-### Dataset Curators
-
-[More Information Needed]
-
 ### Licensing Information
 
-[More Information Needed]
+The dataset license is not specified in the local loader metadata. Users should verify the upstream terms before redistribution or commercial use.
 
 ### Citation Information
 
 ```bibtex
 @article{zheng2019content,
   title={Content-aware generative modeling of graphic design layouts},
-  author={Zheng, Xinru and Qiao, Xiaotian and Cao, Ying and Lau, Rynson WH},
-  journal={ACM Transactions on Graphics (TOG)},
+  author={Zheng, Xinru and Qiao, Xiaotian and Cao, Ying and Lau, Rynson W. H.},
+  journal={ACM Transactions on Graphics},
   volume={38},
   number={4},
-  pages={1--15},
-  year={2019},
-  publisher={ACM New York, NY, USA}
+  year={2019}
 }
 ```
 
 ### Contributions
 
-Thanks to [Xinru Zheng and Xiaotian Qiao](https://xtqiao.com/projects/content_aware_layout/) for creating this dataset.
+Thanks to the authors of the original Magazine layout dataset.

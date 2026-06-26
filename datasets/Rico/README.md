@@ -1,222 +1,106 @@
 ---
 annotations_creators:
-- found
+  - machine-generated
 language:
-- en
+  - en
 language_creators:
-- found
+  - found
 license:
-- unknown
-multilinguality:
-- monolingual
+  - unknown
 pretty_name: Rico
-size_categories: []
+size_categories:
+  - 10K<n<100K
 source_datasets:
-- original
+  - original
 tags:
-- graphic design
+  - mobile-ui
+  - user-interface
+  - view-hierarchy
+  - screenshot
 task_categories:
-- other
+  - image-to-text
+  - object-detection
 task_ids: []
+configs:
+  - config_name: default
+    data_files:
+      - split: metadata
+        path: data/metadata-*
+  - config_name: ui-screenshots-and-hierarchies-with-semantic-annotations
+    data_files:
+      - split: train
+        path: ui-screenshots-and-hierarchies-with-semantic-annotations/train-*
+      - split: validation
+        path: ui-screenshots-and-hierarchies-with-semantic-annotations/validation-*
+      - split: test
+        path: ui-screenshots-and-hierarchies-with-semantic-annotations/test-*
+  - config_name: ui-screenshots-and-view-hierarchies
+    data_files:
+      - split: train
+        path: ui-screenshots-and-view-hierarchies/train-*
+      - split: validation
+        path: ui-screenshots-and-view-hierarchies/validation-*
+      - split: test
+        path: ui-screenshots-and-view-hierarchies/test-*
 ---
 
 # Dataset Card for Rico
 
-
-## Table of Contents
-- [Dataset Card Creation Guide](#dataset-card-creation-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Dataset Description](#dataset-description)
-    - [Dataset Summary](#dataset-summary)
-    - [Supported Tasks and Leaderboards](#supported-tasks-and-leaderboards)
-    - [Languages](#languages)
-  - [Dataset Structure](#dataset-structure)
-    - [Data Instances](#data-instances)
-    - [Data Fields](#data-fields)
-    - [Data Splits](#data-splits)
-  - [Dataset Creation](#dataset-creation)
-    - [Curation Rationale](#curation-rationale)
-    - [Source Data](#source-data)
-      - [Initial Data Collection and Normalization](#initial-data-collection-and-normalization)
-      - [Who are the source language producers?](#who-are-the-source-language-producers)
-    - [Annotations](#annotations)
-      - [Annotation process](#annotation-process)
-      - [Who are the annotators?](#who-are-the-annotators)
-    - [Personal and Sensitive Information](#personal-and-sensitive-information)
-  - [Considerations for Using the Data](#considerations-for-using-the-data)
-    - [Social Impact of Dataset](#social-impact-of-dataset)
-    - [Discussion of Biases](#discussion-of-biases)
-    - [Other Known Limitations](#other-known-limitations)
-  - [Additional Information](#additional-information)
-    - [Dataset Curators](#dataset-curators)
-    - [Licensing Information](#licensing-information)
-    - [Citation Information](#citation-information)
-    - [Contributions](#contributions)
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yaml)
+[![Sync HF](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/push_to_hub.yaml)
 
 ## Dataset Description
 
 - **Homepage:** http://www.interactionmining.org/rico.html
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Rico
-- **Paper (UIST2017):** https://dl.acm.org/doi/10.1145/3126594.3126651
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/Rico
+- **Paper (UIST 2017):** https://dl.acm.org/doi/10.1145/3126594.3126651
 
 ### Dataset Summary
 
-Rico: A Mobile App Dataset for Building Data-Driven Design Applications
+Rico is a mobile app UI dataset for building data-driven design applications. The original dataset mines Android apps at runtime and exposes visual, textual, structural, and interactive design properties from more than 9.3k apps across 27 categories and more than 66k unique UI screens. This packaging provides metadata, screenshots, view hierarchies, and semantic annotations as separate configs.
 
 ### Supported Tasks and Leaderboards
 
-[More Information Needed]
+The dataset supports mobile UI understanding, screen hierarchy modeling, semantic element detection, and screenshot-conditioned interface analysis. No public leaderboard is bundled with this Hugging Face dataset.
 
 ### Languages
 
-[More Information Needed]
+Metadata and UI text are primarily English (`en`), though app screenshots may contain other languages.
 
 ## Dataset Structure
 
-### Data Instances
-
-- UI screenshots and view hierarchies
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="ui-screenshots-and-view-hierarchies",
-)
-```
-
-- UI metadata
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="ui-metadata",
-)
-```
-
-- UI layout vectors
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="ui-layout-vectors",
-)
-```
-
-- Interaction traces
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="interaction-traces",
-)
-```
-
-- [WIP] Animations
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="animations",
-)
-```
-
-- Play store metadata
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="play-store-metadata",
-)
-```
-
-- UI screenshots and hierarchies with semantic annotations
-
-```python
-import datasets as ds
-
-dataset = ds.load_dataset(
-    path="creative-graphic-design/Rico",
-    name="ui-screenshots-and-hierarchies-with-semantic-annotations",
-)
-```
-
 ### Data Fields
 
-[More Information Needed]
+- `default`: app and trace metadata.
+- `ui-screenshots-and-hierarchies-with-semantic-annotations`: semantic hierarchy fields including `ancestors`, `klass`, `bounds`, `clickable`, `children`, and `screenshot`.
+- `ui-screenshots-and-view-hierarchies`: screenshot and Android view hierarchy metadata.
 
 ### Data Splits
 
-[More Information Needed]
+| Config | Split | Rows |
+| --- | --- | ---: |
+| default | metadata | 66,261 |
+| semantic annotations | train | 56,322 |
+| semantic annotations | validation | 3,314 |
+| semantic annotations | test | 6,625 |
+| view hierarchies | train | 56,322 |
+| view hierarchies | validation | 3,314 |
+| view hierarchies | test | 6,625 |
 
 ## Dataset Creation
 
-### Curation Rationale
-
-[More Information Needed]
-
-### Source Data
-
-[More Information Needed]
-
-#### Initial Data Collection and Normalization
-
-[More Information Needed]
-
-#### Who are the source language producers?
-
-[More Information Needed]
-
-### Annotations
-
-[More Information Needed]
-
-#### Annotation process
-
-[More Information Needed]
-
-#### Who are the annotators?
-
-[More Information Needed]
-
-### Personal and Sensitive Information
-
-[More Information Needed]
+Rico was collected from mobile app interaction traces and UI screenshots to support data-driven UI research.
 
 ## Considerations for Using the Data
 
-### Social Impact of Dataset
-
-[More Information Needed]
-
-### Discussion of Biases
-
-[More Information Needed]
-
-### Other Known Limitations
-
-[More Information Needed]
+The dataset contains mobile app screenshots and UI metadata. It may include app-specific text, brands, and interface content from the collection period.
 
 ## Additional Information
 
-### Dataset Curators
-
-[More Information Needed]
-
 ### Licensing Information
 
-[More Information Needed]
+The dataset license is not specified in the local loader metadata. Users should verify the upstream terms before redistribution or commercial use.
 
 ### Citation Information
 
@@ -224,12 +108,8 @@ dataset = ds.load_dataset(
 @inproceedings{deka2017rico,
   title={Rico: A mobile app dataset for building data-driven design applications},
   author={Deka, Biplab and Huang, Zifeng and Franzen, Chad and Hibschman, Joshua and Afergan, Daniel and Li, Yang and Nichols, Jeffrey and Kumar, Ranjitha},
-  booktitle={Proceedings of the 30th annual ACM symposium on user interface software and technology},
+  booktitle={Proceedings of the 30th Annual ACM Symposium on User Interface Software and Technology},
   pages={845--854},
   year={2017}
 }
 ```
-
-### Contributions
-
-Thanks to [DATA DRIVEN DESIGN GROUP UNIVERSITY OF ILLINOIS AT URBANA-CHAMPAIGN](http://ranjithakumar.net/) for creating this dataset.

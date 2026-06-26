@@ -30,11 +30,11 @@ logger = get_logger(__name__)
 _CITATION = """\
 @misc{xiao2025designbench,
   title         = {DesignBench: A Comprehensive Benchmark for MLLM-based Front-end Code Generation},
-  author        = {Jingyu Xiao and Jiawei Liu and Tianhang Hu and Yiheng Xu and Ziyang Wang and Vikash Sehwag and Ted Xiao and Mike Zheng Shou},
+  author        = {Jingyu Xiao and Ming Wang and Man Ho Lam and Yuxuan Wan and Junliang Liu and Yintong Huo and Michael R. Lyu},
   year          = {2025},
   eprint        = {2506.06251},
   archivePrefix = {arXiv},
-  primaryClass  = {cs.AI},
+  primaryClass  = {cs.SE},
   url           = {https://arxiv.org/abs/2506.06251}
 }
 """
