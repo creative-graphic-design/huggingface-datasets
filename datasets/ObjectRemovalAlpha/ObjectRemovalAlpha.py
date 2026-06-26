@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This script was generated from shunk031/cookiecutter-huggingface-datasets.
-#
-# TODO: Address all TODOs and remove all explanatory comments
-
 import pathlib
 from typing import List, Union
 
@@ -27,26 +23,21 @@ import datasets as ds
 
 logger = get_logger(__name__)
 
-# TODO: Add BibTeX citation
-# Find for instance the citation on arxiv or on the dataset repo/website
 _CITATION = """\
-TODO: Add BibTeX citation here
+No dataset-specific paper or BibTeX citation was found in the upstream dataset release.
 """
 
-# TODO: Add description of the dataset here
-# You can copy an official description
 _DESCRIPTION = """\
-
+ObjectRemovalAlpha is a small object-removal training dataset reformatted from
+lrzjason/ObjectRemovalAlpha. Each example contains a shared text prompt, a
+ground-truth image, a factual/source image, and a mask image.
 """
 
-# TODO: Add a link to an official homepage for the dataset here
 _HOMEPAGE = "https://huggingface.co/datasets/lrzjason/ObjectRemovalAlpha"
 
-# TODO: Add the license for the dataset here if you can find it
 _LICENSE = "apache-2.0"
 
 
-# TODO: Name of the dataset usually matches the script name with CamelCase instead of snake_case
 class ObjectRemovalAlphaDataset(ds.GeneratorBasedBuilder):
     """A class for loading ObjectRemovalAlpha dataset."""
 

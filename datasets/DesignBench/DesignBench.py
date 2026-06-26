@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This script was generated from shunk031/cookiecutter-huggingface-datasets.
-#
-# TODO: Address all TODOs and remove all explanatory comments
 import json
 import pathlib
 from dataclasses import dataclass
@@ -30,27 +27,27 @@ import datasets as ds
 
 logger = get_logger(__name__)
 
-# TODO: Add BibTeX citation
-# Find for instance the citation on arxiv or on the dataset repo/website
 _CITATION = """\
-TODO: Add BibTeX citation here
+@misc{xiao2025designbench,
+  title         = {DesignBench: A Comprehensive Benchmark for MLLM-based Front-end Code Generation},
+  author        = {Jingyu Xiao and Jiawei Liu and Tianhang Hu and Yiheng Xu and Ziyang Wang and Vikash Sehwag and Ted Xiao and Mike Zheng Shou},
+  year          = {2025},
+  eprint        = {2506.06251},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url           = {https://arxiv.org/abs/2506.06251}
+}
 """
 
-# TODO: Add description of the dataset here
-# You can copy an official description
 _DESCRIPTION = """\
-Please input description
+DesignBench contains web design prompts, HTML/CSS code, editing cases, repair
+cases, and compilation metadata for evaluating web design generation workflows.
 """
 
-# TODO: Add a link to an official homepage for the dataset here
 _HOMEPAGE = "https://webpai.github.io/DesignBench/"
 
-# TODO: Add the license for the dataset here if you can find it
-_LICENSE = "Please input license information"
+_LICENSE = "unknown"
 
-# TODO: Add link to the official dataset URLs here
-# The HuggingFace Datasets library doesn't host the datasets but only points to the original files.
-# This can be an arbitrary nested dict/list of URLs (see below in `_split_generators` method)
 _URLS = {
     "data.zip": "1x0JfWRiJcUHI05oNzx5Lcv1_g9xoh3ET",
     "EditResults.zip": "11boXiSfhwNXLPZCIu4SQcTpiZ3xLbkxk",

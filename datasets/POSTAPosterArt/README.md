@@ -156,13 +156,14 @@ The license was not clearly identified from the public project page or Drive fil
 ### Citation Information
 
 ```bibtex
-@misc{chen2025posta,
-  title={POSTA: A Go-to Framework for Customized Artistic Poster Generation},
-  author={Chen, Haoyu and others},
-  year={2025},
-  eprint={2503.14908},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+@inproceedings{Chen_2025_CVPR,
+  title = {POSTA: A Go-to Framework for Customized Artistic Poster Generation},
+  author = {Chen, Haoyu and Xu, Xiaojie and Li, Wenbo and Ren, Jingjing and Ye, Tian and Liu, Songhua and Chen, Ying-Cong and Zhu, Lei and Wang, Xinchao},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  year = {2025},
+  pages = {28694--28704},
+  url = {https://openaccess.thecvf.com/content/CVPR2025/html/Chen_POSTA_A_Go-to_Framework_for_Customized_Artistic_Poster_Generation_CVPR_2025_paper.html}
 }
 ```
 
