@@ -158,6 +158,12 @@ _URLS = {
 Before writing or keeping a citation, verify publication metadata from primary or near-primary
 sources. Do not stop at arXiv when venue information may exist.
 
+**ArXiv / venue separation rule:** Treat arXiv availability and peer-reviewed
+venue availability as separate facts. If an arXiv record exists but no venue or
+official paper page is found, keep the arXiv badge, arXiv URL, and arXiv citation,
+and use `Paper-not found` only for the venue/paper badge. Do not describe this
+case as missing arXiv, and do not omit the arXiv metadata.
+
 Check at least:
 
 - arXiv abstract/html page
@@ -803,6 +809,7 @@ Add an entry for your new dataset to the repository root README.md:
 2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
 3. **Format**: Bullet list format, one line per dataset
 4. **Venue check**: Before using `Paper-not found`, verify publication metadata with the Step 4.2 checklist and make the root README badge match `_CITATION` and the dataset README
+5. **ArXiv / venue separation**: If arXiv exists but no peer-reviewed venue is found, keep the arXiv badge and URL, and use `Paper-not found` only for the venue/paper badge
 
 **Example:**
 
