@@ -1,7 +1,6 @@
 ---
 name: create-dataset
 description: This skill should be used when the user asks to "create a dataset", "create a new huggingface dataset", "add a dataset", "implement a dataset", or discusses creating Hugging Face datasets in this monorepo. Provides a concrete MyHFDataset example to copy and customize.
-version: 2.0.0
 ---
 
 # Create Hugging Face Dataset Skill
@@ -155,6 +154,27 @@ _URLS = {
 ```
 
 #### 4.2 Update \_CITATION
+
+Before writing or keeping a citation, verify publication metadata from primary or near-primary
+sources. Do not stop at arXiv when venue information may exist.
+
+Check at least:
+
+- arXiv abstract/html page
+- Official project page or GitHub repository
+- Publisher/conference page such as CVF Open Access, ACL Anthology, ACM DL, PMLR, OpenReview, or the venue website
+- Dataset source page
+
+Search with multiple queries, including:
+
+- `{paper title}`
+- `{paper title} CVPR` / `{paper title} ICCV` / `{paper title} ACL` or the likely venue
+- `{arxiv id} venue`
+- `{paper title} project page`
+
+Only use `@misc`, `Paper-not found`, `[More Information Needed]`, or TODO placeholders after
+these checks fail to find a venue or official paper page. If the paper is accepted/published,
+use the venue-aware BibTeX type and fields, such as `@inproceedings` with `booktitle`.
 
 If user provides:
 
@@ -394,6 +414,13 @@ def _info(self):
 
 #### 4.6 Implement \_split_generators
 
+**Split selection rule:**
+
+- Use `ds.Split.TEST` for evaluation-only datasets, benchmarks, leaderboards, and test sets. Do **not** put all rows in `train` just because the source release has a single file or no official split; that makes benchmark data look like training data.
+- Use `ds.Split.TRAIN` only when the data is intended for model training, pretraining, or general corpus use.
+- If the upstream release has explicit split files, preserve those names (`train`, `validation`, `test`) in the loader.
+- Keep tests and README metadata aligned with the chosen split name (for example, assert `dataset["test"].num_rows` and use `test-*` paths in README frontmatter for benchmark-only datasets).
+
 **Simple:**
 
 ```python
@@ -488,6 +515,48 @@ def test_load_dataset(dataset_path: str, config_name: str, expected_num_train: i
     assert isinstance(dataset, ds.DatasetDict)
     assert dataset["train"].num_rows == expected_num_train
 ```
+
+#### Paper and Source Statistics Parity
+
+Before finalizing tests, verify dataset statistics from primary or near-primary sources such
+as the paper, supplementary material, official project page, or upstream repository. Encode
+those values as named constants in the test file, then assert the loaded dataset matches them.
+
+Include checks for every applicable statistic:
+
+- Per-config and per-split row counts from the paper or official release
+- Total row count across configs or splits
+- Image, audio, annotation, pair, or conversation counts when the source reports them
+- Split names, especially for benchmark-only datasets that should expose `test`, not `train`
+
+Prefer explicit names that document provenance:
+
+```python
+_PAPER_EXPECTED_NUM_TEST_BY_CONFIG = {
+    "basic": 517,
+    "advanced": 1223,
+}
+_PAPER_EXPECTED_TOTAL_PAIRS = 1740
+
+
+def test_paper_reported_counts_are_consistent():
+    assert sum(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.values()) == _PAPER_EXPECTED_TOTAL_PAIRS
+
+
+@pytest.mark.parametrize(
+    argnames=("config_name", "expected_num_test"),
+    argvalues=tuple(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.items()),
+)
+def test_load_dataset(dataset_path: str, config_name: str, expected_num_test: int):
+    dataset = ds.load_dataset(path=dataset_path, name=config_name, trust_remote_code=True)
+    assert list(dataset) == ["test"]
+    assert dataset["test"].num_rows == expected_num_test
+```
+
+Do not leave row counts as unexplained literals like `100` or `EXPECTED_COUNT` when the paper
+or source release states concrete values. If the full load test is gated behind an environment
+variable because downloads are large, still keep a fast test that verifies the paper-derived
+constants are internally consistent.
 
 #### Test Ordering
 
@@ -672,7 +741,7 @@ task_ids: [] # Usually empty
 Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any placeholder information:
 
 - Replace `{{ arxiv_url }}`, `{{ publication_venue }}`, `{{ publication_url }}` with actual values
-- If information is not available, leave TODO comments for future updates
+- Before leaving venue or paper information as TODO / `[More Information Needed]` / `Paper-not found`, run the publication metadata verification in Step 4.2
 - Verify license information matches the source repository
 - Add complete citation information if available
 
@@ -733,6 +802,7 @@ Add an entry for your new dataset to the repository root README.md:
 1. **Description**: Keep it brief (1-2 sentences) focusing on what the dataset is for and its key features
 2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
 3. **Format**: Bullet list format, one line per dataset
+4. **Venue check**: Before using `Paper-not found`, verify publication metadata with the Step 4.2 checklist and make the root README badge match `_CITATION` and the dataset README
 
 **Example:**
 
