@@ -25,6 +25,7 @@ from PIL import Image
 import datasets as ds
 
 logger = get_logger(__name__)
+Image.MAX_IMAGE_PIXELS = None
 
 _CITATION = """\
 @inproceedings{wang2025sega,
