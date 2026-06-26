@@ -66,7 +66,6 @@ task_ids: []
 
 - **Homepage:** https://github.com/nanxuanzhao/CTXFont-dataset
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/CTXFont
-- **Paper (Preprint):** <!-- No arXiv preprint available -->
 - **Paper (Pacific Graphics 2018):** https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.13576
 - **Leaderboard:** N/A
 - **Point of Contact:** Nanxuan Zhao (contact information not publicly available)
@@ -200,11 +199,6 @@ The annotations are machine-generated from HTML/CSS parsing. The design tags wer
 
 [More Information Needed]
 
-<!-- State whether the dataset uses identity categories and, if so, how the information is used. Describe where this information comes from (i.e. self-reporting, collecting from profiles, inferring, etc.). See [Larson 2017](https://www.aclweb.org/anthology/W17-1601.pdf) for using identity categories as a variables, particularly gender. State whether the data is linked to individuals and whether those individuals can be identified in the dataset, either directly or indirectly (i.e., in combination with other data).
-
-State whether the dataset contains other data that might be considered sensitive (e.g., data that reveals racial or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history).
-
-If efforts were made to anonymize the data, describe the anonymization process. -->
 
 ## Considerations for Using the Data
 
@@ -212,27 +206,16 @@ If efforts were made to anonymize the data, describe the anonymization process. 
 
 [More Information Needed]
 
-<!-- Please discuss some of the ways you believe the use of this dataset will impact society.
-
-The statement should include both positive outlooks, such as outlining how technologies developed through its use may improve people's lives, and discuss the accompanying risks. These risks may range from making important decisions more opaque to people who are affected by the technology, to reinforcing existing harmful biases (whose specifics should be discussed in the next section), among other considerations.
-
-Also describe in this section if the proposed dataset contains a low-resource or under-represented language. If this is the case or if this task has any impact on underserved communities, please elaborate here. -->
 
 ### Discussion of Biases
 
 [More Information Needed]
 
-<!-- Provide descriptions of specific biases that are likely to be reflected in the data, and state whether any steps were taken to reduce their impact.
-
-For Wikipedia text, see for example [Dinan et al 2020 on biases in Wikipedia (esp. Table 1)](https://arxiv.org/abs/2005.00614), or [Blodgett et al 2020](https://www.aclweb.org/anthology/2020.acl-main.485/) for a more general discussion of the topic.
-
-If analyses have been run quantifying these biases, please add brief summaries and links to the studies here. -->
 
 ### Other Known Limitations
 
 [More Information Needed]
 
-<!-- If studies of the datasets have outlined other limitations of the dataset, such as annotation artifacts, please outline and cite them here. -->
 
 ## Additional Information
 
@@ -240,13 +223,11 @@ If analyses have been run quantifying these biases, please add brief summaries a
 
 [More Information Needed]
 
-<!-- List the people involved in collecting the dataset and their affiliation(s). If funding information is known, include it here. -->
 
 ### Licensing Information
 
 [More Information Needed]
 
-<!-- Provide the license and link to the license webpage if available. -->
 
 ### Citation Information
 

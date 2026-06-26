@@ -58,6 +58,7 @@ task_ids: []
 
 - **Homepage:** http://59.108.48.34/tiki/PosterLayout/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/PKUPosterLayout
+- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/PKU-PosterLayout
 - **Paper (Preprint):** https://arxiv.org/abs/2303.15937
 - **Paper (CVPR2023):** https://openaccess.thecvf.com/content/CVPR2023/html/Hsu_PosterLayout_A_New_Benchmark_and_Approach_for_Content-Aware_Visual-Textual_Presentation_CVPR_2023_paper.html
 
