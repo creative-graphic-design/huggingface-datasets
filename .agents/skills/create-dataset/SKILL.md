@@ -818,6 +818,25 @@ uv run pytest -vsx datasets/MyHFDataset/tests
 
 If errors, fix and re-run.
 
+After implementation, always run the actual load test directly before considering the dataset
+done:
+
+```bash
+uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
+```
+
+If `test_load_dataset` is gated because the dataset is large, run it with the dataset-specific
+environment variable used by the test:
+
+```bash
+{DATASET_NAME}_RUN_DOWNLOAD_TESTS=1 uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
+```
+
+This direct `test_load_dataset` run is required because fast helper tests can miss schema
+problems that only appear through `ds.load_dataset(...)`, especially for multi-config datasets
+or configs with different optional source fields. If the direct load test is genuinely too
+large or unavailable, report that explicitly and include the exact command the user should run.
+
 Verify loading:
 
 ```python
@@ -894,4 +913,5 @@ uv run pytest -vsx datasets/MyData/tests
 - [ ] Tests updated
 - [ ] README.md updated
 - [ ] Tests passing
+- [ ] Direct `test_load_dataset` pytest target passes with `ds.load_dataset(...)`
 - [ ] Dataset loads correctly
