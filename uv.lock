@@ -27,6 +27,7 @@ members = [
     "pku-poster-layout",
     "posta-poster-art",
     "poster-erase",
+    "poster-iq",
     "poster-reward-bench",
     "publaynet",
     "rico",
@@ -1505,6 +1506,17 @@ requires-dist = [
     { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
     { name = "pandas", specifier = ">=2.0.0" },
 ]
+
+[[package]]
+name = "poster-iq"
+version = "0.1.0"
+source = { virtual = "datasets/PosterIQ" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "poster-reward-bench"
