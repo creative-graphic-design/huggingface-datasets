@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Dataset"
+  short_description: "Publish monorepo datasets to Hugging Face Hub"
+  default_prompt: "Use $publish-dataset to publish a dataset under datasets/DatasetName to the Hugging Face Hub."
