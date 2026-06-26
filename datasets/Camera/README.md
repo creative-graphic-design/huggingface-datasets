@@ -51,6 +51,7 @@ task_ids: []
 
 - **Homepage:** https://github.com/CyberAgentAILab/camera
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Camera
+- **Paper (NLP2023):** https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf
 
 ### Dataset Summary
 
@@ -99,7 +100,7 @@ print(dataset)
 #     })
 #     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
-#         num_rows: 872
+#         num_rows: 869
 #     })
 # })
 ```
@@ -179,7 +180,7 @@ print(dataset)
 #     })
 #     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
-#         num_rows: 872
+#         num_rows: 869
 #     })
 # })
 ```
@@ -273,6 +274,8 @@ From [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pd
 | Train | 12,395    | 1                      | -                     |
 | Valid | 3,098     | 1                      | -                     |
 | Test  | 869       | 4                      | ✔                     |
+
+The public Google Cloud Storage archives referenced by the original loader currently return 404, so these split sizes follow the official paper rather than a fresh download.
 
 ## Dataset Creation
 
