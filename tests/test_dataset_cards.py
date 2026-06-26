@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import sys
 
 
@@ -114,6 +115,25 @@ def test_root_readme_uses_public_hub_repo_ids():
     ]
     for stale_url in stale_urls:
         assert stale_url not in readme
+
+
+def test_root_readme_original_badges_use_source_medium_labels():
+    readme = (ROOT / "README.md").read_text()
+    expected_label_by_logo = {
+        "github": "GitHub",
+        "githubpages": "Project%20Page",
+        "homepage": "Project%20Page",
+        "huggingface": "HF%20Hub",
+    }
+    badges = re.findall(
+        r"Original-([^-]+(?:%20[^-]+)?)-0F766E\?logo=([^&]+)&logoColor=white",
+        readme,
+    )
+
+    assert badges
+    assert len(badges) == readme.count("Original-")
+    for label, logo in badges:
+        assert label == expected_label_by_logo[logo]
 
 
 def test_dataset_cards_include_known_public_hub_links():

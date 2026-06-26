@@ -11,6 +11,7 @@ This is a Python monorepo for Hugging Face datasets focused on graphic design an
 - In the root README dataset list, describe each entry as dataset contents, not as a paper task. Prefer concise noun-phrase descriptions such as "Graphic design aesthetic evaluation data..." over wording like "Benchmark for..." or "Dataset for...".
 - In the root README dataset badges, use `logo=doi&logoColor=white` for linked `Paper` badges. Prefer `https://doi.org/...` URLs when a DOI is available; otherwise keep the canonical paper page URL. Leave `Paper-not found` badges without a logo.
 - In the root README dataset badges, set the `Original` badge `logo` to the source medium using Simple Icons slugs from https://simpleicons.org/: use `github` for GitHub repositories, `githubpages` for GitHub Pages project sites, `huggingface` for upstream Hugging Face datasets, and `homepage` for independent project pages when no more specific Simple Icons brand applies.
+- In the root README dataset badges, set the `Original` badge label to the source medium, not the dataset or project name: use `GitHub`, `Project Page`, or `HF Hub`.
 - When fixing or publishing Hugging Face Hub dataset cards, follow `docs/dataset-card-maintenance.md`. Preserve Hub-generated `dataset_info` / `configs`, remove dataset-card template comments before publishing, verify citations against canonical paper sources, and run `uv run pytest -q tests/test_dataset_cards.py`.
 
 ## Development Commands
