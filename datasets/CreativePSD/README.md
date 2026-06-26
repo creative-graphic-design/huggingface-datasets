@@ -87,7 +87,7 @@ Each row corresponds to one `poster_*.zip` archive:
 
 ### Data Splits
 
-The loader exposes a single `train` split. The row count depends on the ModelScope files available locally or in cache. The local copy used during implementation contained 3,283 `poster_*.zip` files.
+The loader exposes a single `train` split. The ModelScope file API lists 7,978 root-level `poster_*.zip` archives. When loading from an official ModelScope checkout, the loader validates that the checkout contains all 7,978 poster archives and rejects invalid archives before generation.
 
 ## Usage
 

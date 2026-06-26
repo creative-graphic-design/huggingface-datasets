@@ -157,6 +157,30 @@ def test_build_example_includes_all_zip_members(
     assert all_file_names == expected_file_names
 
 
+def test_validate_zip_paths_rejects_incomplete_modelscope_checkout(
+    tmp_path: Path, dataset_module: ModuleType
+):
+    _write_creative_psd_zip(tmp_path / "poster_000001.zip", "poster_000001", 3)
+    (tmp_path / ".gitattributes").write_text("*.zip filter=lfs diff=lfs merge=lfs\n")
+    (tmp_path / "README.md").write_text("# CreativePSD\n")
+
+    with pytest.raises(ValueError, match="appears incomplete"):
+        dataset_module._validate_zip_paths(
+            dataset_module._zip_paths_under(tmp_path),
+            tmp_path,
+        )
+
+
+def test_validate_zip_paths_rejects_invalid_archives(
+    tmp_path: Path, dataset_module: ModuleType
+):
+    invalid_zip = tmp_path / "poster_000001.zip"
+    invalid_zip.write_bytes(b"")
+
+    with pytest.raises(ValueError, match="invalid CreativePSD poster archives"):
+        dataset_module._validate_zip_paths([invalid_zip], tmp_path)
+
+
 def test_load_dataset(
     dataset_path: str,
     repo_id: str,

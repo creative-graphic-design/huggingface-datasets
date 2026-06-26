@@ -43,6 +43,7 @@ _HOMEPAGE = "https://modelscope.cn/datasets/song322/CreativePSD"
 _LICENSE = "CC-BY-NC-4.0"
 
 _DATASET_ID = "song322/CreativePSD"
+_EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT = 7978
 _DEFAULT_LOCAL_DIR = pathlib.Path(
     "/root/ghq/www.modelscope.cn/datasets/song322/CreativePSD"
 )
@@ -83,6 +84,37 @@ def _find_first_zip_dir(path: pathlib.Path) -> pathlib.Path | None:
     return zip_paths[0].parent
 
 
+def _is_modelscope_checkout(path: pathlib.Path) -> bool:
+    if path.is_file():
+        path = path.parent
+    return (path / ".gitattributes").exists() and (path / "README.md").exists()
+
+
+def _validate_zip_paths(zip_paths: list[pathlib.Path], root_path: pathlib.Path) -> None:
+    invalid_zip_paths = [
+        path
+        for path in zip_paths
+        if path.stat().st_size == 0 or not zipfile.is_zipfile(path)
+    ]
+    if invalid_zip_paths:
+        invalid_preview = ", ".join(path.name for path in invalid_zip_paths[:10])
+        raise ValueError(
+            "Found invalid CreativePSD poster archives: "
+            f"{invalid_preview}. Re-download these files before loading."
+        )
+
+    if (
+        _is_modelscope_checkout(root_path)
+        and len(zip_paths) != _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT
+    ):
+        raise ValueError(
+            "The CreativePSD ModelScope checkout appears incomplete: found "
+            f"{len(zip_paths)} poster_*.zip files, expected "
+            f"{_EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT}. Re-run the ModelScope "
+            "download or pass a complete data_dir."
+        )
+
+
 def _ensure_modelscope_download() -> pathlib.Path | None:
     try:
         from modelscope.msdatasets import MsDataset
@@ -112,24 +144,30 @@ def _resolve_zip_paths(
         if not zip_paths and zipfile.is_zipfile(local_path):
             zip_paths = [local_path]
         if zip_paths:
+            _validate_zip_paths(zip_paths, local_path)
             return zip_paths
-        raise FileNotFoundError(f"No poster_*.zip files found under data_dir={local_path}")
+        raise FileNotFoundError(
+            f"No poster_*.zip files found under data_dir={local_path}"
+        )
 
     if dl_manager.manual_dir:
         manual_path = _expand_path(dl_manager.manual_dir)
         zip_paths = _zip_paths_under(manual_path)
         if zip_paths:
+            _validate_zip_paths(zip_paths, manual_path)
             return zip_paths
 
     if _DEFAULT_LOCAL_DIR.exists():
         zip_paths = _zip_paths_under(_DEFAULT_LOCAL_DIR)
         if zip_paths:
+            _validate_zip_paths(zip_paths, _DEFAULT_LOCAL_DIR)
             return zip_paths
 
     modelscope_dir = _ensure_modelscope_download()
     if modelscope_dir is not None:
         zip_paths = _zip_paths_under(modelscope_dir)
         if zip_paths:
+            _validate_zip_paths(zip_paths, modelscope_dir)
             return zip_paths
 
     raise FileNotFoundError(
