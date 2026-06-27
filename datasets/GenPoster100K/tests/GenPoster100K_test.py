@@ -136,7 +136,11 @@ def test_compose_merged_image(builder):
 
         merged_image = builder._compose_merged_image(
             background_path,
-            [layer_a_path, None, layer_b_path],
+            [
+                {"layer_image": layer_a_path, "bbox": [0, 0, 4, 4]},
+                {"layer_image": None, "bbox": [0, 0, 0, 0]},
+                {"layer_image": layer_b_path, "bbox": [2, 1, 4, 3]},
+            ],
         )
 
     assert isinstance(merged_image, dict)
@@ -145,7 +149,9 @@ def test_compose_merged_image(builder):
 
     with Image.open(BytesIO(merged_image["bytes"])) as image:
         pixels = image.convert("RGBA")
-        assert pixels.getpixel((0, 0)) == (0, 0, 255, 255)
+        assert pixels.getpixel((0, 0))[:3] == (255, 127, 127)
+        assert pixels.getpixel((2, 1)) == (0, 0, 255, 255)
+        assert pixels.getpixel((3, 2)) == (0, 0, 255, 255)
         assert pixels.getpixel((3, 3))[:3] == (255, 127, 127)
 
 
@@ -225,8 +231,12 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     assert sample["merged_image"] is not None
     assert len(sample["regions"]) >= 0
     assert len(sample["layers"]) > 0
-    assert isinstance(sample["layers"][0]["layer_name"], str)
-    assert isinstance(sample["layers"][0]["layer_image_relpath"], str)
+    if isinstance(sample["layers"], dict):
+        assert isinstance(sample["layers"]["layer_name"][0], str)
+        assert isinstance(sample["layers"]["layer_image_relpath"][0], str)
+    else:
+        assert isinstance(sample["layers"][0]["layer_name"], str)
+        assert isinstance(sample["layers"][0]["layer_image_relpath"], str)
 
     if os.environ.get("RUN_HEAVY_DATASET_TESTS_PUSH"):
         dataset.push_to_hub(

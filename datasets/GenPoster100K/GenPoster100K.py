@@ -229,23 +229,23 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
     def _compose_merged_image(
         self,
         background_image_path: str,
-        layer_image_paths: List[str | None],
+        layers: List[dict[str, Any]],
     ) -> dict[str, Any]:
         with Image.open(background_image_path) as background:
             merged = background.convert("RGBA")
 
-        for layer_image_path in layer_image_paths:
+        for layer in layers:
+            layer_image_path = layer["layer_image"]
             if layer_image_path is None:
                 continue
+            bbox = layer["bbox"]
             with Image.open(layer_image_path) as layer:
                 layer_rgba = layer.convert("RGBA")
 
-            if layer_rgba.size != merged.size:
-                expanded_layer = Image.new("RGBA", merged.size, (0, 0, 0, 0))
-                expanded_layer.paste(layer_rgba, (0, 0), layer_rgba)
-                layer_rgba = expanded_layer
-
-            merged.alpha_composite(layer_rgba)
+            if layer_rgba.size == merged.size:
+                merged.alpha_composite(layer_rgba)
+            else:
+                merged.alpha_composite(layer_rgba, dest=(bbox[0], bbox[1]))
 
         with io.BytesIO() as buffer:
             merged.save(buffer, format="PNG", compress_level=1)
@@ -326,9 +326,7 @@ class GenPoster100K(ds.GeneratorBasedBuilder):
             else:
                 merged_image = self._compose_merged_image(
                     background_image_path=background_image_path,
-                    layer_image_paths=[
-                        layer["layer_image"] for layer in normalized_layers
-                    ],
+                    layers=normalized_layers,
                 )
 
             yield (
