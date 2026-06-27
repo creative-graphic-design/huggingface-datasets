@@ -19,8 +19,6 @@ source_datasets:
 task_categories:
   - text-to-image
   - image-to-text
-task_ids:
-  - other:content-aware-layout-generation
 ---
 
 # Dataset Card for GenPoster100K
