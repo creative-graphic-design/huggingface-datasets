@@ -192,13 +192,17 @@ This dataset is released under the MIT License. See the [original repository](ht
 ### Citation Information
 
 ```bibtex
-@misc{wang2025banneragency,
-  title={BannerAgency: Advertising Banner Design with Multimodal LLM Agents},
-  author={Wang, Heng and Shimose, Yotaro and Takamatsu, Shingo},
-  year={2025},
-  eprint={2503.11060},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+@inproceedings{wang-etal-2025-banneragency,
+  title = {{B}anner{A}gency: Advertising Banner Design with Multimodal {LLM} Agents},
+  author = {Wang, Heng and Shimose, Yotaro and Takamatsu, Shingo},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
+  month = {November},
+  year = {2025},
+  address = {Suzhou, China},
+  publisher = {Association for Computational Linguistics},
+  pages = {4304--4329},
+  doi = {10.18653/v1/2025.emnlp-main.214},
+  url = {https://aclanthology.org/2025.emnlp-main.214/}
 }
 ```
 

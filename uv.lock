@@ -7,7 +7,8 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-06-18T15:29:18.971717941Z"
+exclude-newer = "2026-06-19T07:58:49.871045643Z"
+exclude-newer-span = "P7D"
 
 [manifest]
 members = [
@@ -20,6 +21,7 @@ members = [
     "ctxfont",
     "desigen",
     "design-bench",
+    "design-bench-prompts",
     "graphic-design-evaluation",
     "huggingface-datasets",
     "lica",
@@ -27,7 +29,9 @@ members = [
     "object-removal-alpha",
     "pku-poster-layout",
     "posta-poster-art",
+    "poster-dna",
     "poster-erase",
+    "poster-iq",
     "poster-reward-bench",
     "publaynet",
     "rico",
@@ -550,6 +554,11 @@ requires-dist = [
     { name = "gdown", specifier = ">=5.2.0" },
     { name = "tenacity", specifier = ">=9.1.2" },
 ]
+
+[[package]]
+name = "design-bench-prompts"
+version = "0.1.0"
+source = { virtual = "datasets/DEsignBenchPrompts" }
 
 [[package]]
 name = "dill"
@@ -1525,6 +1534,17 @@ requires-dist = [
 ]
 
 [[package]]
+name = "poster-dna"
+version = "0.1.0"
+source = { virtual = "datasets/PosterDNA" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
+
+[[package]]
 name = "poster-erase"
 version = "0.1.0"
 source = { virtual = "datasets/PosterErase" }
@@ -1538,6 +1558,17 @@ requires-dist = [
     { name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" },
     { name = "pandas", specifier = ">=2.0.0" },
 ]
+
+[[package]]
+name = "poster-iq"
+version = "0.1.0"
+source = { virtual = "datasets/PosterIQ" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "poster-reward-bench"
