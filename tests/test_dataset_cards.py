@@ -282,7 +282,7 @@ def test_root_readme_dataset_entries_include_input_output_notes():
     for dataset_name in EXPECTED_ROOT_README_IO_DATASETS:
         pattern = (
             rf"- \*\*\[{re.escape(dataset_name)}[^\]]*\]\([^)]*\)\*\*\n"
-            rf"(?P<body>(?:  - .+\n)+)"
+            rf"(?P<body>(?:(?:  -|    -) .+\n)+)"
         )
         match = re.search(pattern, readme)
         assert match, f"{dataset_name} entry not found"
@@ -292,10 +292,10 @@ def test_root_readme_dataset_entries_include_input_output_notes():
         assert "img.shields.io" in lines[0], (
             f"{dataset_name} should place badges directly below the dataset name"
         )
-        assert lines[2].startswith("  - Input: "), (
+        assert lines[2].startswith("    - Input: "), (
             f"{dataset_name} should describe input after the description"
         )
-        assert lines[3].startswith("  - Output: "), (
+        assert lines[3].startswith("    - Output: "), (
             f"{dataset_name} should describe output after input"
         )
 
