@@ -13,6 +13,12 @@ from PIL import Image
 
 import datasets as ds
 
+# Keep Hub Parquet row groups below the Dataset Viewer scan limit (300MB).
+# GenPoster100K has image-heavy examples because each row embeds background,
+# merged, and layer images. 1024 shards still emitted ~100-row Parquet files
+# that could exceed the viewer scan limit, so use ~25 rows per shard instead.
+_HUB_NUM_SHARDS = {"train": 4096}
+
 
 @pytest.fixture
 def script_dir() -> str:
@@ -242,7 +248,7 @@ def test_load_dataset(dataset_path: str, repo_id: str):
         dataset.push_to_hub(
             repo_id=repo_id,
             private=True,
-            max_shard_size="50MB",
+            num_shards=_HUB_NUM_SHARDS,
         )
 
 
