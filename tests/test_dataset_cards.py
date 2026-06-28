@@ -175,6 +175,10 @@ def tracked_dataset_card_paths() -> list[Path]:
     return sorted((ROOT / "datasets").glob("*/README.md"))
 
 
+def tracked_dataset_dirs() -> list[Path]:
+    return sorted(path for path in (ROOT / "datasets").iterdir() if path.is_dir())
+
+
 def _frontmatter(readme: str) -> list[str]:
     lines = readme.splitlines()
     if not lines or lines[0] != "---":
@@ -226,11 +230,50 @@ def _root_readme_public_hub_repos() -> dict[str, str]:
     return repos
 
 
+def _root_readme_dataset_paths() -> list[str]:
+    return [
+        dataset_path.rstrip("/")
+        for dataset_path, _ in _root_readme_dataset_entries().values()
+    ]
+
+
 def test_tracked_dataset_cards_are_not_empty():
     for path in tracked_dataset_card_paths():
         if not (ROOT / ".git").exists() and not path.exists():
             continue
         assert path.read_text().strip(), f"{path.relative_to(ROOT)} is empty"
+
+
+def test_dataset_directories_have_required_loader_files():
+    for dataset_dir in tracked_dataset_dirs():
+        expected_files = [
+            dataset_dir / f"{dataset_dir.name}.py",
+            dataset_dir / "README.md",
+            dataset_dir / "pyproject.toml",
+            dataset_dir / "tests" / "__init__.py",
+            dataset_dir / "tests" / f"{dataset_dir.name}_test.py",
+        ]
+        for path in expected_files:
+            assert path.exists(), f"{path.relative_to(ROOT)} is missing"
+
+
+def test_root_readme_covers_all_dataset_directories():
+    expected_paths = [str(path.relative_to(ROOT)) for path in tracked_dataset_dirs()]
+    listed_paths = _root_readme_dataset_paths()
+    assert len(listed_paths) == len(set(listed_paths))
+    assert set(listed_paths) == set(expected_paths)
+
+
+def test_image_loaders_depend_on_datasets_vision_extra():
+    for dataset_dir in tracked_dataset_dirs():
+        loader_text = (dataset_dir / f"{dataset_dir.name}.py").read_text()
+        pyproject_text = (dataset_dir / "pyproject.toml").read_text()
+        uses_image_feature = "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+
+        assert ("datasets[vision]" in pyproject_text) == uses_image_feature, (
+            f"{dataset_dir.relative_to(ROOT)} should use datasets[vision] exactly "
+            "when the loader defines image features"
+        )
 
 
 def test_dataset_card_task_categories_are_official():
