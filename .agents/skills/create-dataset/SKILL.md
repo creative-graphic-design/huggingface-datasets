@@ -656,7 +656,11 @@ The README must include YAML frontmatter at the very top for Hugging Face Hub me
 
 **Option 2: Write YAML Manually**
 
-Add YAML frontmatter block at the top of README.md (following the official specification at https://github.com/huggingface/hub-docs/blob/main/datasetcard.md):
+Add YAML frontmatter block at the top of README.md. Follow the Hugging Face
+Dataset Cards documentation at https://huggingface.co/docs/hub/datasets-cards
+first, and use the detailed schema at
+https://github.com/huggingface/hub-docs/blob/main/datasetcard.md when field-level
+details are needed:
 
 ```yaml
 ---
@@ -678,11 +682,12 @@ size_categories:
   - n<1K # Format: n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 source_datasets:
   - original # Or list other datasets if derived
-task_categories:
-  - other # See HF docs for full list (image-to-text, text-to-image, etc.)
-task_ids: [] # Usually empty
 
 # Optional fields (add if applicable)
+# task_categories:
+#   - image-to-text # Only use official HF task categories from the docs
+# task_ids:
+#   - visual-question-answering # Add only when using a supported specific task ID
 # paperswithcode_id: your-dataset-name  # If dataset is on Papers with Code
 # language_details:  # More specific language codes
 #   - en-US
@@ -705,8 +710,11 @@ task_ids: [] # Usually empty
 - `language_creators` (list): How language data was created - crowdsourced, found, expert-generated, machine-generated
 - `size_categories` (list): Dataset size - n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 - `source_datasets` (list): "original" if new, or names of source datasets if derived
-- `task_categories` (list): Standard HF task types (see https://huggingface.co/docs/hub/datasets-cards)
-- `task_ids` (list): Usually empty unless using specific task identifiers
+- `task_categories` (list): Standard HF task types only. Check
+  https://huggingface.co/docs/hub/datasets-cards before adding this field.
+  Omit the field when no official category fits; do not use `other`.
+- `task_ids` (list): Add only when using a supported specific task ID. Omit empty
+  `task_ids: []` instead of publishing an empty value.
 
 **Optional fields**:
 
@@ -719,6 +727,9 @@ task_ids: [] # Usually empty
 
 - ❌ `license: [unknown]` - license must be a STRING, not a list
 - ❌ `multilinguality` field - NOT in official spec, don't use it
+- ❌ `task_categories: [other]` - `other` is not an official task category; omit
+  `task_categories` and explain custom tasks in the README body instead
+- ❌ `task_ids: []` - omit empty task IDs
 - ✅ `license: unknown` - correct format
 
 **Examples from existing datasets:**
@@ -729,8 +740,8 @@ task_ids: [] # Usually empty
 
 **Reference Documentation**:
 
-- Official spec: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
-- Task categories: https://huggingface.co/docs/hub/datasets-cards
+- Dataset card docs and task categories: https://huggingface.co/docs/hub/datasets-cards
+- Detailed metadata schema: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
 - License identifiers: https://huggingface.co/docs/hub/repositories-licenses
 
 #### 6.1 Update Dataset README

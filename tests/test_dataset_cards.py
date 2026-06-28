@@ -88,16 +88,132 @@ FORBIDDEN_PLACEHOLDERS = (
     "author={Xiao, Shishi and Wang, Yufei",
 )
 
+OFFICIAL_TASK_CATEGORIES = {
+    "audio-classification",
+    "automatic-speech-recognition",
+    "conversational",
+    "depth-estimation",
+    "document-question-answering",
+    "feature-extraction",
+    "fill-mask",
+    "image-classification",
+    "image-feature-extraction",
+    "image-segmentation",
+    "image-to-3d",
+    "image-to-image",
+    "image-to-text",
+    "image-text-to-text",
+    "mask-generation",
+    "object-detection",
+    "question-answering",
+    "reinforcement-learning",
+    "robotics",
+    "sentence-similarity",
+    "summarization",
+    "table-question-answering",
+    "tabular-classification",
+    "tabular-regression",
+    "text-classification",
+    "text-generation",
+    "text-to-3d",
+    "text-to-audio",
+    "text-to-image",
+    "text-to-speech",
+    "text2text-generation",
+    "time-series-forecasting",
+    "token-classification",
+    "translation",
+    "unconditional-image-generation",
+    "video-classification",
+    "visual-question-answering",
+    "voice-activity-detection",
+    "zero-shot-classification",
+    "zero-shot-image-classification",
+}
+
 
 def dataset_card_path(dataset_name: str) -> Path:
     return ROOT / "datasets" / dataset_name / "README.md"
 
 
+def tracked_dataset_card_paths() -> list[Path]:
+    return sorted((ROOT / "datasets").glob("*/README.md"))
+
+
+def _frontmatter(readme: str) -> list[str]:
+    lines = readme.splitlines()
+    if not lines or lines[0] != "---":
+        return []
+    try:
+        end = lines.index("---", 1)
+    except ValueError:
+        return []
+    return lines[1:end]
+
+
+def _task_categories(frontmatter: list[str]) -> list[str]:
+    categories = []
+    in_task_categories = False
+    for line in frontmatter:
+        if line == "task_categories: []":
+            return []
+        if line == "task_categories:":
+            in_task_categories = True
+            continue
+        if in_task_categories and line.startswith("  - "):
+            categories.append(line.removeprefix("  - ").strip())
+            continue
+        if in_task_categories and line and not line.startswith(" "):
+            break
+    return categories
+
+
 def test_tracked_dataset_cards_are_not_empty():
-    for path in sorted((ROOT / "datasets").glob("*/README.md")):
+    for path in tracked_dataset_card_paths():
         if not (ROOT / ".git").exists() and not path.exists():
             continue
         assert path.read_text().strip(), f"{path.relative_to(ROOT)} is empty"
+
+
+def test_dataset_card_task_categories_are_official():
+    readme_paths = [
+        *tracked_dataset_card_paths(),
+        ROOT
+        / ".agents"
+        / "skills"
+        / "create-dataset"
+        / "templates"
+        / "MyHFDataset"
+        / "README.md",
+    ]
+
+    for path in readme_paths:
+        categories = _task_categories(_frontmatter(path.read_text()))
+        for category in categories:
+            assert category in OFFICIAL_TASK_CATEGORIES, (
+                f"{path.relative_to(ROOT)} uses unsupported task category {category!r}"
+            )
+
+
+def test_dataset_card_point_of_contact_values_are_render_safe():
+    for path in tracked_dataset_card_paths():
+        for line_number, line in enumerate(path.read_text().splitlines(), start=1):
+            if not line.startswith("- **Point of Contact:**"):
+                continue
+
+            value = line.removeprefix("- **Point of Contact:**").strip()
+            assert value, f"{path.relative_to(ROOT)}:{line_number} has an empty contact"
+            assert "TODO" not in value
+            assert "[More Information Needed]" not in value
+            assert not re.search(r"\]\(\s*\)", value), (
+                f"{path.relative_to(ROOT)}:{line_number} has an empty contact link"
+            )
+            assert not re.search(r"\[[^\]]+\]\([^)]+\)", value), (
+                f"{path.relative_to(ROOT)}:{line_number} uses a markdown contact link"
+            )
+            assert not re.fullmatch(r'["\'().\s]+', value), (
+                f"{path.relative_to(ROOT)}:{line_number} is punctuation only"
+            )
 
 
 def test_root_readme_uses_public_hub_repo_ids():
@@ -157,7 +273,9 @@ def test_known_paper_links_are_current():
     ]
     for stale_link in stale_graphic_design_eval_links:
         assert stale_link not in root_readme
-        assert stale_link not in dataset_card_path("GraphicDesignEvaluation").read_text()
+        assert (
+            stale_link not in dataset_card_path("GraphicDesignEvaluation").read_text()
+        )
 
 
 def test_known_citation_text_is_specific():
@@ -173,7 +291,9 @@ def test_dataset_cards_do_not_contain_blocking_placeholders():
     for path in sorted((ROOT / "datasets").glob("*/README.md")):
         text = path.read_text()
         for placeholder in FORBIDDEN_PLACEHOLDERS:
-            assert placeholder not in text, f"{path.relative_to(ROOT)} contains {placeholder!r}"
+            assert placeholder not in text, (
+                f"{path.relative_to(ROOT)} contains {placeholder!r}"
+            )
 
 
 def test_loader_citations_do_not_contain_blocking_placeholders():
@@ -182,7 +302,9 @@ def test_loader_citations_do_not_contain_blocking_placeholders():
         if "_CITATION" not in text:
             continue
         for placeholder in FORBIDDEN_PLACEHOLDERS:
-            assert placeholder not in text, f"{path.relative_to(ROOT)} contains {placeholder!r}"
+            assert placeholder not in text, (
+                f"{path.relative_to(ROOT)} contains {placeholder!r}"
+            )
 
 
 def test_dataset_card_paper_lines_are_not_concatenated():
