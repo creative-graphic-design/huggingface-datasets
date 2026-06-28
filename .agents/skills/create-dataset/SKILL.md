@@ -158,6 +158,12 @@ _URLS = {
 Before writing or keeping a citation, verify publication metadata from primary or near-primary
 sources. Do not stop at arXiv when venue information may exist.
 
+**ArXiv / venue separation rule:** Treat arXiv availability and peer-reviewed
+venue availability as separate facts. If an arXiv record exists but no venue or
+official paper page is found, keep the arXiv badge, arXiv URL, and arXiv citation,
+and use `Paper-not found` only for the venue/paper badge. Do not describe this
+case as missing arXiv, and do not omit the arXiv metadata.
+
 Check at least:
 
 - arXiv abstract/html page
@@ -596,8 +602,12 @@ def test_push_readme_to_hub(hf_api: HfApi, repo_id: str, script_dir: str):
 
 #### Hugging Face Hub Data Publishing
 
-When the user asks to push or publish the dataset to Hugging Face Hub, do it through the dataset
-tests with `HF_WRITE_TESTS=1`, not by uploading the local dataset directory.
+When implementing dataset tests, keep Hub publishing behind `HF_WRITE_TESTS=1` and publish
+generated rows with `DatasetDict.push_to_hub()`. Do not upload the local dataset source
+directory to publish dataset rows.
+
+When the user asks to push, publish, upload, release, or verify Hub publication state, use
+`$publish-dataset` instead of continuing in this skill.
 
 **Correct: publish generated data with `DatasetDict.push_to_hub()`**
 
@@ -630,19 +640,6 @@ If row groups remain too large, use `num_shards` instead of `max_shard_size` to 
 shards. `push_to_hub()` accepts either `max_shard_size` or `num_shards`, not both. This matters
 when the Parquet writer keeps multiple heavy image rows in the same row group.
 
-Run the write test directly:
-
-```bash
-HF_WRITE_TESTS=1 uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
-```
-
-**Incorrect for data publishing: `HfApi.upload_file()` / `HfApi.upload_folder()`**
-
-Use `upload_file()` only for metadata files like `README.md`. Uploading `{DatasetName}.py`,
-`README.md`, or the dataset source directory does not publish the generated dataset rows or
-Parquet shards. Always verify Hub data publishing by confirming the repo contains split files
-such as `train-*.parquet` or `{config}/train-*.parquet`.
-
 ### Step 6: Update README Files
 
 Update both the dataset README and the repository root README.
@@ -659,11 +656,7 @@ The README must include YAML frontmatter at the very top for Hugging Face Hub me
 
 **Option 2: Write YAML Manually**
 
-Add YAML frontmatter block at the top of README.md. Follow the Hugging Face
-Dataset Cards documentation at https://huggingface.co/docs/hub/datasets-cards
-first, and use the detailed schema at
-https://github.com/huggingface/hub-docs/blob/main/datasetcard.md when field-level
-details are needed:
+Add YAML frontmatter block at the top of README.md (following the official specification at https://github.com/huggingface/hub-docs/blob/main/datasetcard.md):
 
 ```yaml
 ---
@@ -685,12 +678,11 @@ size_categories:
   - n<1K # Format: n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 source_datasets:
   - original # Or list other datasets if derived
+task_categories:
+  - other # See HF docs for full list (image-to-text, text-to-image, etc.)
+task_ids: [] # Usually empty
 
 # Optional fields (add if applicable)
-# task_categories:
-#   - image-to-text # Only use official HF task categories from the docs
-# task_ids:
-#   - visual-question-answering # Add only when using a supported specific task ID
 # paperswithcode_id: your-dataset-name  # If dataset is on Papers with Code
 # language_details:  # More specific language codes
 #   - en-US
@@ -713,11 +705,8 @@ source_datasets:
 - `language_creators` (list): How language data was created - crowdsourced, found, expert-generated, machine-generated
 - `size_categories` (list): Dataset size - n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 - `source_datasets` (list): "original" if new, or names of source datasets if derived
-- `task_categories` (list): Standard HF task types only. Check
-  https://huggingface.co/docs/hub/datasets-cards before adding this field.
-  Omit the field when no official category fits; do not use `other`.
-- `task_ids` (list): Add only when using a supported specific task ID. Omit empty
-  `task_ids: []` instead of publishing an empty value.
+- `task_categories` (list): Standard HF task types (see https://huggingface.co/docs/hub/datasets-cards)
+- `task_ids` (list): Usually empty unless using specific task identifiers
 
 **Optional fields**:
 
@@ -730,9 +719,6 @@ source_datasets:
 
 - ❌ `license: [unknown]` - license must be a STRING, not a list
 - ❌ `multilinguality` field - NOT in official spec, don't use it
-- ❌ `task_categories: [other]` - `other` is not an official task category; omit
-  `task_categories` and explain custom tasks in the README body instead
-- ❌ `task_ids: []` - omit empty task IDs
 - ✅ `license: unknown` - correct format
 
 **Examples from existing datasets:**
@@ -743,8 +729,8 @@ source_datasets:
 
 **Reference Documentation**:
 
-- Dataset card docs and task categories: https://huggingface.co/docs/hub/datasets-cards
-- Detailed metadata schema: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
+- Official spec: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
+- Task categories: https://huggingface.co/docs/hub/datasets-cards
 - License identifiers: https://huggingface.co/docs/hub/repositories-licenses
 
 #### 6.1 Update Dataset README
@@ -814,6 +800,7 @@ Add an entry for your new dataset to the repository root README.md:
 2. **Links**: Include data source, conference/journal paper (if published), and arXiv (if available)
 3. **Format**: Bullet list format, one line per dataset
 4. **Venue check**: Before using `Paper-not found`, verify publication metadata with the Step 4.2 checklist and make the root README badge match `_CITATION` and the dataset README
+5. **ArXiv / venue separation**: If arXiv exists but no peer-reviewed venue is found, keep the arXiv badge and URL, and use `Paper-not found` only for the venue/paper badge
 
 **Example:**
 
@@ -828,6 +815,25 @@ uv run pytest -vsx datasets/MyHFDataset/tests
 ```
 
 If errors, fix and re-run.
+
+After implementation, always run the actual load test directly before considering the dataset
+done:
+
+```bash
+uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
+```
+
+If `test_load_dataset` is gated because the dataset is large, run it with the dataset-specific
+environment variable used by the test:
+
+```bash
+{DATASET_NAME}_RUN_DOWNLOAD_TESTS=1 uv run pytest -vsx datasets/{DatasetName}/tests/{DatasetName}_test.py::test_load_dataset
+```
+
+This direct `test_load_dataset` run is required because fast helper tests can miss schema
+problems that only appear through `ds.load_dataset(...)`, especially for multi-config datasets
+or configs with different optional source fields. If the direct load test is genuinely too
+large or unavailable, report that explicitly and include the exact command the user should run.
 
 Verify loading:
 
@@ -905,4 +911,5 @@ uv run pytest -vsx datasets/MyData/tests
 - [ ] Tests updated
 - [ ] README.md updated
 - [ ] Tests passing
+- [ ] Direct `test_load_dataset` pytest target passes with `ds.load_dataset(...)`
 - [ ] Dataset loads correctly
