@@ -39,6 +39,7 @@ EXPECTED_ROOT_README_IO_DATASETS = [
     "Camera",
     "CGLDataset",
     "CGLDatasetV2",
+    "CreativePSD",
     "CTXFont",
     "DesignBench",
     "DEsignBenchPrompts",
@@ -278,6 +279,12 @@ def test_root_readme_original_badges_use_source_medium_labels():
 
 def test_root_readme_dataset_entries_include_input_output_notes():
     readme = (ROOT / "README.md").read_text()
+    listed_dataset_names = re.findall(r"^- \*\*\[([^\]]+)\]\(", readme, re.MULTILINE)
+    normalized_listed_dataset_names = [
+        dataset_name.replace(" 🔐", "") for dataset_name in listed_dataset_names
+    ]
+
+    assert normalized_listed_dataset_names == EXPECTED_ROOT_README_IO_DATASETS
 
     for dataset_name in EXPECTED_ROOT_README_IO_DATASETS:
         pattern = (
