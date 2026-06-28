@@ -53,6 +53,16 @@ Most text content and metadata are in English (`en`).
 
 ## Dataset Structure
 
+### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/CTXFont")
+```
+
 ### Data Fields
 
 Rows contain design-level information (`design_name`, `design_image`, `design_url`, `awwward_url`, `design_tags`) and text-element information (`text_content`, `html_tags`, `font_face`, `font_size`, RGBA color channels, `font_face_embedding`, `center_x`, `center_y`, `width`, and `height`).

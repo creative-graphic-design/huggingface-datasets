@@ -90,6 +90,14 @@ When relevant, please provide [BCP-47 codes](https://tools.ietf.org/html/bcp47),
 
 ### Data Instances
 
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/MyHFDataset")
+```
+
 [More Information Needed]
 
 <!-- Provide an JSON-formatted example and brief description of a typical instance in the dataset. If available, provide a link to further examples.

@@ -85,9 +85,9 @@ When loading a specific configuration, users has to append a version dependent s
 #### without-lp-images
 
 ```python
-from datasets import load_dataset
+import datasets as ds
 
-dataset = load_dataset("creative-graphic-design/CAMERA", name="without-lp-images")
+dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="without-lp-images")
 
 print(dataset)
 # DatasetDict({
@@ -165,9 +165,9 @@ An example of the CAMERA (w/o LP images) dataset looks as follows:
 #### with-lp-images
 
 ```python
-from datasets import load_dataset
+import datasets as ds
 
-dataset = load_dataset("creative-graphic-design/CAMERA", name="with-lp-images")
+dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="with-lp-images")
 
 print(dataset)
 # DatasetDict({

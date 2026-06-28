@@ -110,6 +110,14 @@ The metadata text and task descriptions are in English (`en`). Some preview imag
 
 ### Data Instances
 
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/AesEvalBench")
+```
+
 Each row corresponds to one `{sample_id}-perturbs_new` directory from the released `benchmark_data/` archive.
 
 ```json

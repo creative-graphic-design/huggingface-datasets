@@ -97,6 +97,19 @@ Annotations and evaluation descriptions are in English (`en`).
 
 ## Dataset Structure
 
+### Data Instances
+
+Configs are named as `{eval_type}-{annotation_type}-{design_principle}`. Use `absolute` or `relative`, `gpt` or `human`, and `alignment`, `overlap`, or `whitespace`. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "creative-graphic-design/GraphicDesignEvaluation",
+    name="absolute-gpt-alignment",
+)
+```
+
 ### Data Fields
 
 Absolute configs contain `image_id`, `image`, `perturbation`, `scores`, and `avg`. Relative configs contain `image_id`, `image`, `comparative`, `scores`, and `avg`.

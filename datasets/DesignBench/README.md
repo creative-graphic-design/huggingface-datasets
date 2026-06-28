@@ -87,6 +87,16 @@ Prompts, code, and metadata are primarily English (`en`).
 
 ## Dataset Structure
 
+### Data Instances
+
+Configs are named as `{task}_{framework}`. Available tasks are `generation`, `edit`, `repair`, and `compile`; available frameworks are `vanilla`, `angular`, `react`, and `vue` where supported. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DesignBench", name="generation_vanilla")
+```
+
 ### Data Fields
 
 Generation configs contain `screenshot`, `html`, and `json`. Edit and repair configs contain source/target screenshots and structured JSON metadata for the requested operation.
