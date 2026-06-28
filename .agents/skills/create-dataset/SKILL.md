@@ -753,6 +753,45 @@ Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any pl
 - Verify license information matches the source repository
 - Add complete citation information if available
 
+**Add a loading example to the Data Instances section**
+
+Every dataset README must include a concise loading example in `### Data Instances`, using
+the `import datasets as ds` style. Prefer loading the published Hugging Face Hub dataset
+when the dataset is uploaded:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DatasetName")
+```
+
+For multi-config datasets, include a representative `name` argument:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DatasetName", name="config_name")
+```
+
+Also list or describe the available configuration names near the example so users know
+which values can be passed to `name`. For many configs, describe the naming pattern and
+point to the config list in the dataset card metadata.
+
+If the dataset is not uploaded to the Hub or requires local/private source files, show the
+local loader path and any required arguments such as `data_dir`, `token`, or
+`trust_remote_code`:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "datasets/DatasetName/DatasetName.py",
+    name="config_name",
+    data_dir="/path/to/data",
+    trust_remote_code=True,
+)
+```
+
 **Update the Contributions Section**
 
 The Contributions section (at the end of README) credits those who made the dataset available. There are two common patterns:
@@ -850,8 +889,8 @@ Verify loading:
 
 ```python
 import datasets as ds
-ds = ds.load_dataset("datasets/MyHFDataset/MyHFDataset.py", trust_remote_code=True)
-print(ds["train"][0])
+dataset = ds.load_dataset("datasets/MyHFDataset/MyHFDataset.py", trust_remote_code=True)
+print(dataset["train"][0])
 ```
 
 ## Example Session
