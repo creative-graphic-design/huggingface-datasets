@@ -1,4 +1,5 @@
 import importlib.util
+import math
 import os
 import pickle
 import sys
@@ -8,8 +9,9 @@ from pathlib import Path
 from types import ModuleType
 
 import pytest
-from huggingface_hub import HfApi
+from huggingface_hub import HfApi, HfFileSystem
 from PIL import Image
+import pyarrow.parquet as pq
 
 import datasets as ds
 
@@ -18,6 +20,9 @@ import datasets as ds
 # merged, and layer images. 1024 shards still emitted ~100-row Parquet files
 # that could exceed the viewer scan limit, so use ~25 rows per shard instead.
 _HUB_NUM_SHARDS = {"train": 4096}
+_EXPECTED_TRAIN_ROWS = 102_703
+_HUB_VIEWER_SCAN_LIMIT_BYTES = 300_000_000
+_HUB_VIEWER_SAFE_MAX_ROWS_PER_SHARD = 32
 
 
 @pytest.fixture
@@ -87,6 +92,27 @@ def test_builder_info(builder):
     assert "layer_image_relpath" in layer_feature
     assert "fill_color" in layer_feature
     assert "bbox" in layer_feature
+
+
+def test_hub_sharding_keeps_viewer_safe_row_counts():
+    rows_per_shard = math.ceil(_EXPECTED_TRAIN_ROWS / _HUB_NUM_SHARDS["train"])
+
+    assert rows_per_shard <= _HUB_VIEWER_SAFE_MAX_ROWS_PER_SHARD
+
+
+def test_readme_point_of_contact_is_explicit(script_dir: str):
+    readme = Path(script_dir, "README.md").read_text(encoding="utf-8")
+    contact_lines = [
+        line
+        for line in readme.splitlines()
+        if line.startswith("- **Point of Contact:**")
+    ]
+
+    assert contact_lines == [
+        "- **Point of Contact:** creative-graphic-design maintainers for this "
+        "dataset loader; upstream source release maintainer: "
+        "[@BruceW91](https://huggingface.co/BruceW91)."
+    ]
 
 
 def test_normalize_relative_image_path(builder):
@@ -268,3 +294,36 @@ def test_push_readme_to_hub(
         repo_id=repo_id,
         repo_type="dataset",
     )
+
+
+def test_published_hub_parquet_is_viewer_safe(repo_id: str):
+    if not os.environ.get("RUN_HUB_DATASET_VALIDATION"):
+        pytest.skip("Set RUN_HUB_DATASET_VALIDATION=1 to validate published Hub files.")
+
+    info = HfApi().dataset_info(repo_id, files_metadata=True)
+    parquet_files = sorted(
+        sibling.rfilename
+        for sibling in info.siblings
+        if sibling.rfilename.endswith(".parquet")
+    )
+
+    assert len(parquet_files) == _HUB_NUM_SHARDS["train"]
+
+    fs = HfFileSystem()
+    total_rows = 0
+    max_rows_per_file = 0
+    max_row_group_size = 0
+    for parquet_file in parquet_files:
+        with fs.open(f"datasets/{repo_id}/{parquet_file}", "rb") as f:
+            metadata = pq.ParquetFile(f).metadata
+        total_rows += metadata.num_rows
+        max_rows_per_file = max(max_rows_per_file, metadata.num_rows)
+        for row_group_index in range(metadata.num_row_groups):
+            max_row_group_size = max(
+                max_row_group_size,
+                metadata.row_group(row_group_index).total_byte_size,
+            )
+
+    assert total_rows == _EXPECTED_TRAIN_ROWS
+    assert max_rows_per_file <= _HUB_VIEWER_SAFE_MAX_ROWS_PER_SHARD
+    assert max_row_group_size < _HUB_VIEWER_SCAN_LIMIT_BYTES
