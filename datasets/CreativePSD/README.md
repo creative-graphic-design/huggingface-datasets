@@ -87,11 +87,21 @@ Each row corresponds to one `poster_*.zip` archive:
 
 ### Data Splits
 
-The loader exposes a single `train` split. It targets the public ModelScope archive release, which currently lists 7,978 root-level `poster_*.zip` archives, while the PSDesigner paper reports 10,454 CreativePSD samples.
+The loader exposes a single `train` split. The PSDesigner paper reports 10,454 CreativePSD samples in Table 1, while the public ModelScope release currently exposes 7,978 root-level `poster_*.zip` archives through the file metadata API. This loader targets the public ModelScope archive release, not the unreleased remainder implied by the paper count.
+
+When loading from an official ModelScope checkout, the loader validates the archive count and skips only the known unavailable source archives listed below. With the current source availability issue, non-streaming `load_dataset(...)` completes with 7,968 usable poster archives.
 
 ### Known Source Availability Issue
 
-As of 2026-06-28, 10 public ModelScope archives are unavailable as valid ZIP files. The loader skips only these known unavailable archives in an official ModelScope checkout, so non-streaming `load_dataset(...)` completes with 7,968 rows:
+As of 2026-06-28, the paper-reported CreativePSD count, the public ModelScope release, and the loadable dataset rows differ:
+
+- Paper Table 1: 10,454 CreativePSD samples.
+- Public ModelScope file metadata: 7,978 root-level `poster_*.zip` archives.
+- Current `load_dataset(...)` result: 7,968 rows after skipping the 10 known unavailable archives below.
+
+Repeated downloads from the available ModelScope SDK, resolve/raw, Git LFS, and OSS access paths returned 10 of the public archives as 0-byte files in the local checkout. The loader skips these known unavailable archives when they are 0-byte or absent in an official ModelScope checkout. Any other invalid or missing poster archive still fails validation.
+
+The currently unresolved 0-byte archives are:
 
 - `poster_003266.zip`
 - `poster_003281.zip`
