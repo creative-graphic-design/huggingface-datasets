@@ -5,6 +5,8 @@ from huggingface_hub import HfApi
 
 import datasets as ds
 
+_HUB_NUM_SHARDS = {"train": 128, "test": 32}
+
 
 @pytest.fixture
 def script_dir() -> str:
@@ -87,7 +89,10 @@ def test_load_dataset(dataset_path: str, repo_id: str):
     assert first_example["design_image"] is not None
 
     if os.environ.get("HF_WRITE_TESTS"):
-        dataset.push_to_hub(repo_id=repo_id)
+        dataset.push_to_hub(
+            repo_id=repo_id,
+            num_shards=_HUB_NUM_SHARDS,
+        )
 
 
 def test_push_readme_to_hub(

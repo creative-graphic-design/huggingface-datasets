@@ -4,6 +4,8 @@ import pytest
 
 import datasets as ds
 
+_HUB_NUM_SHARDS = {"train": 20}
+
 
 @pytest.fixture
 def script_dir() -> str:
@@ -50,4 +52,8 @@ def test_load_dataset(
     assert dataset["train"].num_rows == expected_num_train
 
     if os.environ.get("HF_WRITE_TESTS"):
-        dataset.push_to_hub(repo_id=repo_id, private=True)
+        dataset.push_to_hub(
+            repo_id=repo_id,
+            private=True,
+            num_shards=_HUB_NUM_SHARDS,
+        )
