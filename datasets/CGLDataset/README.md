@@ -69,6 +69,16 @@ Poster text is primarily Chinese (`zh`).
 
 ## Dataset Structure
 
+### Data Instances
+
+CGL-Dataset provides `default` and `ralf-style` configurations. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/CGL-Dataset", name="default")
+```
+
 ### Data Fields
 
 The `default` config contains `image_id`, `file_name`, `width`, `height`, `image`, and COCO-style `annotations`.

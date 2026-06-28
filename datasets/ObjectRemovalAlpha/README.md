@@ -49,6 +49,14 @@ The text prompts are in English.
 
 ### Data Instances
 
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/ObjectRemovalAlpha")
+```
+
 ```json
 {
   "text": "object-removal prompt",

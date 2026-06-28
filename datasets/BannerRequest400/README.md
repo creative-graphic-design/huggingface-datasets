@@ -80,7 +80,13 @@ The dataset is in English (en). All banner requests, target audience description
 
 ### Data Instances
 
-The dataset provides two configurations:
+The dataset provides two configurations, `abstract_400` and `concrete_5k`. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/BannerRequest400", name="abstract_400")
+```
 
 **Abstract Configuration** (400 examples):
 

@@ -99,6 +99,14 @@ Prompts are primarily in English (`en`). The Advanced subset also includes promp
 
 ### Data Instances
 
+PosterRewardBench provides `basic` and `advanced` configurations. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/PosterRewardBench", name="basic")
+```
+
 Each row corresponds to one preference pair from the upstream `PRB_basic_relative.json` or `PRB_advanced_relative.json` file.
 
 ```json
