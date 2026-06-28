@@ -4,8 +4,6 @@ import pytest
 
 import datasets as ds
 
-_HUB_MAX_SHARD_SIZE = "100MB"
-
 
 @pytest.fixture
 def script_dir() -> str:
@@ -78,7 +76,6 @@ def test_load_dataset(
         dataset.push_to_hub(
             repo_id=repo_id,
             config_name=f"{task_name}={framework_name}",
-            max_shard_size=_HUB_MAX_SHARD_SIZE,
             # private=True,
         )
 
