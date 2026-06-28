@@ -33,6 +33,30 @@ EXPECTED_HUB_REPOS = {
     "Rico": "creative-graphic-design/Rico",
 }
 
+EXPECTED_ROOT_README_IO_DATASETS = [
+    "AesEvalBench",
+    "BannerRequest400",
+    "Camera",
+    "CGLDataset",
+    "CGLDatasetV2",
+    "CTXFont",
+    "DesignBench",
+    "DEsignBenchPrompts",
+    "Desigen",
+    "GraphicDesignEvaluation",
+    "LICA",
+    "Magazine",
+    "ObjectRemovalAlpha",
+    "PKUPosterLayout",
+    "PosterDNA",
+    "PosterIQ",
+    "PosterRewardBench",
+    "POSTA-PosterArt",
+    "PosterErase",
+    "PubLayNet",
+    "Rico",
+]
+
 EXPECTED_CARD_LINKS = {
     "Camera": "https://huggingface.co/datasets/creative-graphic-design/CAMERA",
     "CGLDataset": "https://huggingface.co/datasets/creative-graphic-design/CGL-Dataset",
@@ -250,6 +274,22 @@ def test_root_readme_original_badges_use_source_medium_labels():
     assert len(badges) == readme.count("Original-")
     for label, logo in badges:
         assert label == expected_label_by_logo[logo]
+
+
+def test_root_readme_dataset_entries_include_input_output_notes():
+    readme = (ROOT / "README.md").read_text()
+
+    for dataset_name in EXPECTED_ROOT_README_IO_DATASETS:
+        pattern = (
+            rf"- \*\*\[{re.escape(dataset_name)}[^\]]*\]\([^)]*\)\*\*\n"
+            rf"(?P<body>(?:  - .+\n)+)"
+        )
+        match = re.search(pattern, readme)
+        assert match, f"{dataset_name} entry not found"
+
+        body = match.group("body")
+        assert "  - Input: " in body, f"{dataset_name} should describe input"
+        assert "  - Output: " in body, f"{dataset_name} should describe output"
 
 
 def test_dataset_cards_include_known_public_hub_links():
