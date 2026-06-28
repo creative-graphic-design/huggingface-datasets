@@ -62,7 +62,7 @@ task_categories:
 - **Paper (Preprint):** https://arxiv.org/abs/2510.15749
 - **Paper (Conference):** https://openaccess.thecvf.com/content/ICCV2025/html/Wang_SEGA_A_Stepwise_Evolution_Paradigm_for_Content-Aware_Layout_Generation_with_ICCV_2025_paper.html
 - **Leaderboard:** No official public leaderboard URL is documented for GenPoster-100K.
-- **Point of Contact:** creative-graphic-design maintainers for this dataset loader; upstream source release maintainer: [@BruceW91](https://huggingface.co/BruceW91).
+- **Point of Contact:** creative-graphic-design maintainers via https://github.com/creative-graphic-design/huggingface-datasets/issues; upstream source release maintainer: https://huggingface.co/BruceW91
 
 ### Dataset Summary
 

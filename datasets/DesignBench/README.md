@@ -45,8 +45,8 @@ TODO: YAML tags (full spec here: https://github.com/huggingface/hub-docs/blob/ma
 - **Homepage:** https://webpai.github.io/DesignBench/
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/DesignBench
 - **Paper (Preprint):** https://arxiv.org/abs/2506.06251
-- **Leaderboard:** [TODO: If the dataset supports an active leaderboard, add link here]()
-- **Point of Contact:** [TODO: If known, name and email of at least one person the reader can contact for questions about the dataset.]()
+- **Leaderboard:** No official public leaderboard URL is documented for DesignBench.
+- **Point of Contact:** creative-graphic-design maintainers via https://github.com/creative-graphic-design/huggingface-datasets/issues
 
 ### Dataset Summary
 

@@ -109,9 +109,9 @@ def test_readme_point_of_contact_is_explicit(script_dir: str):
     ]
 
     assert contact_lines == [
-        "- **Point of Contact:** creative-graphic-design maintainers for this "
-        "dataset loader; upstream source release maintainer: "
-        "[@BruceW91](https://huggingface.co/BruceW91)."
+        "- **Point of Contact:** creative-graphic-design maintainers via "
+        "https://github.com/creative-graphic-design/huggingface-datasets/issues; "
+        "upstream source release maintainer: https://huggingface.co/BruceW91"
     ]
 
 
