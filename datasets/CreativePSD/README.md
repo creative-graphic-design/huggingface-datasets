@@ -87,7 +87,22 @@ Each row corresponds to one `poster_*.zip` archive:
 
 ### Data Splits
 
-The loader exposes a single `train` split. The ModelScope file API lists 7,978 root-level `poster_*.zip` archives. When loading from an official ModelScope checkout, the loader validates that the checkout contains all 7,978 poster archives and rejects invalid archives before generation.
+The loader exposes a single `train` split. It targets the public ModelScope archive release, which currently lists 7,978 root-level `poster_*.zip` archives, while the PSDesigner paper reports 10,454 CreativePSD samples.
+
+### Known Source Availability Issue
+
+As of 2026-06-28, 10 public ModelScope archives are unavailable as valid ZIP files. The loader skips only these known unavailable archives in an official ModelScope checkout, so non-streaming `load_dataset(...)` completes with 7,968 rows:
+
+- `poster_003266.zip`
+- `poster_003281.zip`
+- `poster_003287.zip`
+- `poster_003288.zip`
+- `poster_003294.zip`
+- `poster_003296.zip`
+- `poster_003299.zip`
+- `poster_003302.zip`
+- `poster_003305.zip`
+- `poster_003306.zip`
 
 ## Usage
 

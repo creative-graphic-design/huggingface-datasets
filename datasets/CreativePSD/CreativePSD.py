@@ -44,6 +44,20 @@ _LICENSE = "CC-BY-NC-4.0"
 
 _DATASET_ID = "song322/CreativePSD"
 _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT = 7978
+_KNOWN_UNAVAILABLE_POSTER_ARCHIVES = frozenset(
+    {
+        "poster_003266.zip",
+        "poster_003281.zip",
+        "poster_003287.zip",
+        "poster_003288.zip",
+        "poster_003294.zip",
+        "poster_003296.zip",
+        "poster_003299.zip",
+        "poster_003302.zip",
+        "poster_003305.zip",
+        "poster_003306.zip",
+    }
+)
 _DEFAULT_LOCAL_DIR = pathlib.Path(
     "/root/ghq/www.modelscope.cn/datasets/song322/CreativePSD"
 )
@@ -90,29 +104,62 @@ def _is_modelscope_checkout(path: pathlib.Path) -> bool:
     return (path / ".gitattributes").exists() and (path / "README.md").exists()
 
 
-def _validate_zip_paths(zip_paths: list[pathlib.Path], root_path: pathlib.Path) -> None:
+def _validate_zip_paths(
+    zip_paths: list[pathlib.Path], root_path: pathlib.Path
+) -> list[pathlib.Path]:
+    is_modelscope_checkout = _is_modelscope_checkout(root_path)
+    zip_names = {path.name for path in zip_paths}
+    known_invalid_names: set[str] = set()
     invalid_zip_paths = [
         path
         for path in zip_paths
         if path.stat().st_size == 0 or not zipfile.is_zipfile(path)
     ]
     if invalid_zip_paths:
-        invalid_preview = ", ".join(path.name for path in invalid_zip_paths[:10])
-        raise ValueError(
-            "Found invalid CreativePSD poster archives: "
-            f"{invalid_preview}. Re-download these files before loading."
-        )
+        invalid_names = {path.name for path in invalid_zip_paths}
+        known_invalid_names = invalid_names & _KNOWN_UNAVAILABLE_POSTER_ARCHIVES
+        unexpected_invalid_names = sorted(invalid_names - known_invalid_names)
+        if unexpected_invalid_names or not is_modelscope_checkout:
+            invalid_preview = ", ".join(
+                sorted(unexpected_invalid_names or invalid_names)[:10]
+            )
+            raise ValueError(
+                "Found invalid CreativePSD poster archives: "
+                f"{invalid_preview}. These files are zero-byte or non-ZIP "
+                "archives; verify them against the official ModelScope file "
+                "sizes before loading."
+            )
 
-    if (
-        _is_modelscope_checkout(root_path)
-        and len(zip_paths) != _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT
-    ):
+        logger.warning(
+            "Skipping %d known unavailable CreativePSD archives from the "
+            "official ModelScope checkout: %s.",
+            len(known_invalid_names),
+            ", ".join(sorted(known_invalid_names)),
+        )
+        zip_paths = [
+            path for path in zip_paths if path.name not in known_invalid_names
+        ]
+
+    if is_modelscope_checkout:
+        known_unavailable_names = (
+            _KNOWN_UNAVAILABLE_POSTER_ARCHIVES - zip_names
+        ) | known_invalid_names
+        expected_usable_zip_count = (
+            _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT - len(known_unavailable_names)
+        )
+    else:
+        expected_usable_zip_count = len(zip_paths)
+
+    if is_modelscope_checkout and len(zip_paths) != expected_usable_zip_count:
         raise ValueError(
             "The CreativePSD ModelScope checkout appears incomplete: found "
-            f"{len(zip_paths)} poster_*.zip files, expected "
-            f"{_EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT}. Re-run the ModelScope "
-            "download or pass a complete data_dir."
+            f"{len(zip_paths)} usable poster_*.zip files, expected "
+            f"{expected_usable_zip_count} after excluding known unavailable "
+            "source archives. Re-run the ModelScope download or pass a "
+            "complete data_dir."
         )
+
+    return zip_paths
 
 
 def _ensure_modelscope_download() -> pathlib.Path | None:
@@ -144,8 +191,7 @@ def _resolve_zip_paths(
         if not zip_paths and zipfile.is_zipfile(local_path):
             zip_paths = [local_path]
         if zip_paths:
-            _validate_zip_paths(zip_paths, local_path)
-            return zip_paths
+            return _validate_zip_paths(zip_paths, local_path)
         raise FileNotFoundError(
             f"No poster_*.zip files found under data_dir={local_path}"
         )
@@ -154,21 +200,18 @@ def _resolve_zip_paths(
         manual_path = _expand_path(dl_manager.manual_dir)
         zip_paths = _zip_paths_under(manual_path)
         if zip_paths:
-            _validate_zip_paths(zip_paths, manual_path)
-            return zip_paths
+            return _validate_zip_paths(zip_paths, manual_path)
 
     if _DEFAULT_LOCAL_DIR.exists():
         zip_paths = _zip_paths_under(_DEFAULT_LOCAL_DIR)
         if zip_paths:
-            _validate_zip_paths(zip_paths, _DEFAULT_LOCAL_DIR)
-            return zip_paths
+            return _validate_zip_paths(zip_paths, _DEFAULT_LOCAL_DIR)
 
     modelscope_dir = _ensure_modelscope_download()
     if modelscope_dir is not None:
         zip_paths = _zip_paths_under(modelscope_dir)
         if zip_paths:
-            _validate_zip_paths(zip_paths, modelscope_dir)
-            return zip_paths
+            return _validate_zip_paths(zip_paths, modelscope_dir)
 
     raise FileNotFoundError(
         "Could not find CreativePSD poster_*.zip files. Download the dataset with "

@@ -13,6 +13,11 @@ from PIL import Image
 
 import datasets as ds
 
+_PAPER_REPORTED_CREATIVEPSD_SAMPLES = 10454
+_MODELSCOPE_RELEASE_POSTER_ZIP_COUNT = 7978
+_KNOWN_UNAVAILABLE_POSTER_ZIP_COUNT = 10
+_EXPECTED_LOADABLE_POSTER_ZIP_COUNT = 7968
+
 
 @pytest.fixture
 def script_dir() -> str:
@@ -157,6 +162,22 @@ def test_build_example_includes_all_zip_members(
     assert all_file_names == expected_file_names
 
 
+def test_source_availability_counts_are_documented(dataset_module: ModuleType):
+    assert (
+        dataset_module._EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT
+        == _MODELSCOPE_RELEASE_POSTER_ZIP_COUNT
+    )
+    assert (
+        len(dataset_module._KNOWN_UNAVAILABLE_POSTER_ARCHIVES)
+        == _KNOWN_UNAVAILABLE_POSTER_ZIP_COUNT
+    )
+    assert (
+        _MODELSCOPE_RELEASE_POSTER_ZIP_COUNT - _KNOWN_UNAVAILABLE_POSTER_ZIP_COUNT
+        == _EXPECTED_LOADABLE_POSTER_ZIP_COUNT
+    )
+    assert _PAPER_REPORTED_CREATIVEPSD_SAMPLES > _MODELSCOPE_RELEASE_POSTER_ZIP_COUNT
+
+
 def test_validate_zip_paths_rejects_incomplete_modelscope_checkout(
     tmp_path: Path, dataset_module: ModuleType
 ):
@@ -169,6 +190,33 @@ def test_validate_zip_paths_rejects_incomplete_modelscope_checkout(
             dataset_module._zip_paths_under(tmp_path),
             tmp_path,
         )
+
+
+def test_validate_zip_paths_skips_known_unavailable_modelscope_archives(
+    tmp_path: Path, dataset_module: ModuleType, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(dataset_module, "_EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT", 4)
+    monkeypatch.setattr(
+        dataset_module,
+        "_KNOWN_UNAVAILABLE_POSTER_ARCHIVES",
+        frozenset({"poster_000003.zip", "poster_000004.zip"}),
+    )
+    _write_creative_psd_zip(tmp_path / "poster_000001.zip", "poster_000001", 3)
+    _write_creative_psd_zip(tmp_path / "poster_000002.zip", "poster_000002", 4)
+    (tmp_path / "poster_000003.zip").write_bytes(b"")
+    (tmp_path / "poster_000004.zip").write_bytes(b"")
+    (tmp_path / ".gitattributes").write_text("*.zip filter=lfs diff=lfs merge=lfs\n")
+    (tmp_path / "README.md").write_text("# CreativePSD\n")
+
+    zip_paths = dataset_module._validate_zip_paths(
+        dataset_module._zip_paths_under(tmp_path),
+        tmp_path,
+    )
+
+    assert [path.name for path in zip_paths] == [
+        "poster_000001.zip",
+        "poster_000002.zip",
+    ]
 
 
 def test_validate_zip_paths_rejects_invalid_archives(
