@@ -18,9 +18,6 @@ size_categories:
   - 1K<n<10K
 source_datasets:
   - original
-task_categories:
-  - other
-task_ids: []
 configs:
   - config_name: default
     data_files:
