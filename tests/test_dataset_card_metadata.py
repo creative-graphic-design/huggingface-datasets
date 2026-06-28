@@ -76,8 +76,18 @@ def _task_categories(frontmatter: list[str]) -> list[str]:
 def test_dataset_card_task_categories_are_official():
     repo_root = Path(__file__).resolve().parents[1]
     failures = []
+    readme_paths = [
+        *sorted((repo_root / "datasets").glob("*/README.md")),
+        repo_root
+        / ".agents"
+        / "skills"
+        / "create-dataset"
+        / "templates"
+        / "MyHFDataset"
+        / "README.md",
+    ]
 
-    for readme_path in sorted((repo_root / "datasets").glob("*/README.md")):
+    for readme_path in readme_paths:
         categories = _task_categories(
             _frontmatter(readme_path.read_text(encoding="utf-8"))
         )
