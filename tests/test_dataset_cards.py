@@ -17,8 +17,10 @@ EXPECTED_HUB_REPOS = {
     "Camera": "creative-graphic-design/CAMERA",
     "CGLDataset": "creative-graphic-design/CGL-Dataset",
     "CGLDatasetV2": "creative-graphic-design/CGL-Dataset-v2",
+    "CreativePSD": "creative-graphic-design/CreativePSD",
     "CTXFont": "creative-graphic-design/CTXFont",
     "DesignBench": "creative-graphic-design/DesignBench",
+    "DEsignBenchPrompts": "creative-graphic-design/DEsignBench-Prompts",
     "Desigen": "creative-graphic-design/Desigen",
     "GraphicDesignEvaluation": "creative-graphic-design/GraphicDesignEvaluation",
     "LICA": "creative-graphic-design/LICA",
@@ -66,6 +68,10 @@ EXPECTED_CARD_LINKS = {
 }
 
 EXPECTED_PAPER_LINKS = {
+    "CreativePSD": [
+        "https://arxiv.org/abs/2603.25738",
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Shuai_PSDesigner_Automated_Graphic_Design_with_a_Human-Like_Creative_Workflow_CVPR_2026_paper.html",
+    ],
     "GraphicDesignEvaluation": [
         "https://arxiv.org/abs/2410.08885",
         "https://doi.org/10.1145/3681758.3698010",
@@ -79,6 +85,10 @@ EXPECTED_CITATION_TEXT = {
     "BannerRequest400": [
         "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
         "10.18653/v1/2025.emnlp-main.214",
+    ],
+    "CreativePSD": [
+        "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+        "pages={10165-10175}",
     ],
     "Desigen": [
         "Weng, Haohan and Huang, Danqing",
@@ -193,6 +203,29 @@ def _task_categories(frontmatter: list[str]) -> list[str]:
     return categories
 
 
+def _root_readme_dataset_entries() -> dict[str, tuple[str, str]]:
+    readme = (ROOT / "README.md").read_text()
+    entries = {}
+    pattern = (
+        r"^- \*\*\[(?P<name>[^\]]+)\]\((?P<path>[^)]+)\)\*\*\n"
+        r"(?P<body>(?:(?:  -|    -) .+\n)+)"
+    )
+    for match in re.finditer(pattern, readme, flags=re.MULTILINE):
+        name = match.group("name").replace(" 🔐", "")
+        entries[name] = (match.group("path"), match.group("body"))
+    return entries
+
+
+def _root_readme_public_hub_repos() -> dict[str, str]:
+    repos = {}
+    for _, (dataset_path, body) in _root_readme_dataset_entries().items():
+        urls = re.findall(r"https://huggingface\.co/datasets/([^)\s]+)", body)
+        if urls:
+            dataset_name = Path(dataset_path).name
+            repos[dataset_name] = urls[-1]
+    return repos
+
+
 def test_tracked_dataset_cards_are_not_empty():
     for path in tracked_dataset_card_paths():
         if not (ROOT / ".git").exists() and not path.exists():
@@ -256,6 +289,13 @@ def test_root_readme_uses_public_hub_repo_ids():
     ]
     for stale_url in stale_urls:
         assert stale_url not in readme
+
+
+def test_root_readme_dataset_links_point_to_existing_dataset_dirs():
+    for dataset_name, (dataset_path, _) in _root_readme_dataset_entries().items():
+        assert (ROOT / dataset_path).is_dir(), (
+            f"{dataset_name} should link to an existing dataset directory"
+        )
 
 
 def test_root_readme_original_badges_use_source_medium_labels():
@@ -374,6 +414,7 @@ def test_dataset_card_paper_lines_are_not_concatenated():
 
 def test_sync_script_covers_all_expected_hub_repos():
     assert DATASET_CARD_REPOS == EXPECTED_HUB_REPOS
+    assert DATASET_CARD_REPOS == _root_readme_public_hub_repos()
 
 
 def test_merge_remote_frontmatter_preserves_hub_dataset_info():
