@@ -288,8 +288,16 @@ def test_root_readme_dataset_entries_include_input_output_notes():
         assert match, f"{dataset_name} entry not found"
 
         body = match.group("body")
-        assert "  - Input: " in body, f"{dataset_name} should describe input"
-        assert "  - Output: " in body, f"{dataset_name} should describe output"
+        lines = body.splitlines()
+        assert "img.shields.io" in lines[0], (
+            f"{dataset_name} should place badges directly below the dataset name"
+        )
+        assert lines[2].startswith("  - Input: "), (
+            f"{dataset_name} should describe input after the description"
+        )
+        assert lines[3].startswith("  - Output: "), (
+            f"{dataset_name} should describe output after input"
+        )
 
 
 def test_dataset_cards_include_known_public_hub_links():
