@@ -78,6 +78,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Poster images, text elements, saliency maps, and visual-textual layout annotations.
     - ➡️ Input: Non-empty poster canvas or inpainted poster with saliency maps.
     - ⬅️ Output: Text, logo, and underlay bounding boxes.
+- **[PittImageVideoAdsDataset](datasets/PittImageVideoAdsDataset/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-1707.03067-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/1707.03067) [![Paper](https://img.shields.io/badge/Paper-CVPR%2717-blue?logo=doi&logoColor=white)](https://openaccess.thecvf.com/content_cvpr_2017/html/Hussain_Automatic_Understanding_of_CVPR_2017_paper.html) [![Original](https://img.shields.io/badge/Original-Project%20Page-0F766E?logo=homepage&logoColor=white)](https://people.cs.pitt.edu/~kovashka/ads/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PittImageVideoAdsDataset-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PittImageVideoAdsDataset)
+  - Image and video advertisement annotations with topics, sentiments, slogans, persuasive strategies, symbolic references, and action/reason Q/A.
+    - ➡️ Input: Advertisement image or YouTube video ID with raw annotation responses.
+    - ⬅️ Output: Topics, sentiments, slogans, persuasive strategies, symbolic references, and action/reason Q/A.
 - **[PosterDNA 🔐](datasets/PosterDNA/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2601.03993-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2601.03993) [![Paper](https://img.shields.io/badge/Paper-AAAI%2726-blue?logo=doi&logoColor=white)](https://doi.org/10.1609/aaai.v40i9.37656) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/wuhaer/PosterVerse) ![HF Hub](https://img.shields.io/badge/HF%20Hub-not%20uploaded-lightgrey?logo=huggingface&logoColor=white)
   - Commercial-grade, text-dense poster images with HTML layout specifications, typography metadata, poster intention data, and a held-out test set; password-protected ZIPs under CC BY-NC-ND 4.0 are not mirrored to our Hugging Face Hub, and the loader is provided for reference.
