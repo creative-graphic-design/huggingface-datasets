@@ -21,7 +21,6 @@ source_datasets:
 task_categories:
   - image-to-text
   - text-to-image
-task_ids: []
 ---
 
 # Dataset Card for CreativePSD
@@ -30,9 +29,8 @@ task_ids: []
 
 - **Homepage:** https://modelscope.cn/datasets/song322/CreativePSD
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/CreativePSD
-- **Paper (Preprint):** https://arxiv.org/abs/2603.25738
-- **Paper (Conference/Journal Name):** https://openaccess.thecvf.com/content/CVPR2026/html/Shuai_PSDesigner_Automated_Graphic_Design_with_a_Human-Like_Creative_Workflow_CVPR_2026_paper.html
-- **Point of Contact:** [More Information Needed]
+- **arXiv:** https://arxiv.org/abs/2603.25738
+- **Paper (CVPR 2026):** https://openaccess.thecvf.com/content/CVPR2026/html/Shuai_PSDesigner_Automated_Graphic_Design_with_a_Human-Like_Creative_Workflow_CVPR_2026_paper.html
 
 ### Dataset Summary
 
@@ -149,11 +147,13 @@ The source dataset card lists `CC-BY-NC-4.0`.
 ### Citation Information
 
 ```bibtex
-@inproceedings{shuai2026psdesigner,
+@InProceedings{Shuai_2026_CVPR,
   title={PSDesigner: Automated Graphic Design with a Human-Like Creative Workflow},
   author={Shuai, Xincheng and Tang, Song and Huang, Yutong and Ding, Henghui and Tao, Dacheng},
-  booktitle={CVPR},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month={June},
   year={2026},
+  pages={10165-10175},
 }
 ```
 
