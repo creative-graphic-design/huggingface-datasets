@@ -22,7 +22,6 @@ tags:
 task_categories:
   - image-to-text
   - text-to-image
-task_ids: []
 ---
 
 # Dataset Card for BannerRequest400

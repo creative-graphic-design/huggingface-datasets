@@ -21,7 +21,6 @@ tags:
 task_categories:
   - image-to-image
   - text-to-image
-task_ids: []
 configs:
   - config_name: default
     data_files:

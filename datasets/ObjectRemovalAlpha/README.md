@@ -18,7 +18,6 @@ tags:
   - text-to-image
 task_categories:
   - image-to-image
-task_ids: []
 ---
 
 # Dataset Card for ObjectRemovalAlpha

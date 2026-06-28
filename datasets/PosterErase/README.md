@@ -21,7 +21,6 @@ tags:
   - image-inpainting
 task_categories:
   - image-to-image
-task_ids: []
 configs:
   - config_name: default
     data_files:

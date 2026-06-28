@@ -21,7 +21,6 @@ source_datasets:
 task_categories:
   - text-generation
   - image-to-text
-task_ids: []
 configs:
   - config_name: "edit=angular"
     data_files:

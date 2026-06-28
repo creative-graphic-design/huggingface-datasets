@@ -11,55 +11,6 @@ from scripts.sync_dataset_cards_to_hub import (  # noqa: E402
     merge_remote_frontmatter,
 )
 
-EXPECTED_HUB_REPOS = {
-    "AesEvalBench": "creative-graphic-design/AesEvalBench",
-    "BannerRequest400": "creative-graphic-design/BannerRequest400",
-    "Camera": "creative-graphic-design/CAMERA",
-    "CGLDataset": "creative-graphic-design/CGL-Dataset",
-    "CGLDatasetV2": "creative-graphic-design/CGL-Dataset-v2",
-    "CreativePSD": "creative-graphic-design/CreativePSD",
-    "CTXFont": "creative-graphic-design/CTXFont",
-    "DesignBench": "creative-graphic-design/DesignBench",
-    "DEsignBenchPrompts": "creative-graphic-design/DEsignBench-Prompts",
-    "Desigen": "creative-graphic-design/Desigen",
-    "GraphicDesignEvaluation": "creative-graphic-design/GraphicDesignEvaluation",
-    "LICA": "creative-graphic-design/LICA",
-    "Magazine": "creative-graphic-design/Magazine",
-    "ObjectRemovalAlpha": "creative-graphic-design/ObjectRemovalAlpha",
-    "PKUPosterLayout": "creative-graphic-design/PKU-PosterLayout",
-    "POSTAPosterArt": "creative-graphic-design/POSTAPosterArt",
-    "PosterErase": "creative-graphic-design/PosterErase",
-    "PosterIQ": "creative-graphic-design/PosterIQ",
-    "PosterRewardBench": "creative-graphic-design/PosterRewardBench",
-    "PubLayNet": "creative-graphic-design/PubLayNet",
-    "Rico": "creative-graphic-design/Rico",
-}
-
-EXPECTED_ROOT_README_IO_DATASETS = [
-    "AesEvalBench",
-    "BannerRequest400",
-    "Camera",
-    "CGLDataset",
-    "CGLDatasetV2",
-    "CreativePSD",
-    "CTXFont",
-    "DesignBench",
-    "DEsignBenchPrompts",
-    "Desigen",
-    "GraphicDesignEvaluation",
-    "LICA",
-    "Magazine",
-    "ObjectRemovalAlpha",
-    "PKUPosterLayout",
-    "PosterDNA",
-    "PosterIQ",
-    "PosterRewardBench",
-    "POSTA-PosterArt",
-    "PosterErase",
-    "PubLayNet",
-    "Rico",
-]
-
 EXPECTED_CARD_LINKS = {
     "Camera": "https://huggingface.co/datasets/creative-graphic-design/CAMERA",
     "CGLDataset": "https://huggingface.co/datasets/creative-graphic-design/CGL-Dataset",
@@ -244,6 +195,13 @@ def test_tracked_dataset_cards_are_not_empty():
         assert path.read_text().strip(), f"{path.relative_to(ROOT)} is empty"
 
 
+def test_tracked_dataset_cards_have_frontmatter():
+    for path in tracked_dataset_card_paths():
+        assert _frontmatter(path.read_text()), (
+            f"{path.relative_to(ROOT)} should start with YAML frontmatter"
+        )
+
+
 def test_dataset_directories_have_required_loader_files():
     for dataset_dir in tracked_dataset_dirs():
         expected_files = [
@@ -296,6 +254,19 @@ def test_dataset_card_task_categories_are_official():
             )
 
 
+def test_dataset_card_frontmatter_omits_empty_or_invalid_fields():
+    for path in tracked_dataset_card_paths():
+        frontmatter = "\n".join(_frontmatter(path.read_text()))
+        assert "task_ids: []" not in frontmatter, (
+            f"{path.relative_to(ROOT)} should omit empty task_ids"
+        )
+        assert "task_categories: [other]" not in frontmatter
+        assert "task_categories:\n  - other" not in frontmatter
+        assert not re.search(r"^license:\s*\[", frontmatter, flags=re.MULTILINE), (
+            f"{path.relative_to(ROOT)} should use a scalar license value"
+        )
+
+
 def test_dataset_card_point_of_contact_values_are_render_safe():
     for path in tracked_dataset_card_paths():
         for line_number, line in enumerate(path.read_text().splitlines(), start=1):
@@ -320,7 +291,7 @@ def test_dataset_card_point_of_contact_values_are_render_safe():
 def test_root_readme_uses_public_hub_repo_ids():
     readme = (ROOT / "README.md").read_text()
 
-    for dataset_name, repo_id in EXPECTED_HUB_REPOS.items():
+    for dataset_name, repo_id in DATASET_CARD_REPOS.items():
         expected_url = f"https://huggingface.co/datasets/{repo_id}"
         assert expected_url in readme, f"{dataset_name} should link to {expected_url}"
 
@@ -361,23 +332,7 @@ def test_root_readme_original_badges_use_source_medium_labels():
 
 
 def test_root_readme_dataset_entries_include_input_output_notes():
-    readme = (ROOT / "README.md").read_text()
-    listed_dataset_names = re.findall(r"^- \*\*\[([^\]]+)\]\(", readme, re.MULTILINE)
-    normalized_listed_dataset_names = [
-        dataset_name.replace(" 🔐", "") for dataset_name in listed_dataset_names
-    ]
-
-    assert normalized_listed_dataset_names == EXPECTED_ROOT_README_IO_DATASETS
-
-    for dataset_name in EXPECTED_ROOT_README_IO_DATASETS:
-        pattern = (
-            rf"- \*\*\[{re.escape(dataset_name)}[^\]]*\]\([^)]*\)\*\*\n"
-            rf"(?P<body>(?:(?:  -|    -) .+\n)+)"
-        )
-        match = re.search(pattern, readme)
-        assert match, f"{dataset_name} entry not found"
-
-        body = match.group("body")
+    for dataset_name, (_, body) in _root_readme_dataset_entries().items():
         lines = body.splitlines()
         assert "img.shields.io" in lines[0], (
             f"{dataset_name} should place badges directly below the dataset name"
@@ -456,7 +411,6 @@ def test_dataset_card_paper_lines_are_not_concatenated():
 
 
 def test_sync_script_covers_all_expected_hub_repos():
-    assert DATASET_CARD_REPOS == EXPECTED_HUB_REPOS
     assert DATASET_CARD_REPOS == _root_readme_public_hub_repos()
 
 

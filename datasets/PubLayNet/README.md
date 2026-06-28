@@ -19,7 +19,6 @@ tags:
 task_categories:
   - object-detection
   - image-segmentation
-task_ids: []
 configs:
   - config_name: default
     data_files:
