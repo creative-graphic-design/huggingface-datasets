@@ -66,6 +66,17 @@ The annotation text and Q/A responses are in English (`en`).
 
 ### Data Instances
 
+PittImageVideoAdsDataset provides `image_ads` and `video_ads` configurations. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "creative-graphic-design/PittImageVideoAdsDataset",
+    name="image_ads",
+)
+```
+
 `image_ads` example:
 
 ```json
