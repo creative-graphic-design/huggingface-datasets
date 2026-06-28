@@ -101,6 +101,18 @@ The dataset contains Chinese (`zh`) and English (`en`) poster text, prompts, and
 
 ### Data Instances
 
+PosterDNA provides `posterdna` and `test_set` configurations. The dataset is not mirrored to the Hugging Face Hub, so load the local loader and pass the configuration name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "datasets/PosterDNA/PosterDNA.py",
+    name="posterdna",
+    trust_remote_code=True,
+)
+```
+
 Each row exposes raw metadata as a JSON string plus resolved local asset paths when the corresponding background image or HTML specification can be matched.
 
 ```json

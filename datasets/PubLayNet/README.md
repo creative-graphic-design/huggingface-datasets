@@ -58,6 +58,16 @@ Document content is primarily English (`en`), but the task is visual document la
 
 ## Dataset Structure
 
+### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/PubLayNet")
+```
+
 ### Data Fields
 
 Rows contain `image_id`, `file_name`, `width`, `height`, `image`, and COCO-style `annotations`.

@@ -160,6 +160,14 @@ Prompts and annotations are primarily in English (`en`).
 
 ### Data Instances
 
+PosterIQ exposes one configuration per task. Examples include `alignment`, `composition_understanding`, `font_attributes`, `layout_generation`, and `gen_style`; see the configuration list in the dataset card metadata for all 24 names. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/PosterIQ", name="alignment")
+```
+
 An understanding row contains task metadata, prompt text, JSON-encoded answer metadata, and an input image:
 
 ```json

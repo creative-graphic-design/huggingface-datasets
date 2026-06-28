@@ -55,6 +55,16 @@ The source magazine pages and keywords are primarily English (`en`).
 
 ## Dataset Structure
 
+### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/Magazine")
+```
+
 ### Data Fields
 
 Each row contains `filename`, `category`, `size`, `elements`, `keywords`, and `images`.
