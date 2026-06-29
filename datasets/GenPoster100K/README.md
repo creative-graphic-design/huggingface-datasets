@@ -81,7 +81,7 @@ Implementation note: this loader uses `0503_raw_offline.pkl` and `part_*.tar.gz`
 
 ### Supported Tasks and Leaderboards
 
-- `other:content-aware-layout-generation`: Generate or refine poster element layouts conditioned on background imagery and textual element metadata.
+- Content-aware layout generation: Generate or refine poster element layouts conditioned on background imagery and textual element metadata.
 - `text-to-image`: Can be used in poster design workflows where textual content and structured attributes guide generated visual composition.
 - `image-to-text`: Can support structured extraction/understanding tasks over design layers and poster metadata.
 
@@ -251,7 +251,7 @@ No public bias audit report specific to this release is currently documented.
 
 ### Other Known Limitations
 
-- The upstream source is train-only; this loader follows that source format, while our Hub publication additionally provides an `8:1:1` split.
+- The upstream source is train-only; this loader and the published Hub dataset both expose a single `train` split.
 - Paper-level total (105,456) and loader-level total (102,703) differ due to release artifacts used by this loader.
 - `psd_path` is recorded as metadata path, but only a limited subset of raw PSD files is present in the public source release.
 - License constraints limit direct commercial usage without additional permission from the copyright owner.

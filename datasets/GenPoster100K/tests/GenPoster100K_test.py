@@ -115,6 +115,17 @@ def test_readme_point_of_contact_is_explicit(script_dir: str):
     ]
 
 
+def test_readme_matches_published_split_and_task_metadata(script_dir: str):
+    readme = Path(script_dir, "README.md").read_text(encoding="utf-8")
+
+    assert "8:1:1" not in readme
+    assert "other:content-aware-layout-generation" not in readme
+    assert (
+        "this loader and the published Hub dataset both expose a single `train` split"
+        in readme
+    )
+
+
 def test_normalize_relative_image_path(builder):
     signed_url = (
         "https://example.com/big_poster/poster_metadata/sample_bg.png"
