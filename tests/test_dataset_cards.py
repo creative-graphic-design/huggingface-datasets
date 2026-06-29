@@ -11,52 +11,6 @@ from scripts.sync_dataset_cards_to_hub import (  # noqa: E402
     merge_remote_frontmatter,
 )
 
-EXPECTED_HUB_REPOS = {
-    "AesEvalBench": "creative-graphic-design/AesEvalBench",
-    "BannerRequest400": "creative-graphic-design/BannerRequest400",
-    "Camera": "creative-graphic-design/CAMERA",
-    "CGLDataset": "creative-graphic-design/CGL-Dataset",
-    "CGLDatasetV2": "creative-graphic-design/CGL-Dataset-v2",
-    "CTXFont": "creative-graphic-design/CTXFont",
-    "DesignBench": "creative-graphic-design/DesignBench",
-    "Desigen": "creative-graphic-design/Desigen",
-    "GraphicDesignEvaluation": "creative-graphic-design/GraphicDesignEvaluation",
-    "LICA": "creative-graphic-design/LICA",
-    "Magazine": "creative-graphic-design/Magazine",
-    "ObjectRemovalAlpha": "creative-graphic-design/ObjectRemovalAlpha",
-    "PKUPosterLayout": "creative-graphic-design/PKU-PosterLayout",
-    "POSTAPosterArt": "creative-graphic-design/POSTAPosterArt",
-    "PosterErase": "creative-graphic-design/PosterErase",
-    "PosterIQ": "creative-graphic-design/PosterIQ",
-    "PosterRewardBench": "creative-graphic-design/PosterRewardBench",
-    "PubLayNet": "creative-graphic-design/PubLayNet",
-    "Rico": "creative-graphic-design/Rico",
-}
-
-EXPECTED_ROOT_README_IO_DATASETS = [
-    "AesEvalBench",
-    "BannerRequest400",
-    "Camera",
-    "CGLDataset",
-    "CGLDatasetV2",
-    "CTXFont",
-    "DesignBench",
-    "DEsignBenchPrompts",
-    "Desigen",
-    "GraphicDesignEvaluation",
-    "LICA",
-    "Magazine",
-    "ObjectRemovalAlpha",
-    "PKUPosterLayout",
-    "PosterDNA",
-    "PosterIQ",
-    "PosterRewardBench",
-    "POSTA-PosterArt",
-    "PosterErase",
-    "PubLayNet",
-    "Rico",
-]
-
 EXPECTED_CARD_LINKS = {
     "Camera": "https://huggingface.co/datasets/creative-graphic-design/CAMERA",
     "CGLDataset": "https://huggingface.co/datasets/creative-graphic-design/CGL-Dataset",
@@ -65,6 +19,10 @@ EXPECTED_CARD_LINKS = {
 }
 
 EXPECTED_PAPER_LINKS = {
+    "CreativePSD": [
+        "https://arxiv.org/abs/2603.25738",
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Shuai_PSDesigner_Automated_Graphic_Design_with_a_Human-Like_Creative_Workflow_CVPR_2026_paper.html",
+    ],
     "GraphicDesignEvaluation": [
         "https://arxiv.org/abs/2410.08885",
         "https://doi.org/10.1145/3681758.3698010",
@@ -78,6 +36,10 @@ EXPECTED_CITATION_TEXT = {
     "BannerRequest400": [
         "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
         "10.18653/v1/2025.emnlp-main.214",
+    ],
+    "CreativePSD": [
+        "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+        "pages={10165-10175}",
     ],
     "Desigen": [
         "Weng, Haohan and Huang, Danqing",
@@ -164,6 +126,10 @@ def tracked_dataset_card_paths() -> list[Path]:
     return sorted((ROOT / "datasets").glob("*/README.md"))
 
 
+def tracked_dataset_dirs() -> list[Path]:
+    return sorted(path for path in (ROOT / "datasets").iterdir() if path.is_dir())
+
+
 def _frontmatter(readme: str) -> list[str]:
     lines = readme.splitlines()
     if not lines or lines[0] != "---":
@@ -192,11 +158,80 @@ def _task_categories(frontmatter: list[str]) -> list[str]:
     return categories
 
 
+def _root_readme_dataset_entries() -> dict[str, tuple[str, str]]:
+    readme = (ROOT / "README.md").read_text()
+    entries = {}
+    pattern = (
+        r"^- \*\*\[(?P<name>[^\]]+)\]\((?P<path>[^)]+)\)\*\*\n"
+        r"(?P<body>(?:(?:  -|    -) .+\n)+)"
+    )
+    for match in re.finditer(pattern, readme, flags=re.MULTILINE):
+        name = match.group("name").replace(" 🔐", "")
+        entries[name] = (match.group("path"), match.group("body"))
+    return entries
+
+
+def _root_readme_public_hub_repos() -> dict[str, str]:
+    repos = {}
+    for _, (dataset_path, body) in _root_readme_dataset_entries().items():
+        urls = re.findall(r"https://huggingface\.co/datasets/([^)\s]+)", body)
+        if urls:
+            dataset_name = Path(dataset_path).name
+            repos[dataset_name] = urls[-1]
+    return repos
+
+
+def _root_readme_dataset_paths() -> list[str]:
+    return [
+        dataset_path.rstrip("/")
+        for dataset_path, _ in _root_readme_dataset_entries().values()
+    ]
+
+
 def test_tracked_dataset_cards_are_not_empty():
     for path in tracked_dataset_card_paths():
         if not (ROOT / ".git").exists() and not path.exists():
             continue
         assert path.read_text().strip(), f"{path.relative_to(ROOT)} is empty"
+
+
+def test_tracked_dataset_cards_have_frontmatter():
+    for path in tracked_dataset_card_paths():
+        assert _frontmatter(path.read_text()), (
+            f"{path.relative_to(ROOT)} should start with YAML frontmatter"
+        )
+
+
+def test_dataset_directories_have_required_loader_files():
+    for dataset_dir in tracked_dataset_dirs():
+        expected_files = [
+            dataset_dir / f"{dataset_dir.name}.py",
+            dataset_dir / "README.md",
+            dataset_dir / "pyproject.toml",
+            dataset_dir / "tests" / "__init__.py",
+            dataset_dir / "tests" / f"{dataset_dir.name}_test.py",
+        ]
+        for path in expected_files:
+            assert path.exists(), f"{path.relative_to(ROOT)} is missing"
+
+
+def test_root_readme_covers_all_dataset_directories():
+    expected_paths = [str(path.relative_to(ROOT)) for path in tracked_dataset_dirs()]
+    listed_paths = _root_readme_dataset_paths()
+    assert len(listed_paths) == len(set(listed_paths))
+    assert set(listed_paths) == set(expected_paths)
+
+
+def test_image_loaders_depend_on_datasets_vision_extra():
+    for dataset_dir in tracked_dataset_dirs():
+        loader_text = (dataset_dir / f"{dataset_dir.name}.py").read_text()
+        pyproject_text = (dataset_dir / "pyproject.toml").read_text()
+        uses_image_feature = "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+
+        assert ("datasets[vision]" in pyproject_text) == uses_image_feature, (
+            f"{dataset_dir.relative_to(ROOT)} should use datasets[vision] exactly "
+            "when the loader defines image features"
+        )
 
 
 def test_dataset_card_task_categories_are_official():
@@ -217,6 +252,19 @@ def test_dataset_card_task_categories_are_official():
             assert category in OFFICIAL_TASK_CATEGORIES, (
                 f"{path.relative_to(ROOT)} uses unsupported task category {category!r}"
             )
+
+
+def test_dataset_card_frontmatter_omits_empty_or_invalid_fields():
+    for path in tracked_dataset_card_paths():
+        frontmatter = "\n".join(_frontmatter(path.read_text()))
+        assert "task_ids: []" not in frontmatter, (
+            f"{path.relative_to(ROOT)} should omit empty task_ids"
+        )
+        assert "task_categories: [other]" not in frontmatter
+        assert "task_categories:\n  - other" not in frontmatter
+        assert not re.search(r"^license:\s*\[", frontmatter, flags=re.MULTILINE), (
+            f"{path.relative_to(ROOT)} should use a scalar license value"
+        )
 
 
 def test_dataset_card_point_of_contact_values_are_render_safe():
@@ -243,7 +291,7 @@ def test_dataset_card_point_of_contact_values_are_render_safe():
 def test_root_readme_uses_public_hub_repo_ids():
     readme = (ROOT / "README.md").read_text()
 
-    for dataset_name, repo_id in EXPECTED_HUB_REPOS.items():
+    for dataset_name, repo_id in DATASET_CARD_REPOS.items():
         expected_url = f"https://huggingface.co/datasets/{repo_id}"
         assert expected_url in readme, f"{dataset_name} should link to {expected_url}"
 
@@ -255,6 +303,13 @@ def test_root_readme_uses_public_hub_repo_ids():
     ]
     for stale_url in stale_urls:
         assert stale_url not in readme
+
+
+def test_root_readme_dataset_links_point_to_existing_dataset_dirs():
+    for dataset_name, (dataset_path, _) in _root_readme_dataset_entries().items():
+        assert (ROOT / dataset_path).is_dir(), (
+            f"{dataset_name} should link to an existing dataset directory"
+        )
 
 
 def test_root_readme_original_badges_use_source_medium_labels():
@@ -277,17 +332,7 @@ def test_root_readme_original_badges_use_source_medium_labels():
 
 
 def test_root_readme_dataset_entries_include_input_output_notes():
-    readme = (ROOT / "README.md").read_text()
-
-    for dataset_name in EXPECTED_ROOT_README_IO_DATASETS:
-        pattern = (
-            rf"- \*\*\[{re.escape(dataset_name)}[^\]]*\]\([^)]*\)\*\*\n"
-            rf"(?P<body>(?:(?:  -|    -) .+\n)+)"
-        )
-        match = re.search(pattern, readme)
-        assert match, f"{dataset_name} entry not found"
-
-        body = match.group("body")
+    for dataset_name, (_, body) in _root_readme_dataset_entries().items():
         lines = body.splitlines()
         assert "img.shields.io" in lines[0], (
             f"{dataset_name} should place badges directly below the dataset name"
@@ -366,7 +411,7 @@ def test_dataset_card_paper_lines_are_not_concatenated():
 
 
 def test_sync_script_covers_all_expected_hub_repos():
-    assert DATASET_CARD_REPOS == EXPECTED_HUB_REPOS
+    assert DATASET_CARD_REPOS == _root_readme_public_hub_repos()
 
 
 def test_merge_remote_frontmatter_preserves_hub_dataset_info():

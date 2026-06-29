@@ -22,7 +22,6 @@ source_datasets:
 task_categories:
   - text-to-image
   - image-to-text
-task_ids: []
 configs:
   - config_name: posterdna
     data_files:

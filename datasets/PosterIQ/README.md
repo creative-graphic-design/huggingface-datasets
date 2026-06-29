@@ -24,7 +24,6 @@ source_datasets:
 task_categories:
   - image-to-text
   - text-to-image
-task_ids: []
 configs:
   - config_name: alignment
     data_files:

@@ -18,7 +18,6 @@ tags:
   - human-annotation
 task_categories:
   - image-to-text
-task_ids: []
 configs:
   - config_name: absolute-gpt-alignment
     data_files:
