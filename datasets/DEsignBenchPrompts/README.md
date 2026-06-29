@@ -19,7 +19,6 @@ source_datasets:
   - original
 task_categories:
   - text-to-image
-task_ids: []
 configs:
   - config_name: default
     data_files:

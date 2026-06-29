@@ -16,7 +16,6 @@ source_datasets:
 tags: []
 task_categories:
 - text-generation
-task_ids: []
 ---
 
 # Dataset Card for CAMERA 📷

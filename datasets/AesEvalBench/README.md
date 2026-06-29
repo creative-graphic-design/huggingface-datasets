@@ -21,7 +21,6 @@ source_datasets:
 task_categories:
   - image-to-text
   - visual-question-answering
-task_ids: []
 ---
 
 # Dataset Card for AesEval-Bench

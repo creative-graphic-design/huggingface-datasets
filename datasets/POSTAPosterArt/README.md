@@ -24,7 +24,6 @@ task_categories:
   - image-to-text
   - text-to-image
   - image-segmentation
-task_ids: []
 configs:
   - config_name: text
     data_files:
