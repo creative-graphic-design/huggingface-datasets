@@ -63,6 +63,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Graphic design samples with alignment, overlap, and white-space quality scores.
     - ➡️ Input: Graphic banner image, perturbation/comparison setting, evaluator type, and design principle.
     - ⬅️ Output: Absolute quality scores or relative preference labels.
+- **[GenPoster100K](datasets/GenPoster100K/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-2510.15749-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2510.15749) [![Paper](https://img.shields.io/badge/Paper-ICCV%2725-blue?logo=doi&logoColor=white)](https://openaccess.thecvf.com/content/ICCV2025/html/Wang_SEGA_A_Stepwise_Evolution_Paradigm_for_Content-Aware_Layout_Generation_with_ICCV_2025_paper.html) [![Original](https://img.shields.io/badge/Original-HF%20Hub-0F766E?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/BruceW91/GenPoster-100K) [![HF Hub](https://img.shields.io/badge/HF%20Hub-GenPoster100K-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/GenPoster100K)
+  - Poster layout data with rendered backgrounds, composited images, PSD references, regions, and layer-level typography and color metadata.
+    - ➡️ Input: Poster background image, PSD path, regions, and per-layer rendered images plus text/typography metadata.
+    - ⬅️ Output: Composited poster image and structured layer annotations with boxes, colors, labels, and typography attributes.
 - **[LICA](datasets/LICA/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2603.16098-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.16098) [![Paper](https://img.shields.io/badge/Paper-arXiv-blue?logo=doi&logoColor=white)](https://doi.org/10.48550/arXiv.2603.16098) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/lica-world/lica-dataset) [![HF Hub](https://img.shields.io/badge/HF%20Hub-LICA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/LICA)
   - Rendered graphic design layouts, component-level specifications, and natural-language annotations.
