@@ -255,7 +255,8 @@ def test_load_dataset(
     assert len(first["all_files"]) == 12
     assert first["final_rendering"].size == (4, 4)
     assert first["raw_resources"][0]["image"].size == (4, 4)
-    assert first["rendering_images"][0]["image"].size == (4, 4)
+    assert first["rendering_images"][0]["image_path"].endswith(".jpg")
+    assert first["rendering_images"][0]["image_bytes"]
     assert any(record["is_final"] for record in first["rendering_images"])
     assert "create_document" in first["tool_trajectory_json"]
 

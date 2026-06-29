@@ -380,7 +380,8 @@ def _rendering_image_records(
                 "layer_id": layer_id,
                 "layer_kind": layer_kind,
                 "is_final": pathlib.PurePosixPath(member).name == "0_total.jpg",
-                "image": _image_from_zip(zf, member, archive_filename),
+                "image_path": f"{archive_filename}/{member}",
+                "image_bytes": _read_member_bytes(zf, member),
             }
         )
     return records
@@ -501,7 +502,8 @@ class CreativePSD(ds.GeneratorBasedBuilder):
                         "layer_id": ds.Value("int32"),
                         "layer_kind": ds.Value("string"),
                         "is_final": ds.Value("bool"),
-                        "image": ds.Image(),
+                        "image_path": ds.Value("string"),
+                        "image_bytes": ds.Value("binary"),
                     }
                 ],
                 "final_rendering": ds.Image(),

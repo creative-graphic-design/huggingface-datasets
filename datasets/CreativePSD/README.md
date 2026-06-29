@@ -63,7 +63,13 @@ Each row corresponds to one `poster_*.zip` archive:
   "origin_psd_tree": "...",
   "tool_trajectory_json": "[...]",
   "raw_resources": [{"filename": "raw_resource/1_asset.png", "image": "<image>"}],
-  "rendering_images": [{"filename": "rendering_imgs/0_total.jpg", "image": "<image>"}],
+  "rendering_images": [
+    {
+      "filename": "rendering_imgs/0_total.jpg",
+      "image_path": "poster_000175.zip/rendering_imgs/0_total.jpg",
+      "image_bytes": "<bytes>"
+    }
+  ],
   "final_rendering": "<image>"
 }
 ```
@@ -79,7 +85,7 @@ Each row corresponds to one `poster_*.zip` archive:
 - `metadata_files`: All files under `metadata/` as text.
 - `non_image_files`: Every non-image file in the archive as text and bytes.
 - `raw_resources`: All source images under `raw_resource/`.
-- `rendering_images`: All images under `rendering_imgs/`, including `0_total.jpg` and intermediate layer renders.
+- `rendering_images`: All images under `rendering_imgs/`, including `0_total.jpg` and intermediate layer renders, stored as image bytes plus archive-relative paths.
 - `final_rendering`: `rendering_imgs/0_total.jpg` when present.
 - `all_files`: Manifest of every file member in the zip.
 
