@@ -98,6 +98,12 @@ No official leaderboard URL specific to GenPoster-100K is currently provided in 
 
 Each example includes image assets and structured layer metadata.
 
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/GenPoster100K")
+```
+
 ```json
 {
   "id": 0,

@@ -656,7 +656,11 @@ The README must include YAML frontmatter at the very top for Hugging Face Hub me
 
 **Option 2: Write YAML Manually**
 
-Add YAML frontmatter block at the top of README.md (following the official specification at https://github.com/huggingface/hub-docs/blob/main/datasetcard.md):
+Add YAML frontmatter block at the top of README.md. Follow the Hugging Face
+Dataset Cards documentation at https://huggingface.co/docs/hub/datasets-cards
+first, and use the detailed schema at
+https://github.com/huggingface/hub-docs/blob/main/datasetcard.md when field-level
+details are needed:
 
 ```yaml
 ---
@@ -678,11 +682,12 @@ size_categories:
   - n<1K # Format: n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 source_datasets:
   - original # Or list other datasets if derived
-task_categories:
-  - other # See HF docs for full list (image-to-text, text-to-image, etc.)
-task_ids: [] # Usually empty
 
 # Optional fields (add if applicable)
+# task_categories:
+#   - image-to-text # Only use official HF task categories from the docs
+# task_ids:
+#   - visual-question-answering # Add only when using a supported specific task ID
 # paperswithcode_id: your-dataset-name  # If dataset is on Papers with Code
 # language_details:  # More specific language codes
 #   - en-US
@@ -705,8 +710,11 @@ task_ids: [] # Usually empty
 - `language_creators` (list): How language data was created - crowdsourced, found, expert-generated, machine-generated
 - `size_categories` (list): Dataset size - n<1K, 1K<n<10K, 10K<n<100K, 100K<n<1M, 1M<n<10M, etc.
 - `source_datasets` (list): "original" if new, or names of source datasets if derived
-- `task_categories` (list): Standard HF task types (see https://huggingface.co/docs/hub/datasets-cards)
-- `task_ids` (list): Usually empty unless using specific task identifiers
+- `task_categories` (list): Standard HF task types only. Check
+  https://huggingface.co/docs/hub/datasets-cards before adding this field.
+  Omit the field when no official category fits; do not use `other`.
+- `task_ids` (list): Add only when using a supported specific task ID. Omit empty
+  `task_ids: []` instead of publishing an empty value.
 
 **Optional fields**:
 
@@ -719,6 +727,9 @@ task_ids: [] # Usually empty
 
 - ❌ `license: [unknown]` - license must be a STRING, not a list
 - ❌ `multilinguality` field - NOT in official spec, don't use it
+- ❌ `task_categories: [other]` - `other` is not an official task category; omit
+  `task_categories` and explain custom tasks in the README body instead
+- ❌ `task_ids: []` - omit empty task IDs
 - ✅ `license: unknown` - correct format
 
 **Examples from existing datasets:**
@@ -729,8 +740,8 @@ task_ids: [] # Usually empty
 
 **Reference Documentation**:
 
-- Official spec: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
-- Task categories: https://huggingface.co/docs/hub/datasets-cards
+- Dataset card docs and task categories: https://huggingface.co/docs/hub/datasets-cards
+- Detailed metadata schema: https://github.com/huggingface/hub-docs/blob/main/datasetcard.md
 - License identifiers: https://huggingface.co/docs/hub/repositories-licenses
 
 #### 6.1 Update Dataset README
@@ -741,6 +752,45 @@ Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any pl
 - Before leaving venue or paper information as TODO / `[More Information Needed]` / `Paper-not found`, run the publication metadata verification in Step 4.2
 - Verify license information matches the source repository
 - Add complete citation information if available
+
+**Add a loading example to the Data Instances section**
+
+Every dataset README must include a concise loading example in `### Data Instances`, using
+the `import datasets as ds` style. Prefer loading the published Hugging Face Hub dataset
+when the dataset is uploaded:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DatasetName")
+```
+
+For multi-config datasets, include a representative `name` argument:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DatasetName", name="config_name")
+```
+
+Also list or describe the available configuration names near the example so users know
+which values can be passed to `name`. For many configs, describe the naming pattern and
+point to the config list in the dataset card metadata.
+
+If the dataset is not uploaded to the Hub or requires local/private source files, show the
+local loader path and any required arguments such as `data_dir`, `token`, or
+`trust_remote_code`:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "datasets/DatasetName/DatasetName.py",
+    name="config_name",
+    data_dir="/path/to/data",
+    trust_remote_code=True,
+)
+```
 
 **Update the Contributions Section**
 
@@ -839,8 +889,8 @@ Verify loading:
 
 ```python
 import datasets as ds
-ds = ds.load_dataset("datasets/MyHFDataset/MyHFDataset.py", trust_remote_code=True)
-print(ds["train"][0])
+dataset = ds.load_dataset("datasets/MyHFDataset/MyHFDataset.py", trust_remote_code=True)
+print(dataset["train"][0])
 ```
 
 ## Example Session

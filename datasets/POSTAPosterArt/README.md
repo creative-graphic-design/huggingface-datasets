@@ -68,6 +68,14 @@ The dataset provides two configurations:
 
 ### Data Instances
 
+POSTA-PosterArt provides `text` and `design` configurations. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/POSTAPosterArt", name="text")
+```
+
 `text` example:
 
 ```json

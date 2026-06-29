@@ -124,6 +124,7 @@ def test_readme_matches_published_split_and_task_metadata(script_dir: str):
         "this loader and the published Hub dataset both expose a single `train` split"
         in readme
     )
+    assert 'dataset = ds.load_dataset("creative-graphic-design/GenPoster100K")' in readme
 
 
 def test_normalize_relative_image_path(builder):

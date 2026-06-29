@@ -67,6 +67,14 @@ Poster text is primarily Chinese (`zh`).
 
 ### Data Instances
 
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/PosterErase")
+```
+
 Each row contains a poster image, the original relative image path, and parsed annotation fields. Validation and test rows also include `gt_image`.
 
 ```json

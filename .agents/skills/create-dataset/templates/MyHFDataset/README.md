@@ -17,9 +17,6 @@ size_categories:
   - n<1K
 source_datasets:
   - original
-task_categories:
-  - other
-task_ids: []
 ---
 
 # Dataset Card for MyHFDataset
@@ -65,7 +62,7 @@ task_ids: []
 - **Paper (Preprint):** https://arxiv.org/abs/XXXX.XXXXX <!-- TODO: Add arXiv URL if available -->
 - **Paper (Conference/Journal Name):** https://example.com/paper <!-- TODO: Add conference/journal URL when published -->
 - **Leaderboard:** [More Information Needed] <!-- TODO: If the dataset supports an active leaderboard, add link here -->
-- **Point of Contact:** [More Information Needed] <!-- TODO: Add contact information if known -->
+- **Point of Contact:** More Information Needed <!-- TODO: Add a raw URL or plain-text contact; avoid empty markdown links -->
 
 ### Dataset Summary
 
@@ -77,7 +74,7 @@ task_ids: []
 
 [More Information Needed]
 
-<!-- For each of the tasks tagged for this dataset, give a brief description of the tag, metrics, and suggested models (with a link to their HuggingFace implementation if available). Give a similar description of tasks that were not covered by the structured tag set (repace the `task-category-tag` with an appropriate `other:other-task-name`).
+<!-- For each official task category tagged for this dataset, give a brief description of the tag, metrics, and suggested models (with a link to their HuggingFace implementation if available). For custom graphic-design tasks that do not match an official Hugging Face task category, omit task_categories from the YAML frontmatter and describe the task here in prose.
 
 - `task-category-tag`: The dataset can be used to train a model for [TASK NAME], which consists in [TASK DESCRIPTION]. Success on this task is typically measured by achieving a *high/low* [metric name](https://huggingface.co/metrics/metric_name). The ([model name](https://huggingface.co/model_name) or [model class](https://huggingface.co/transformers/model_doc/model_class.html)) model currently achieves the following score. *[IF A LEADERBOARD IS AVAILABLE]:* This task has an active leaderboard which can be found at [leaderboard url]() and ranks models based on [metric name](https://huggingface.co/metrics/metric_name) while also reporting [other metric name](https://huggingface.co/metrics/other_metric_name). -->
 
@@ -92,6 +89,14 @@ When relevant, please provide [BCP-47 codes](https://tools.ietf.org/html/bcp47),
 ## Dataset Structure
 
 ### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/MyHFDataset")
+```
 
 [More Information Needed]
 

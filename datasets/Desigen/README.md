@@ -23,6 +23,16 @@ Desigen contains web advertisement design data with background images, content p
 
 ## Dataset Structure
 
+### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/Desigen")
+```
+
 ### Data Fields
 
 - `image`: Background or rendered advertisement image.

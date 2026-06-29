@@ -70,6 +70,19 @@ Metadata and UI text are primarily English (`en`), though app screenshots may co
 
 ## Dataset Structure
 
+### Data Instances
+
+Rico exposes multiple configurations: `ui-screenshots-and-view-hierarchies`, `ui-layout-vectors`, `interaction-traces`, `animations`, `ui-screenshots-and-hierarchies-with-semantic-annotations`, `ui-metadata`, and `play-store-metadata`. Load one configuration by passing its name:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "creative-graphic-design/Rico",
+    name="ui-screenshots-and-view-hierarchies",
+)
+```
+
 ### Data Fields
 
 - `default`: app and trace metadata.

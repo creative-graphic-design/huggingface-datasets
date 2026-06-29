@@ -19,9 +19,6 @@ size_categories:
   - 1K<n<10K
 source_datasets:
   - original
-task_categories:
-  - other
-task_ids: []
 ---
 
 # Dataset Card for LICA
@@ -62,6 +59,14 @@ The annotation text is in English (`en`). Rendered designs may contain text insi
 ## Dataset Structure
 
 ### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/LICA")
+```
 
 Each row corresponds to one layout from `metadata.csv`.
 

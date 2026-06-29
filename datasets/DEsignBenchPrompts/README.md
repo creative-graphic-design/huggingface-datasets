@@ -61,6 +61,14 @@ The prompts are primarily written in English, with some prompts or expanded prom
 
 ### Data Instances
 
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/DEsignBench-Prompts")
+```
+
 ```json
 {
   "id": "text_0_0",

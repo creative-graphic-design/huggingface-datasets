@@ -18,9 +18,6 @@ size_categories:
   - 1K<n<10K
 source_datasets:
   - original
-task_categories:
-  - other
-task_ids: []
 configs:
   - config_name: default
     data_files:
@@ -55,6 +52,16 @@ The dataset supports font property prediction, context-aware typography recommen
 Most text content and metadata are in English (`en`).
 
 ## Dataset Structure
+
+### Data Instances
+
+Load the dataset with:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/CTXFont")
+```
 
 ### Data Fields
 
