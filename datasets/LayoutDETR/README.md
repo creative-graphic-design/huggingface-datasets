@@ -1,7 +1,7 @@
 ---
 language:
   - en
-license: apache-2.0
+license: unknown
 pretty_name: LayoutDETR
 tags:
   - graphic-design
@@ -62,7 +62,7 @@ task_categories:
 - **Project Page:** https://ningyu1991.github.io/projects/LayoutDETR.html
 - **Paper (ECCV 2024 / arXiv):** https://arxiv.org/abs/2212.09877
 - **Leaderboard:** Not available in the original release.
-- **Point of Contact:** https://github.com/salesforce/LayoutDETR/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
 
 ### Dataset Summary
 
@@ -150,14 +150,14 @@ Each row corresponds to one valid sample from the sorted raw JSON files.
 
 The raw upstream release is not pre-split. This loader deterministically sorts JSON files in `png_json_gt/` and applies the same 9:1 split rule used by the upstream preprocessing script: the first 90% are `train`, and the remaining 10% are `validation`.
 
-The upstream README reports 7,672 samples. Applying the loader-level split rule to that count gives:
+The upstream README reports 7,672 raw samples before loader validity filtering. This loader first applies the upstream validity filters, then applies the 9:1 split to the remaining valid examples, matching `dataset_tool.py`.
 
-| Split | Rows before validity filtering |
+| Split | Rows |
 | --- | ---: |
-| `train` | 6,904 |
-| `validation` | 768 |
+| `train` | 90% of valid examples |
+| `validation` | Remaining 10% of valid examples |
 
-Rows with zero valid foreground elements or more than nine valid foreground elements are skipped, matching the upstream preprocessing behavior.
+Rows with zero valid foreground elements or more than nine valid foreground elements are skipped before splitting, matching the upstream preprocessing behavior.
 
 ## Dataset Creation
 
@@ -199,7 +199,7 @@ The dataset was created by the LayoutDETR authors at Salesforce Research. This H
 
 ### Licensing Information
 
-The upstream repository license is Apache License Version 2.0, copyright Salesforce 2023. This dataset card uses the Hugging Face license id `apache-2.0`.
+The upstream repository code is licensed under Apache License Version 2.0, copyright Salesforce 2023. A separate dataset-content license was not confirmed in the upstream release. Because the source images are partly from the Pitt Image Ads Dataset and partly crawled from Google image search, source image and content rights may follow their original sources. This dataset card therefore marks the dataset content license as `unknown`.
 
 ### Citation Information
 

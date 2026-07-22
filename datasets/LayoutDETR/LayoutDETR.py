@@ -42,7 +42,7 @@ LayoutDETR for multimodal layout generation.
 
 _HOMEPAGE = "https://github.com/salesforce/LayoutDETR"
 
-_LICENSE = "apache-2.0"
+_LICENSE = "unknown"
 
 _URLS = {
     "ads_banner_dataset": "1T09t4dX7zQ7J-8KxtJv1RkyjRNdilD1m",
@@ -196,27 +196,11 @@ def _background_path(root: pathlib.Path, dirname: str, stem: str) -> pathlib.Pat
     return path if path.exists() else None
 
 
-def _split_json_paths(
-    json_paths: list[pathlib.Path],
-    split: str,
-) -> list[pathlib.Path]:
-    cutoff = int(len(json_paths) * 0.90)
-    if split == "train":
-        return json_paths[:cutoff]
-    if split == "validation":
-        return json_paths[cutoff:]
-    raise ValueError(f"Unsupported split: {split}")
-
-
-def _iter_examples(
-    root: str | pathlib.Path,
-    split: str,
-) -> Iterable[tuple[str, dict[str, Any]]]:
+def _valid_sample_records(root: str | pathlib.Path) -> list[dict[str, Any]]:
     root = pathlib.Path(root)
     gt_dir = root / "png_json_gt"
-    json_paths = _split_json_paths(sorted(gt_dir.glob("*.json")), split)
-
-    for json_path in json_paths:
+    records = []
+    for json_path in sorted(gt_dir.glob("*.json")):
         stem = json_path.stem
         image_path = gt_dir / f"{stem}.png"
         if not image_path.exists():
@@ -228,6 +212,46 @@ def _iter_examples(
         elements = _valid_elements(annotation, width=width, height=height)
         if len(elements) == 0 or len(elements) > 9:
             continue
+
+        records.append(
+            {
+                "stem": stem,
+                "image_path": image_path,
+                "width": width,
+                "height": height,
+                "annotation": annotation,
+                "elements": elements,
+            }
+        )
+    return records
+
+
+def _split_records(
+    records: list[dict[str, Any]],
+    split: str,
+) -> list[dict[str, Any]]:
+    cutoff = int(len(records) * 0.90)
+    if split == "train":
+        return records[:cutoff]
+    if split == "validation":
+        return records[cutoff:]
+    raise ValueError(f"Unsupported split: {split}")
+
+
+def _iter_examples(
+    root: str | pathlib.Path,
+    split: str,
+) -> Iterable[tuple[str, dict[str, Any]]]:
+    root = pathlib.Path(root)
+    records = _split_records(_valid_sample_records(root), split)
+
+    for record in records:
+        stem = record["stem"]
+        image_path = record["image_path"]
+        width = record["width"]
+        height = record["height"]
+        annotation = record["annotation"]
+        elements = record["elements"]
 
         background_1x_path = _background_path(
             root, "1x_inpainted_background_png", stem

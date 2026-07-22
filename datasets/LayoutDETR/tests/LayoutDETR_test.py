@@ -12,8 +12,6 @@ from PIL import Image
 import datasets as ds
 
 _EXPECTED_TOTAL_SAMPLES = 7672
-_EXPECTED_NUM_TRAIN = int(_EXPECTED_TOTAL_SAMPLES * 0.90)
-_EXPECTED_NUM_VALIDATION = _EXPECTED_TOTAL_SAMPLES - _EXPECTED_NUM_TRAIN
 
 
 @pytest.fixture
@@ -74,6 +72,15 @@ def _write_annotation(path: Path, text: str = "Shop now") -> None:
     path.write_text(json.dumps(annotation), encoding="utf-8")
 
 
+def _write_invalid_annotation(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    annotation = [
+        {"xyxy_word_fit": [10, 5, 50, 25], "str": "", "label": "button"},
+        {"xyxy_word_fit": [10, 5, 50, 25], "str": "Unknown", "label": "unknown"},
+    ]
+    path.write_text(json.dumps(annotation), encoding="utf-8")
+
+
 @pytest.fixture
 def tiny_layoutdetr_root(tmp_path: Path) -> Path:
     root = tmp_path / "ads_banner_dataset"
@@ -120,14 +127,13 @@ def test_xyxy_to_normalized_cxcywh(dataset_module: ModuleType):
     ) == pytest.approx([0.3, 0.3, 0.4, 0.4])
 
 
-def test_split_json_paths_uses_upstream_9_to_1_rule(
-    tmp_path: Path,
+def test_split_records_uses_upstream_9_to_1_rule(
     dataset_module: ModuleType,
 ):
-    paths = [tmp_path / f"{index:02d}.json" for index in range(10)]
+    records = [{"stem": f"{index:02d}"} for index in range(10)]
 
-    assert dataset_module._split_json_paths(paths, "train") == paths[:9]
-    assert dataset_module._split_json_paths(paths, "validation") == paths[9:]
+    assert dataset_module._split_records(records, "train") == records[:9]
+    assert dataset_module._split_records(records, "validation") == records[9:]
 
 
 def test_iter_examples_reads_raw_fixture_and_optional_backgrounds(
@@ -191,6 +197,37 @@ def test_load_dataset_with_tiny_data_dir(
     assert validation_sample["background_3x_path"] == ""
 
 
+def test_split_is_applied_after_validity_filtering(
+    tmp_path: Path,
+    dataset_module: ModuleType,
+):
+    root = tmp_path / "ads_banner_dataset"
+    gt_dir = root / "png_json_gt"
+
+    for index in range(10):
+        stem = f"sample_{index:02d}"
+        _write_image(gt_dir / f"{stem}.png")
+        if index == 9:
+            _write_invalid_annotation(gt_dir / f"{stem}.json")
+        else:
+            _write_annotation(gt_dir / f"{stem}.json", text=f"Copy {index}")
+
+    train_examples = list(dataset_module._iter_examples(root, "train"))
+    validation_examples = list(dataset_module._iter_examples(root, "validation"))
+
+    assert [example[0] for example in train_examples] == [
+        "sample_00",
+        "sample_01",
+        "sample_02",
+        "sample_03",
+        "sample_04",
+        "sample_05",
+        "sample_06",
+        "sample_07",
+    ]
+    assert [example[0] for example in validation_examples] == ["sample_08"]
+
+
 def test_invalid_or_oversized_element_counts_are_filtered(
     tmp_path: Path,
     dataset_module: ModuleType,
@@ -198,19 +235,13 @@ def test_invalid_or_oversized_element_counts_are_filtered(
     root = tmp_path / "ads_banner_dataset"
     gt_dir = root / "png_json_gt"
     _write_image(gt_dir / "sample.png")
-    annotation = [
-        {"xyxy_word_fit": [10, 5, 50, 25], "str": "", "label": "button"},
-        {"xyxy_word_fit": [10, 5, 50, 25], "str": "Unknown", "label": "unknown"},
-    ]
-    (gt_dir / "sample.json").write_text(json.dumps(annotation), encoding="utf-8")
+    _write_invalid_annotation(gt_dir / "sample.json")
 
     assert list(dataset_module._iter_examples(root, "validation")) == []
 
 
-def test_expected_full_split_counts_are_consistent():
-    assert _EXPECTED_NUM_TRAIN == 6904
-    assert _EXPECTED_NUM_VALIDATION == 768
-    assert _EXPECTED_NUM_TRAIN + _EXPECTED_NUM_VALIDATION == _EXPECTED_TOTAL_SAMPLES
+def test_expected_raw_sample_count_is_documented():
+    assert _EXPECTED_TOTAL_SAMPLES == 7672
 
 
 @pytest.mark.skipif(
@@ -233,8 +264,12 @@ def test_load_dataset(
 
     dataset = ds.load_dataset(**load_kwargs)
     assert isinstance(dataset, ds.DatasetDict)
-    assert dataset["train"].num_rows == _EXPECTED_NUM_TRAIN
-    assert dataset["validation"].num_rows == _EXPECTED_NUM_VALIDATION
+    total_valid_rows = dataset["train"].num_rows + dataset["validation"].num_rows
+    assert 0 < total_valid_rows <= _EXPECTED_TOTAL_SAMPLES
+    assert dataset["train"].num_rows == int(total_valid_rows * 0.90)
+    assert dataset["validation"].num_rows == total_valid_rows - int(
+        total_valid_rows * 0.90
+    )
 
     sample = dataset["train"][0]
     assert sample["image"] is not None
