@@ -23,6 +23,7 @@ DATASET_CARD_REPOS = {
     "Desigen": "creative-graphic-design/Desigen",
     "GenPoster100K": "creative-graphic-design/GenPoster100K",
     "GraphicDesignEvaluation": "creative-graphic-design/GraphicDesignEvaluation",
+    "LayoutDETR": "creative-graphic-design/LayoutDETR",
     "LICA": "creative-graphic-design/LICA",
     "Magazine": "creative-graphic-design/Magazine",
     "ObjectRemovalAlpha": "creative-graphic-design/ObjectRemovalAlpha",

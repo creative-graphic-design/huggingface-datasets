@@ -68,6 +68,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Poster layout data with rendered backgrounds, composited images, PSD references, regions, and layer-level typography and color metadata.
     - ➡️ Input: Poster background image, PSD path, regions, and per-layer rendered images plus text/typography metadata.
     - ⬅️ Output: Composited poster image and structured layer annotations with boxes, colors, labels, and typography attributes.
+- **[LayoutDETR](datasets/LayoutDETR/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-2212.09877-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2212.09877) [![Paper](https://img.shields.io/badge/Paper-ECCV%2724-blue?logo=doi&logoColor=white)](https://arxiv.org/abs/2212.09877) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/salesforce/LayoutDETR) [![HF Hub](https://img.shields.io/badge/HF%20Hub-LayoutDETR-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/LayoutDETR)
+  - Advertising banner images, foreground layout annotations, and inpainted background assets.
+    - ➡️ Input: Ad banner image or inpainted background image plus foreground text/category annotations.
+    - ⬅️ Output: Foreground element labels and bounding boxes in pixel and normalized formats.
 - **[LICA](datasets/LICA/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2603.16098-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.16098) [![Paper](https://img.shields.io/badge/Paper-arXiv-blue?logo=doi&logoColor=white)](https://doi.org/10.48550/arXiv.2603.16098) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/lica-world/lica-dataset) [![HF Hub](https://img.shields.io/badge/HF%20Hub-LICA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/LICA)
   - Rendered graphic design layouts, component-level specifications, and natural-language annotations.
