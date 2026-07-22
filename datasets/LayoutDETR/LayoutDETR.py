@@ -29,8 +29,13 @@ _CITATION = """\
 @inproceedings{yu2024layoutdetr,
   title={LayoutDETR: Detection Transformer Is a Good Multimodal Layout Designer},
   author={Yu, Ning and Chen, Chia-Chih and Chen, Zeyuan and Meng, Rui and Wu, Gang and Josel, Paul and Niebles, Juan Carlos and Xiong, Caiming and Xu, Ran},
-  booktitle={European Conference on Computer Vision (ECCV)},
-  year={2024}
+  booktitle={Computer Vision - ECCV 2024},
+  series={Lecture Notes in Computer Science},
+  volume={15078},
+  pages={169--187},
+  publisher={Springer, Cham},
+  year={2025},
+  doi={10.1007/978-3-031-72661-3_10}
 }
 """
 

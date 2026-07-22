@@ -60,7 +60,8 @@ task_categories:
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/LayoutDETR
 - **Original Code and Data:** https://github.com/salesforce/LayoutDETR
 - **Project Page:** https://ningyu1991.github.io/projects/LayoutDETR.html
-- **Paper (ECCV 2024 / arXiv):** https://arxiv.org/abs/2212.09877
+- **Paper (ECCV 2024):** https://doi.org/10.1007/978-3-031-72661-3_10
+- **arXiv:** https://arxiv.org/abs/2212.09877
 - **Leaderboard:** Not available in the original release.
 - **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
 
@@ -207,8 +208,13 @@ The upstream repository code is licensed under Apache License Version 2.0, copyr
 @inproceedings{yu2024layoutdetr,
   title={LayoutDETR: Detection Transformer Is a Good Multimodal Layout Designer},
   author={Yu, Ning and Chen, Chia-Chih and Chen, Zeyuan and Meng, Rui and Wu, Gang and Josel, Paul and Niebles, Juan Carlos and Xiong, Caiming and Xu, Ran},
-  booktitle={European Conference on Computer Vision (ECCV)},
-  year={2024}
+  booktitle={Computer Vision - ECCV 2024},
+  series={Lecture Notes in Computer Science},
+  volume={15078},
+  pages={169--187},
+  publisher={Springer, Cham},
+  year={2025},
+  doi={10.1007/978-3-031-72661-3_10}
 }
 ```
 
