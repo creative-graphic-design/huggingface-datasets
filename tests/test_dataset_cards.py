@@ -74,6 +74,10 @@ FORBIDDEN_PLACEHOLDERS = (
     "author={Xiao, Shishi and Wang, Yufei",
 )
 
+INTERNAL_POINT_OF_CONTACT = (
+    "https://github.com/creative-graphic-design/huggingface-datasets/issues"
+)
+
 OFFICIAL_TASK_CATEGORIES = {
     "audio-classification",
     "automatic-speech-recognition",
@@ -124,6 +128,19 @@ def dataset_card_path(dataset_name: str) -> Path:
 
 def tracked_dataset_card_paths() -> list[Path]:
     return sorted((ROOT / "datasets").glob("*/README.md"))
+
+
+def dataset_card_and_template_paths() -> list[Path]:
+    return [
+        *tracked_dataset_card_paths(),
+        ROOT
+        / ".agents"
+        / "skills"
+        / "create-dataset"
+        / "templates"
+        / "MyHFDataset"
+        / "README.md",
+    ]
 
 
 def tracked_dataset_dirs() -> list[Path]:
@@ -286,6 +303,20 @@ def test_dataset_card_point_of_contact_values_are_render_safe():
             assert not re.fullmatch(r'["\'().\s]+', value), (
                 f"{path.relative_to(ROOT)}:{line_number} is punctuation only"
             )
+
+
+def test_dataset_card_point_of_contact_does_not_use_upstream_github_issues():
+    for path in dataset_card_and_template_paths():
+        for line_number, line in enumerate(path.read_text().splitlines(), start=1):
+            if not line.startswith("- **Point of Contact:**"):
+                continue
+
+            value = line.removeprefix("- **Point of Contact:**").strip()
+            if re.fullmatch(r"https://github\.com/[^/\s]+/[^/\s]+/issues", value):
+                assert value == INTERNAL_POINT_OF_CONTACT, (
+                    f"{path.relative_to(ROOT)}:{line_number} should use "
+                    f"{INTERNAL_POINT_OF_CONTACT} as Point of Contact"
+                )
 
 
 def test_root_readme_uses_public_hub_repo_ids():

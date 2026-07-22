@@ -71,7 +71,8 @@ configs:
 - **Paper (CVPR 2026 / arXiv):** https://arxiv.org/abs/2603.29855
 - **Source Model Repository:** https://huggingface.co/MeiGen-AI/PosterReward_v1
 - **Leaderboard:** Not available in the original release.
-- **Point of Contact:** https://github.com/MeiGen-AI/PosterReward/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/MeiGen-AI/PosterReward/issues
 
 ### Dataset Summary
 

@@ -137,7 +137,8 @@ configs:
 - **Original Code:** https://github.com/ArtmeScienceLab/PosterIQ-Benchmark
 - **Paper (CVPR 2026 / arXiv):** https://arxiv.org/abs/2603.24078
 - **Leaderboard:** Not available in the original release.
-- **Point of Contact:** https://github.com/ArtmeScienceLab/PosterIQ-Benchmark/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/ArtmeScienceLab/PosterIQ-Benchmark/issues
 
 ### Dataset Summary
 

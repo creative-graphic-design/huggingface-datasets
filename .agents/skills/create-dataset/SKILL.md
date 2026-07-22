@@ -39,6 +39,49 @@ Guide the user to customize the copied files. Ask them for:
 4. **license**: License (e.g., MIT, Apache-2.0, Unknown)
 5. **data_urls**: URLs to actual data files
 
+### Step 2.0: Complete Source Audit Before Writing Dataset Metadata
+
+Do not write the dataset card, schema, README, or root README entry from a GitHub URL alone.
+Before implementation, read the primary or near-primary sources that define the dataset:
+
+- arXiv abstract/html page or paper PDF
+- Official project page, if available
+- Upstream README
+- Upstream data release page or dataset/source page
+- Upstream data loading, preprocessing, or conversion code
+- License file, license section, or dataset hosting license metadata
+
+Record the audit findings in the dataset README and root README. Reflect the source evidence in:
+
+- `Summary`
+- `Dataset Description`
+- `Data Splits`
+- `Dataset Creation`
+- `Limitations`
+- `Citation`
+- Root `README.md` badges and dataset description
+
+If a source is missing or inaccessible, state that specifically in the dataset README instead of
+filling the section from assumptions.
+
+### Point of Contact Policy
+
+Use this repository's issue tracker as the dataset card `Point of Contact` by default:
+
+```markdown
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+```
+
+Do not use an upstream repository issue URL as `Point of Contact`. If upstream contact information
+is useful, keep it on a separate line such as:
+
+```markdown
+- **Original Source Contact:** https://github.com/upstream/project/issues
+```
+
+This keeps maintenance questions for the mirrored Hugging Face dataset separate from questions for
+the original data authors or upstream maintainers.
+
 **Files to customize:**
 
 1. **`{DatasetName}.py`** - Main dataset implementation:
@@ -200,6 +243,11 @@ If generic, enhance by fetching from homepage. Otherwise keep user-provided.
 
 For multi-config datasets with type safety, see **Step 4.4.1** below for recommended patterns.
 
+**Python 3.10 compatibility:** This repository uses `requires-python = ">=3.10"`.
+Avoid Python 3.11-only APIs such as `enum.StrEnum` and `typing.assert_never`, unless you add an
+explicit compatibility fallback such as `typing_extensions`. Prefer `class DatasetType(str, Enum)`
+and an explicit `raise ValueError(...)` fallback in examples and new dataset loaders.
+
 **Single config:**
 
 ```python
@@ -216,15 +264,15 @@ BUILDER_CONFIGS = [
 ]
 ```
 
-**Advanced (with StrEnum):**
+**Advanced (Python 3.10-compatible string Enum):**
 
 ```python
-from enum import StrEnum, auto
+from enum import Enum
 from dataclasses import dataclass
 
-class MyHFDatasetType(StrEnum):
-    config1 = auto()
-    config2 = auto()
+class MyHFDatasetType(str, Enum):
+    config1 = "config1"
+    config2 = "config2"
 
 @dataclass
 class MyHFDatasetConfig(ds.BuilderConfig):
@@ -246,17 +294,17 @@ When working with multiple configurations, these patterns improve type safety, e
 - **Exhaustiveness Checking**: Type checker ensures all config cases are handled
 - **Maintainability**: Adding new configs triggers compile errors where implementation is needed
 
-**Pattern 1: StrEnum with Direct `name` Field**
+**Pattern 1: Python 3.10-Compatible String Enum with Direct `name` Field**
 
-Define config types using StrEnum and use the enum directly in the `name` field:
+Define config types using `str, Enum` and use the enum directly in the `name` field:
 
 ```python
-from enum import StrEnum, auto
+from enum import Enum
 from dataclasses import dataclass
 
-class MyHFDatasetType(StrEnum):
-    config1 = auto()
-    config2 = auto()
+class MyHFDatasetType(str, Enum):
+    config1 = "config1"
+    config2 = "config2"
 
 @dataclass
 class MyHFDatasetConfig(ds.BuilderConfig):
@@ -272,13 +320,11 @@ BUILDER_CONFIGS = [
 config: MyHFDatasetConfig
 ```
 
-**Pattern 2: `match/case` with `assert_never`**
+**Pattern 2: `match/case` with Explicit Fallback**
 
-Use `match/case` statements with `assert_never` to ensure all config cases are handled:
+Use `match/case` statements and raise an explicit error if an unexpected config name appears:
 
 ```python
-from typing import assert_never
-
 def _info(self) -> ds.DatasetInfo:
     match self.config.name:
         case MyHFDatasetType.config1:
@@ -290,7 +336,7 @@ def _info(self) -> ds.DatasetInfo:
                 "field2": ds.Value("int32"),
             })
         case _:
-            assert_never(self.config.name)
+            raise ValueError(f"Unsupported config: {self.config.name}")
 
     return ds.DatasetInfo(
         description=_DESCRIPTION,
@@ -310,14 +356,14 @@ def _info(self) -> ds.DatasetInfo:
 **Complete Example:**
 
 ```python
-from enum import StrEnum, auto
+from enum import Enum
 from dataclasses import dataclass
-from typing import List, assert_never
+from typing import List
 import datasets as ds
 
-class MyDatasetType(StrEnum):
-    small = auto()
-    large = auto()
+class MyDatasetType(str, Enum):
+    small = "small"
+    large = "large"
 
 @dataclass
 class MyDatasetConfig(ds.BuilderConfig):
@@ -346,7 +392,7 @@ class MyDataset(ds.GeneratorBasedBuilder):
                     "metadata": ds.Value("string"),
                 })
             case _:
-                assert_never(self.config.name)
+                raise ValueError(f"Unsupported config: {self.config.name}")
 
         return ds.DatasetInfo(
             description=_DESCRIPTION,
@@ -363,7 +409,7 @@ class MyDataset(ds.GeneratorBasedBuilder):
             case MyDatasetType.large:
                 data_url = _URLS["large"]
             case _:
-                assert_never(self.config.name)
+                raise ValueError(f"Unsupported config: {self.config.name}")
 
         filepath = dl_manager.download_and_extract(data_url)
         return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"filepath": filepath})]
@@ -382,13 +428,13 @@ class MyDataset(ds.GeneratorBasedBuilder):
                             "metadata": data.get("metadata", ""),
                         }
                     case _:
-                        assert_never(self.config.name)
+                        raise ValueError(f"Unsupported config: {self.config.name}")
 ```
 
 **When to Use:**
 
-- Use StrEnum + direct `name` field for **any multi-config dataset**
-- Use `match/case` with `assert_never` when **config affects behavior** in methods
+- Use `str, Enum` + direct `name` field for **any multi-config dataset**
+- Use `match/case` with explicit fallback errors when **config affects behavior** in methods
 
 #### 4.5 Define Features
 
@@ -954,12 +1000,16 @@ uv run pytest -vsx datasets/MyData/tests
 
 - [ ] User info collected
 - [ ] Files generated from templates
+- [ ] Source audit completed from paper/project page/upstream README/source code/data page/license
+- [ ] Source audit findings reflected in dataset README and root README badges/description
 - [ ] \_URLS updated
 - [ ] Features defined
 - [ ] \_split_generators implemented
 - [ ] \_generate_examples implemented
 - [ ] Tests updated
 - [ ] README.md updated
+- [ ] Dataset README uses this repository's issues URL as `Point of Contact`
+- [ ] Upstream contact, if useful, is listed separately as `Original Source Contact` or `Upstream Maintainer`
 - [ ] Tests passing
 - [ ] Direct `test_load_dataset` pytest target passes with `ds.load_dataset(...)`
 - [ ] Dataset loads correctly
