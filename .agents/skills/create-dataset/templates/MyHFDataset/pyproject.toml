@@ -4,7 +4,7 @@ name = "my-hf-dataset"
 version = "0.1.0"
 description = "A sample Hugging Face dataset demonstrating best practices for dataset creation, featuring multi-config support, type-safe enums, and comprehensive documentation."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 dependencies = [
     # For image-based datasets, add:
@@ -12,4 +12,3 @@ dependencies = [
     #
     # For non-image datasets, leave empty (inherits from workspace root)
 ]
-

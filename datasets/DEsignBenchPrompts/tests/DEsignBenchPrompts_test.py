@@ -112,7 +112,9 @@ def test_iter_prompt_rows_reads_tsv_with_pandas(
 
 
 def test_source_reported_counts_are_consistent():
-    assert sum(_SOURCE_EXPECTED_ASPECT_RATIO_COUNTS.values()) == _SOURCE_EXPECTED_NUM_TEST
+    assert (
+        sum(_SOURCE_EXPECTED_ASPECT_RATIO_COUNTS.values()) == _SOURCE_EXPECTED_NUM_TEST
+    )
 
 
 def test_load_dataset(dataset_path: str, repo_id: str):

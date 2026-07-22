@@ -100,9 +100,7 @@ def _image_annotation_paths(extracted_dir: str | pathlib.Path) -> dict[str, str]
     return {
         "qa_action": str(image_dir / "QA_Action.json"),
         "qa_reason": str(image_dir / "QA_Reason.json"),
-        "qa_combined_action_reason": str(
-            image_dir / "QA_Combined_Action_Reason.json"
-        ),
+        "qa_combined_action_reason": str(image_dir / "QA_Combined_Action_Reason.json"),
         "sentiments": str(image_dir / "Sentiments.json"),
         "slogans": str(image_dir / "Slogans.json"),
         "strategies": str(image_dir / "Strategies.json"),

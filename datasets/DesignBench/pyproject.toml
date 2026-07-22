@@ -10,4 +10,3 @@ dependencies = [
     "gdown>=5.2.0",
     "tenacity>=9.1.2",
 ]
-

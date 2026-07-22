@@ -286,7 +286,9 @@ def test_image_loaders_depend_on_datasets_vision_extra():
     for dataset_dir in tracked_dataset_dirs():
         loader_text = (dataset_dir / f"{dataset_dir.name}.py").read_text()
         pyproject_text = (dataset_dir / "pyproject.toml").read_text()
-        uses_image_feature = "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+        uses_image_feature = (
+            "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+        )
 
         assert ("datasets[vision]" in pyproject_text) == uses_image_feature, (
             f"{dataset_dir.relative_to(ROOT)} should use datasets[vision] exactly "

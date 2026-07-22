@@ -58,7 +58,10 @@ def test_dataset_loaders_use_download_manager_for_downloads():
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     root = alias.name.split(".", maxsplit=1)[0]
-                    if root in FORBIDDEN_IMPORT_ROOTS or alias.name in FORBIDDEN_IMPORTS:
+                    if (
+                        root in FORBIDDEN_IMPORT_ROOTS
+                        or alias.name in FORBIDDEN_IMPORTS
+                    ):
                         violations.append((path, node.lineno, f"import {alias.name}"))
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""

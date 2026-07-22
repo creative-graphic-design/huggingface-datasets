@@ -3,7 +3,7 @@ name = "huggingface-datasets"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "datasets[vision]>=2.0.0,<4.0.0",
     "huggingface-datasets-cocoapi-tools[cocoapi]>=0.4.0",
@@ -19,6 +19,7 @@ dependencies = [
 dev = [
     "gdown>=5.2.0",
     "mypy>=1.0.0",
+    "pre-commit>=4.6.0",
     "pytest>=6.0.0",
     "pytest-cov>=6.0.0",
     "ruff>=0.1.5",

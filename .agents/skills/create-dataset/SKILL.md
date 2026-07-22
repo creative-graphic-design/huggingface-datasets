@@ -127,7 +127,7 @@ name = "{dataset-name}"
 version = "0.1.0"
 description = "..."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "datasets[vision]>=2.0.0,<4.0.0",
 ]
@@ -243,11 +243,6 @@ If generic, enhance by fetching from homepage. Otherwise keep user-provided.
 
 For multi-config datasets with type safety, see **Step 4.4.1** below for recommended patterns.
 
-**Python 3.10 compatibility:** This repository uses `requires-python = ">=3.10"`.
-Avoid Python 3.11-only APIs such as `enum.StrEnum` and `typing.assert_never`, unless you add an
-explicit compatibility fallback such as `typing_extensions`. Prefer `class DatasetType(str, Enum)`
-and an explicit `raise ValueError(...)` fallback in examples and new dataset loaders.
-
 **Single config:**
 
 ```python
@@ -264,15 +259,15 @@ BUILDER_CONFIGS = [
 ]
 ```
 
-**Advanced (Python 3.10-compatible string Enum):**
+**Advanced (string Enum):**
 
 ```python
-from enum import Enum
 from dataclasses import dataclass
+from enum import StrEnum, auto
 
-class MyHFDatasetType(str, Enum):
-    config1 = "config1"
-    config2 = "config2"
+class MyHFDatasetType(StrEnum):
+    config1 = auto()
+    config2 = auto()
 
 @dataclass
 class MyHFDatasetConfig(ds.BuilderConfig):
@@ -294,17 +289,17 @@ When working with multiple configurations, these patterns improve type safety, e
 - **Exhaustiveness Checking**: Type checker ensures all config cases are handled
 - **Maintainability**: Adding new configs triggers compile errors where implementation is needed
 
-**Pattern 1: Python 3.10-Compatible String Enum with Direct `name` Field**
+**Pattern 1: String Enum with Direct `name` Field**
 
-Define config types using `str, Enum` and use the enum directly in the `name` field:
+Define config types using `StrEnum` and use the enum directly in the `name` field:
 
 ```python
-from enum import Enum
 from dataclasses import dataclass
+from enum import StrEnum, auto
 
-class MyHFDatasetType(str, Enum):
-    config1 = "config1"
-    config2 = "config2"
+class MyHFDatasetType(StrEnum):
+    config1 = auto()
+    config2 = auto()
 
 @dataclass
 class MyHFDatasetConfig(ds.BuilderConfig):
@@ -320,11 +315,13 @@ BUILDER_CONFIGS = [
 config: MyHFDatasetConfig
 ```
 
-**Pattern 2: `match/case` with Explicit Fallback**
+**Pattern 2: `match/case` with Exhaustiveness Check**
 
-Use `match/case` statements and raise an explicit error if an unexpected config name appears:
+Use `match/case` statements and `assert_never` to make unexpected config names visible to type checkers:
 
 ```python
+from typing import assert_never
+
 def _info(self) -> ds.DatasetInfo:
     match self.config.name:
         case MyHFDatasetType.config1:
@@ -336,7 +333,7 @@ def _info(self) -> ds.DatasetInfo:
                 "field2": ds.Value("int32"),
             })
         case _:
-            raise ValueError(f"Unsupported config: {self.config.name}")
+            assert_never(self.config.name)
 
     return ds.DatasetInfo(
         description=_DESCRIPTION,
@@ -356,14 +353,14 @@ def _info(self) -> ds.DatasetInfo:
 **Complete Example:**
 
 ```python
-from enum import Enum
 from dataclasses import dataclass
-from typing import List
+from enum import StrEnum, auto
+from typing import List, assert_never
 import datasets as ds
 
-class MyDatasetType(str, Enum):
-    small = "small"
-    large = "large"
+class MyDatasetType(StrEnum):
+    small = auto()
+    large = auto()
 
 @dataclass
 class MyDatasetConfig(ds.BuilderConfig):
@@ -392,7 +389,7 @@ class MyDataset(ds.GeneratorBasedBuilder):
                     "metadata": ds.Value("string"),
                 })
             case _:
-                raise ValueError(f"Unsupported config: {self.config.name}")
+                assert_never(self.config.name)
 
         return ds.DatasetInfo(
             description=_DESCRIPTION,
@@ -409,7 +406,7 @@ class MyDataset(ds.GeneratorBasedBuilder):
             case MyDatasetType.large:
                 data_url = _URLS["large"]
             case _:
-                raise ValueError(f"Unsupported config: {self.config.name}")
+                assert_never(self.config.name)
 
         filepath = dl_manager.download_and_extract(data_url)
         return [ds.SplitGenerator(name=ds.Split.TRAIN, gen_kwargs={"filepath": filepath})]
@@ -428,13 +425,13 @@ class MyDataset(ds.GeneratorBasedBuilder):
                             "metadata": data.get("metadata", ""),
                         }
                     case _:
-                        raise ValueError(f"Unsupported config: {self.config.name}")
+                        assert_never(self.config.name)
 ```
 
 **When to Use:**
 
-- Use `str, Enum` + direct `name` field for **any multi-config dataset**
-- Use `match/case` with explicit fallback errors when **config affects behavior** in methods
+- Use `StrEnum` + direct `name` field for **any multi-config dataset**
+- Use `match/case` with `assert_never` when **config affects behavior** in methods
 
 #### 4.5 Define Features
 
