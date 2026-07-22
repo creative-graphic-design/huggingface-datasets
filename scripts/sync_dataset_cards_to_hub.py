@@ -31,6 +31,7 @@ DATASET_CARD_REPOS = {
     "POSTAPosterArt": "creative-graphic-design/POSTAPosterArt",
     "PosterErase": "creative-graphic-design/PosterErase",
     "PosterIQ": "creative-graphic-design/PosterIQ",
+    "PosterLLaVA": "creative-graphic-design/PosterLLaVA",
     "PosterRewardBench": "creative-graphic-design/PosterRewardBench",
     "PubLayNet": "creative-graphic-design/PubLayNet",
     "Rico": "creative-graphic-design/Rico",
