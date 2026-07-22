@@ -12,7 +12,11 @@ from PIL import Image
 import datasets as ds
 
 _HUB_MAX_SHARD_SIZE = "50MB"
-_UPSTREAM_REPORTED_QB_POSTER_LAYOUTS = 4000
+_QB_POSTER_EXPECTED_NUM_ROWS = {
+    "train": 4675,
+    "validation": 513,
+}
+_QB_POSTER_EXPECTED_TOTAL_ROWS = 5188
 _USER_CONSTRAINED_EXPECTED_NUM_ROWS = {
     "train": 54546 + 9973,
     "validation": 6002,
@@ -86,8 +90,8 @@ def tiny_qb_poster_data(tmp_path: Path) -> Path:
                 {
                     "xc": 400,
                     "yc": 300,
-                    "width": 200,
-                    "height": 100,
+                    "width": 201,
+                    "height": 101,
                     "label": "text",
                 }
             ],
@@ -174,6 +178,9 @@ def test_iter_qb_poster_examples_normalizes_boxes_and_conversations(
     assert "place 1 foreground elements" in example["prompt"]
     assert example["conversations"][0]["from"] == "human"
     assert example["conversations"][1]["from"] == "gpt"
+    conversation_prefix = "Sure! Here is the design results: "
+    answer = example["conversations"][1]["value"].removeprefix(conversation_prefix)
+    assert json.loads(answer)[0]["box"] == [0.375, 0.4167, 0.625, 0.5833]
 
 
 def test_iter_user_constrained_examples_preserves_source_and_constraints(
@@ -223,10 +230,17 @@ def test_load_dataset_with_tiny_data_dir(
 
 
 def test_source_reported_counts_are_consistent():
-    assert _UPSTREAM_REPORTED_QB_POSTER_LAYOUTS == 4000
+    assert sum(_QB_POSTER_EXPECTED_NUM_ROWS.values()) == (
+        _QB_POSTER_EXPECTED_TOTAL_ROWS
+    )
     assert sum(_USER_CONSTRAINED_EXPECTED_NUM_ROWS.values()) == (
         _USER_CONSTRAINED_EXPECTED_TOTAL_ROWS
     )
+
+
+def test_loader_uses_python_310_compatible_enum(dataset_path: str):
+    loader_text = Path(dataset_path).read_text(encoding="utf-8")
+    assert "StrEnum" not in loader_text
 
 
 @pytest.mark.skipif(
@@ -247,8 +261,8 @@ def test_load_dataset(dataset_path: str, repo_id: str, config_name: str):
     assert list(dataset) == ["train", "validation"]
 
     if config_name == "qb_poster":
-        assert dataset["train"].num_rows > 0
-        assert dataset["validation"].num_rows > 0
+        for split_name, expected_num_rows in _QB_POSTER_EXPECTED_NUM_ROWS.items():
+            assert dataset[split_name].num_rows == expected_num_rows
         sample = dataset["train"][0]
         assert sample["image"] is not None
         assert sample["elements"]

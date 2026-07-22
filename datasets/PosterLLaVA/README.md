@@ -51,7 +51,7 @@ configs:
 - **Original Code and Data:** https://github.com/posterllava/PosterLLaVA
 - **Paper (IEEE TMM / arXiv):** https://arxiv.org/abs/2406.02884
 - **Demo:** https://huggingface.co/spaces/posterllava/PosterLLaVA
-- **Point of Contact:** https://github.com/posterllava/PosterLLaVA/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
 
 ### Dataset Summary
 
@@ -60,7 +60,7 @@ PosterLLaVA contains poster layout data released with *PosterLLaVa: Constructing
 - `qb_poster`: QB-Poster social-media poster layout data with poster images, canvas size, foreground element labels, pixel boxes, normalized boxes, and LLaVA-style instruction conversations.
 - `user_constrained`: user-constraint annotations for CGL-dataset and PosterLayout poster layout generation. The upstream release contains annotation text only; images and original bounding box annotations must be obtained from CGL-dataset and PosterLayout.
 
-The upstream model README states that PosterLLaVA was fine-tuned with 7k banner layouts, 60k commercial poster layouts from CGL-dataset and PosterLayout with text constraints, and 4k social-media poster layouts from QB-Poster.
+The upstream model README summarizes PosterLLaVA fine-tuning data as 7k banner layouts, 60k commercial poster layouts from CGL-dataset and PosterLayout with text constraints, and 4k social-media poster layouts from QB-Poster. The public QB-Poster archive contains 5,188 rows in this loader: 4,675 train rows and 513 validation rows.
 
 ### Supported Tasks and Leaderboards
 
@@ -168,16 +168,16 @@ A User-Constrained row contains a source dataset identifier and natural-language
 
 ### Data Splits
 
-QB-Poster preserves the `split` field from the upstream annotation file. The upstream README describes QB-Poster as 4k social-media poster layouts, but this loader does not hard-code a train/validation count because the full raw archive was not mirrored in this repository.
+QB-Poster preserves the `split` field from the upstream annotation file.
 
 | Config | Split | Rows |
 | --- | --- | ---: |
-| `qb_poster` | train | From upstream annotation |
-| `qb_poster` | validation | From upstream annotation |
+| `qb_poster` | train | 4,675 |
+| `qb_poster` | validation | 513 |
 | `user_constrained` | train | 64,519 |
 | `user_constrained` | validation | 6,002 |
 
-The User-Constrained counts come from the public Google Drive archive files inspected for this loader: `cgl_train.json` has 54,546 rows, `posterlayout_train.json` has 9,973 rows, and `cgl_val.json` has 6,002 rows.
+The QB-Poster counts come from the public Google Drive archive inspected for this loader. The User-Constrained counts come from `cgl_train.json` with 54,546 rows, `posterlayout_train.json` with 9,973 rows, and `cgl_val.json` with 6,002 rows.
 
 ### Local Data and Downloads
 
@@ -229,7 +229,7 @@ User-Constrained is released through Google Drive and contains only user-constra
 
 ### Annotations
 
-QB-Poster annotations contain canvas dimensions and element boxes with center coordinates, width, height, and label. This loader converts each element to pixel box edges and normalized `[left, top, right, bottom]` boxes, then recreates the instruction-answer conversations used by the upstream preprocessing script.
+QB-Poster annotations contain canvas dimensions and element boxes with center coordinates, width, height, and label. This loader converts each element to pixel box edges and normalized `[left, top, right, bottom]` boxes, matching the upstream preprocessing script's integer floor-division half-size behavior, then recreates the instruction-answer conversations used by the upstream preprocessing script.
 
 User-Constrained annotations contain natural-language constraints for CGL-dataset and PosterLayout examples.
 

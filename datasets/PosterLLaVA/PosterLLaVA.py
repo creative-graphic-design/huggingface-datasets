@@ -15,8 +15,8 @@ import json
 import os
 import pathlib
 from dataclasses import dataclass
-from enum import StrEnum, auto
-from typing import Any, Iterable, List, assert_never
+from enum import Enum
+from typing import Any, Iterable, List, NoReturn
 
 import gdown
 from datasets.utils.logging import get_logger
@@ -63,9 +63,16 @@ Here is the initial JSON file: {json_data}"""
 _QB_POSTER_DOMAIN = "social media promotion poster with qbposter style"
 
 
-class PosterLLaVAType(StrEnum):
-    qb_poster = auto()
-    user_constrained = auto()
+def _assert_never(value: Any) -> NoReturn:
+    raise AssertionError(f"Unhandled PosterLLaVA config: {value!r}")
+
+
+class PosterLLaVAType(str, Enum):
+    qb_poster = "qb_poster"
+    user_constrained = "user_constrained"
+
+    def __str__(self) -> str:
+        return self.value
 
 
 @dataclass
@@ -204,10 +211,12 @@ def _normalize_element(
     yc = float(element["yc"])
     width = float(element["width"])
     height = float(element["height"])
-    left = xc - width / 2
-    top = yc - height / 2
-    right = xc + width / 2
-    bottom = yc + height / 2
+    half_width = width // 2
+    half_height = height // 2
+    left = xc - half_width
+    top = yc - half_height
+    right = xc + half_width
+    bottom = yc + half_height
 
     return {
         "label": str(element["label"]),
@@ -399,7 +408,7 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
                     }
                 )
             case _:
-                assert_never(self.config.name)
+                _assert_never(self.config.name)
 
         return ds.DatasetInfo(
             description=_DESCRIPTION,
@@ -454,7 +463,7 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
             case PosterLLaVAType.user_constrained:
                 return _find_user_constrained_root(path)
             case _:
-                assert_never(self.config.name)
+                _assert_never(self.config.name)
 
     def _generate_examples(self, data_root: pathlib.Path, split_name: str):
         match self.config.name:
@@ -463,4 +472,4 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
             case PosterLLaVAType.user_constrained:
                 yield from _iter_user_constrained_examples(data_root, split_name)
             case _:
-                assert_never(self.config.name)
+                _assert_never(self.config.name)
