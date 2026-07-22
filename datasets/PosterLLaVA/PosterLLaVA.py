@@ -15,8 +15,8 @@ import json
 import os
 import pathlib
 from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Iterable, List, NoReturn
+from enum import StrEnum, auto
+from typing import Any, Iterable, List, assert_never
 
 import gdown
 from datasets.utils.logging import get_logger
@@ -63,16 +63,9 @@ Here is the initial JSON file: {json_data}"""
 _QB_POSTER_DOMAIN = "social media promotion poster with qbposter style"
 
 
-def _assert_never(value: Any) -> NoReturn:
-    raise AssertionError(f"Unhandled PosterLLaVA config: {value!r}")
-
-
-class PosterLLaVAType(str, Enum):
-    qb_poster = "qb_poster"
-    user_constrained = "user_constrained"
-
-    def __str__(self) -> str:
-        return self.value
+class PosterLLaVAType(StrEnum):
+    qb_poster = auto()
+    user_constrained = auto()
 
 
 @dataclass
@@ -408,7 +401,7 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
                     }
                 )
             case _:
-                _assert_never(self.config.name)
+                assert_never(self.config.name)
 
         return ds.DatasetInfo(
             description=_DESCRIPTION,
@@ -463,7 +456,7 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
             case PosterLLaVAType.user_constrained:
                 return _find_user_constrained_root(path)
             case _:
-                _assert_never(self.config.name)
+                assert_never(self.config.name)
 
     def _generate_examples(self, data_root: pathlib.Path, split_name: str):
         match self.config.name:
@@ -472,4 +465,4 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
             case PosterLLaVAType.user_constrained:
                 yield from _iter_user_constrained_examples(data_root, split_name)
             case _:
-                _assert_never(self.config.name)
+                assert_never(self.config.name)

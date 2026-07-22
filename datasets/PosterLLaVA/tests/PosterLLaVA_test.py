@@ -238,9 +238,15 @@ def test_source_reported_counts_are_consistent():
     )
 
 
-def test_loader_uses_python_310_compatible_enum(dataset_path: str):
+def test_loader_uses_python_311_enum_and_exhaustiveness_helpers(dataset_path: str):
     loader_text = Path(dataset_path).read_text(encoding="utf-8")
-    assert "StrEnum" not in loader_text
+    assert "from enum import StrEnum, auto" in loader_text
+    assert "from typing import Any, Iterable, List, assert_never" in loader_text
+    assert "class PosterLLaVAType(StrEnum):" in loader_text
+    assert "qb_poster = auto()" in loader_text
+    assert "user_constrained = auto()" in loader_text
+    assert "assert_never(self.config.name)" in loader_text
+    assert "def _assert" "_never" not in loader_text
 
 
 @pytest.mark.skipif(
