@@ -799,6 +799,16 @@ Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any pl
 - Verify license information matches the source repository
 - Add complete citation information if available
 
+Keep the Hugging Face README guide major sections in every dataset README. The repository CI
+checks these top-level headings in `tests/test_dataset_cards.py`, so new dataset cards must
+include:
+
+- `## Dataset Description`
+- `## Dataset Structure`
+- `## Dataset Creation`
+- `## Considerations for Using the Data`
+- `## Additional Information`
+
 **Add a loading example to the Data Instances section**
 
 Every dataset README must include a concise loading example in `### Data Instances`, using
@@ -1008,6 +1018,7 @@ uv run pytest -vsx datasets/MyData/tests
 - [ ] \_generate_examples implemented
 - [ ] Tests updated
 - [ ] README.md updated
+- [ ] Dataset README includes the Hugging Face README guide major sections checked by CI
 - [ ] Dataset README uses this repository's issues URL as `Point of Contact`
 - [ ] Upstream contact, if useful, is listed separately as `Original Source Contact` or `Upstream Maintainer`
 - [ ] Tests passing

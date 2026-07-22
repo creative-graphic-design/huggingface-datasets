@@ -78,6 +78,28 @@ INTERNAL_POINT_OF_CONTACT = (
     "https://github.com/creative-graphic-design/huggingface-datasets/issues"
 )
 
+HF_README_GUIDE_MAJOR_SECTIONS = {
+    "Dataset Description",
+    "Dataset Structure",
+    "Dataset Creation",
+    "Considerations for Using the Data",
+    "Additional Information",
+}
+
+LEGACY_DATASET_CARDS_MISSING_HF_README_GUIDE_MAJOR_SECTIONS = {
+    "BannerRequest400": {"Considerations for Using the Data"},
+    "CreativePSD": {"Dataset Creation"},
+    "Desigen": {
+        "Dataset Creation",
+        "Considerations for Using the Data",
+        "Additional Information",
+    },
+    "ObjectRemovalAlpha": {
+        "Considerations for Using the Data",
+        "Additional Information",
+    },
+}
+
 OFFICIAL_TASK_CATEGORIES = {
     "audio-classification",
     "automatic-speech-recognition",
@@ -156,6 +178,27 @@ def _frontmatter(readme: str) -> list[str]:
     except ValueError:
         return []
     return lines[1:end]
+
+
+def _markdown_headings(readme: str, level: int) -> list[str]:
+    lines = readme.splitlines()
+    start = 0
+    if lines[:1] == ["---"]:
+        try:
+            start = lines.index("---", 1) + 1
+        except ValueError:
+            start = 0
+
+    headings = []
+    in_code_block = False
+    marker = "#" * level + " "
+    for line in lines[start:]:
+        if line.startswith("```"):
+            in_code_block = not in_code_block
+            continue
+        if not in_code_block and line.startswith(marker):
+            headings.append(line.removeprefix(marker).strip())
+    return headings
 
 
 def _task_categories(frontmatter: list[str]) -> list[str]:
@@ -317,6 +360,24 @@ def test_dataset_card_point_of_contact_does_not_use_upstream_github_issues():
                     f"{path.relative_to(ROOT)}:{line_number} should use "
                     f"{INTERNAL_POINT_OF_CONTACT} as Point of Contact"
                 )
+
+
+def test_dataset_cards_follow_hf_readme_guide_major_sections():
+    for path in dataset_card_and_template_paths():
+        sections = set(_markdown_headings(path.read_text(), level=2))
+        missing_sections = HF_README_GUIDE_MAJOR_SECTIONS - sections
+        dataset_name = path.parent.name
+        legacy_missing_sections = (
+            LEGACY_DATASET_CARDS_MISSING_HF_README_GUIDE_MAJOR_SECTIONS.get(
+                dataset_name,
+                set(),
+            )
+        )
+
+        assert missing_sections == legacy_missing_sections, (
+            f"{path.relative_to(ROOT)} should include the Hugging Face README guide "
+            f"major sections; missing {sorted(missing_sections)!r}"
+        )
 
 
 def test_root_readme_uses_public_hub_repo_ids():
