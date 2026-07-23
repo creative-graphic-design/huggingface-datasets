@@ -166,9 +166,7 @@ def _remove_almost_covered_elements(
         for other_index, other in enumerate(elements):
             if index == other_index:
                 continue
-            xx1, yy1, xx2, yy2 = [
-                float(value) for value in other["xyxy_word_fit"]
-            ]
+            xx1, yy1, xx2, yy2 = [float(value) for value in other["xyxy_word_fit"]]
             x1_max = max(x1, xx1)
             y1_max = max(y1, yy1)
             x2_min = min(x2, xx2)
@@ -196,7 +194,9 @@ def _valid_elements(
     return _remove_almost_covered_elements(elements)
 
 
-def _background_path(root: pathlib.Path, dirname: str, stem: str) -> pathlib.Path | None:
+def _background_path(
+    root: pathlib.Path, dirname: str, stem: str
+) -> pathlib.Path | None:
     path = root / dirname / f"{stem}_inpainted.png"
     return path if path.exists() else None
 
@@ -258,12 +258,8 @@ def _iter_examples(
         annotation = record["annotation"]
         elements = record["elements"]
 
-        background_1x_path = _background_path(
-            root, "1x_inpainted_background_png", stem
-        )
-        background_3x_path = _background_path(
-            root, "3x_inpainted_background_png", stem
-        )
+        background_1x_path = _background_path(root, "1x_inpainted_background_png", stem)
+        background_3x_path = _background_path(root, "3x_inpainted_background_png", stem)
         example_elements = []
         for element in elements:
             bbox_xyxy = [float(value) for value in element["xyxy_word_fit"]]
