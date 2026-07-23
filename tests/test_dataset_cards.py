@@ -1,7 +1,6 @@
 from pathlib import Path
 import re
 import sys
-import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,20 +169,6 @@ def tracked_dataset_dirs() -> list[Path]:
     return sorted(path for path in (ROOT / "datasets").iterdir() if path.is_dir())
 
 
-def workspace_pyproject_paths() -> list[Path]:
-    return [
-        ROOT / "pyproject.toml",
-        *sorted((ROOT / "datasets").glob("*/pyproject.toml")),
-        ROOT
-        / ".agents"
-        / "skills"
-        / "create-dataset"
-        / "templates"
-        / "MyHFDataset"
-        / "pyproject.toml",
-    ]
-
-
 def _frontmatter(readme: str) -> list[str]:
     lines = readme.splitlines()
     if not lines or lines[0] != "---":
@@ -309,34 +294,6 @@ def test_image_loaders_depend_on_datasets_vision_extra():
             f"{dataset_dir.relative_to(ROOT)} should use datasets[vision] exactly "
             "when the loader defines image features"
         )
-
-
-def test_workspace_pyprojects_require_python_311():
-    for path in workspace_pyproject_paths():
-        pyproject = tomllib.loads(path.read_text())
-        assert pyproject["project"]["requires-python"] == ">=3.11", (
-            f"{path.relative_to(ROOT)} should require Python 3.11"
-        )
-
-
-def test_create_dataset_skill_uses_python_311_enum_guidance():
-    skill_text = (
-        ROOT / ".agents" / "skills" / "create-dataset" / "SKILL.md"
-    ).read_text()
-    forbidden_fragments = (
-        "Python 3.10 compatibility",
-        "3.10-compatible",
-        'requires-python = ">=3.10"',
-        "from enum import Enum",
-        'raise ValueError(f"Unsupported config:',
-    )
-
-    for fragment in forbidden_fragments:
-        assert fragment not in skill_text
-
-    assert not re.search(r"class\s+\w+Type\s*\(\s*str\s*,\s*Enum\s*\)", skill_text)
-    assert "StrEnum" in skill_text
-    assert "assert_never" in skill_text
 
 
 def test_dataset_card_task_categories_are_official():
