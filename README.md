@@ -2,11 +2,9 @@
   <img src=".github/teaser.png" alt="Creative Graphic Design Datasets teaser" width="100%">
 </p>
 
-<p align="center">
-  <a href="https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml"><img src="https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-</p>
-
 # 🤗 Creative Graphic Design Datasets
+
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml)
 
 A collection of Hugging Face dataset loaders and dataset cards for graphic design research. This repository makes datasets for design generation, layout understanding, typography, editing, and aesthetic evaluation easier to find, load, and cite.
 
