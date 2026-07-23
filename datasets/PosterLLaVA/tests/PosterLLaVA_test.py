@@ -77,9 +77,7 @@ def tiny_qb_poster_data(tmp_path: Path) -> Path:
         ("original_poster", "poster_val.png"),
         ("inpainted_1x", "poster_val.png"),
     ):
-        Image.new("RGB", (8, 6), color=(255, 255, 255)).save(
-            raw / dirname / image_name
-        )
+        Image.new("RGB", (8, 6), color=(255, 255, 255)).save(raw / dirname / image_name)
 
     annotations = {
         "poster_train": {
@@ -111,9 +109,7 @@ def tiny_qb_poster_data(tmp_path: Path) -> Path:
             ],
         },
     }
-    (raw / "annotations.json").write_text(
-        json.dumps(annotations), encoding="utf-8"
-    )
+    (raw / "annotations.json").write_text(json.dumps(annotations), encoding="utf-8")
     return tmp_path
 
 
@@ -246,7 +242,7 @@ def test_loader_uses_python_311_enum_and_exhaustiveness_helpers(dataset_path: st
     assert "qb_poster = auto()" in loader_text
     assert "user_constrained = auto()" in loader_text
     assert "assert_never(self.config.name)" in loader_text
-    assert "def _assert" "_never" not in loader_text
+    assert "def _assert_never" not in loader_text
 
 
 @pytest.mark.skipif(
@@ -274,7 +270,10 @@ def test_load_dataset(dataset_path: str, repo_id: str, config_name: str):
         assert sample["elements"]
         assert sample["conversations"][0]["from"] == "human"
     else:
-        for split_name, expected_num_rows in _USER_CONSTRAINED_EXPECTED_NUM_ROWS.items():
+        for (
+            split_name,
+            expected_num_rows,
+        ) in _USER_CONSTRAINED_EXPECTED_NUM_ROWS.items():
             assert dataset[split_name].num_rows == expected_num_rows
         sample = dataset["train"][0]
         assert sample["source_dataset"] in {"cgl", "posterlayout"}

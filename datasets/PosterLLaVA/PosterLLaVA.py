@@ -442,7 +442,9 @@ class PosterLLaVA(ds.GeneratorBasedBuilder):
         config_name = str(self.config.name)
         archive_path = cache_dir / "posterllava" / f"{config_name}"
         if not archive_path.exists():
-            logger.info("Downloading PosterLLaVA %s data from Google Drive.", config_name)
+            logger.info(
+                "Downloading PosterLLaVA %s data from Google Drive.", config_name
+            )
             download_google_drive_file(_GOOGLE_DRIVE_IDS[config_name], archive_path)
 
         extracted_path = dl_manager.extract(str(archive_path))
