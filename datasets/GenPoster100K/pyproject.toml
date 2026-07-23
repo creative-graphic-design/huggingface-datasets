@@ -3,7 +3,7 @@ name = "gen-poster-100k"
 version = "0.1.0"
 description = "Hugging Face dataset loader for GenPoster-100K poster layout data."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 dependencies = [
     "datasets[vision]>=2.0.0,<4.0.0",

@@ -1,3 +1,4 @@
+import ast
 from pathlib import Path
 import re
 import sys
@@ -74,6 +75,32 @@ FORBIDDEN_PLACEHOLDERS = (
     "author={Xiao, Shishi and Wang, Yufei",
 )
 
+INTERNAL_POINT_OF_CONTACT = (
+    "https://github.com/creative-graphic-design/huggingface-datasets/issues"
+)
+
+HF_README_GUIDE_MAJOR_SECTIONS = {
+    "Dataset Description",
+    "Dataset Structure",
+    "Dataset Creation",
+    "Considerations for Using the Data",
+    "Additional Information",
+}
+
+LEGACY_DATASET_CARDS_MISSING_HF_README_GUIDE_MAJOR_SECTIONS = {
+    "BannerRequest400": {"Considerations for Using the Data"},
+    "CreativePSD": {"Dataset Creation"},
+    "Desigen": {
+        "Dataset Creation",
+        "Considerations for Using the Data",
+        "Additional Information",
+    },
+    "ObjectRemovalAlpha": {
+        "Considerations for Using the Data",
+        "Additional Information",
+    },
+}
+
 OFFICIAL_TASK_CATEGORIES = {
     "audio-classification",
     "automatic-speech-recognition",
@@ -126,8 +153,71 @@ def tracked_dataset_card_paths() -> list[Path]:
     return sorted((ROOT / "datasets").glob("*/README.md"))
 
 
+def dataset_card_and_template_paths() -> list[Path]:
+    return [
+        *tracked_dataset_card_paths(),
+        ROOT
+        / ".agents"
+        / "skills"
+        / "create-dataset"
+        / "templates"
+        / "MyHFDataset"
+        / "README.md",
+    ]
+
+
 def tracked_dataset_dirs() -> list[Path]:
     return sorted(path for path in (ROOT / "datasets").iterdir() if path.is_dir())
+
+
+def loader_and_template_python_paths() -> list[Path]:
+    return [
+        *sorted((ROOT / "datasets").glob("*/*.py")),
+        ROOT
+        / ".agents"
+        / "skills"
+        / "create-dataset"
+        / "templates"
+        / "MyHFDataset"
+        / "MyHFDataset.py",
+    ]
+
+
+def _parse_python(path: Path) -> ast.Module:
+    return ast.parse(path.read_text(), filename=str(path.relative_to(ROOT)))
+
+
+def _name_or_attr_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+
+def _is_self_config_name(node: ast.AST) -> bool:
+    return (
+        isinstance(node, ast.Attribute)
+        and node.attr == "name"
+        and isinstance(node.value, ast.Attribute)
+        and node.value.attr == "config"
+        and isinstance(node.value.value, ast.Name)
+        and node.value.value.id == "self"
+    )
+
+
+def _is_wildcard_case(pattern: ast.pattern) -> bool:
+    return isinstance(pattern, ast.MatchAs) and pattern.pattern is None
+
+
+def _body_contains_assert_never(body: list[ast.stmt]) -> bool:
+    for node in body:
+        for child in ast.walk(node):
+            if not isinstance(child, ast.Call):
+                continue
+            if _name_or_attr_name(child.func) == "assert_never":
+                return True
+    return False
 
 
 def _frontmatter(readme: str) -> list[str]:
@@ -139,6 +229,27 @@ def _frontmatter(readme: str) -> list[str]:
     except ValueError:
         return []
     return lines[1:end]
+
+
+def _markdown_headings(readme: str, level: int) -> list[str]:
+    lines = readme.splitlines()
+    start = 0
+    if lines[:1] == ["---"]:
+        try:
+            start = lines.index("---", 1) + 1
+        except ValueError:
+            start = 0
+
+    headings = []
+    in_code_block = False
+    marker = "#" * level + " "
+    for line in lines[start:]:
+        if line.startswith("```"):
+            in_code_block = not in_code_block
+            continue
+        if not in_code_block and line.startswith(marker):
+            headings.append(line.removeprefix(marker).strip())
+    return headings
 
 
 def _task_categories(frontmatter: list[str]) -> list[str]:
@@ -226,12 +337,83 @@ def test_image_loaders_depend_on_datasets_vision_extra():
     for dataset_dir in tracked_dataset_dirs():
         loader_text = (dataset_dir / f"{dataset_dir.name}.py").read_text()
         pyproject_text = (dataset_dir / "pyproject.toml").read_text()
-        uses_image_feature = "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+        uses_image_feature = (
+            "ds.Image(" in loader_text or "datasets.Image(" in loader_text
+        )
 
         assert ("datasets[vision]" in pyproject_text) == uses_image_feature, (
             f"{dataset_dir.relative_to(ROOT)} should use datasets[vision] exactly "
             "when the loader defines image features"
         )
+
+
+def test_loader_and_template_enums_use_str_enum():
+    for path in loader_and_template_python_paths():
+        tree = _parse_python(path)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ClassDef):
+                continue
+
+            base_names = {_name_or_attr_name(base) for base in node.bases}
+            assert not {"str", "Enum"}.issubset(base_names), (
+                f"{path.relative_to(ROOT)}:{node.lineno} should use StrEnum instead "
+                f"of class {node.name}(str, Enum)"
+            )
+
+
+def test_config_name_match_fallbacks_use_assert_never():
+    for path in loader_and_template_python_paths():
+        tree = _parse_python(path)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Match) or not _is_self_config_name(
+                node.subject
+            ):
+                continue
+
+            for case in node.cases:
+                if _is_wildcard_case(case.pattern):
+                    assert _body_contains_assert_never(case.body), (
+                        f"{path.relative_to(ROOT)}:{case.pattern.lineno} should use "
+                        "assert_never(...) in match self.config.name case _ fallback"
+                    )
+
+
+def test_loader_and_template_exhaustiveness_uses_typing_assert_never():
+    for path in loader_and_template_python_paths():
+        tree = _parse_python(path)
+        for node in ast.walk(tree):
+            assert not (
+                isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and node.name == "_assert_never"
+            ), (
+                f"{path.relative_to(ROOT)}:{node.lineno} should use "
+                "typing.assert_never instead of a custom _assert_never"
+            )
+
+            if isinstance(node, ast.ImportFrom) and node.module == "typing":
+                imported_names = {alias.name for alias in node.names}
+                assert "NoReturn" not in imported_names, (
+                    f"{path.relative_to(ROOT)}:{node.lineno} should use "
+                    "typing.assert_never instead of NoReturn-based fallbacks"
+                )
+            if isinstance(node, ast.Import):
+                imported_names = {alias.name for alias in node.names}
+                assert "NoReturn" not in imported_names, (
+                    f"{path.relative_to(ROOT)}:{node.lineno} should use "
+                    "typing.assert_never instead of NoReturn-based fallbacks"
+                )
+
+
+def test_create_dataset_skill_documents_str_enum_assert_never_policy():
+    skill_text = (
+        ROOT / ".agents" / "skills" / "create-dataset" / "SKILL.md"
+    ).read_text()
+
+    assert "StrEnum" in skill_text
+    assert "assert_never" in skill_text
+    assert "class MyHFDatasetType(str, Enum)" not in skill_text
+    assert "Python 3.10 compatibility" not in skill_text
+    assert "3.10-compatible" not in skill_text
 
 
 def test_dataset_card_task_categories_are_official():
@@ -286,6 +468,38 @@ def test_dataset_card_point_of_contact_values_are_render_safe():
             assert not re.fullmatch(r'["\'().\s]+', value), (
                 f"{path.relative_to(ROOT)}:{line_number} is punctuation only"
             )
+
+
+def test_dataset_card_point_of_contact_does_not_use_upstream_github_issues():
+    for path in dataset_card_and_template_paths():
+        for line_number, line in enumerate(path.read_text().splitlines(), start=1):
+            if not line.startswith("- **Point of Contact:**"):
+                continue
+
+            value = line.removeprefix("- **Point of Contact:**").strip()
+            if re.fullmatch(r"https://github\.com/[^/\s]+/[^/\s]+/issues", value):
+                assert value == INTERNAL_POINT_OF_CONTACT, (
+                    f"{path.relative_to(ROOT)}:{line_number} should use "
+                    f"{INTERNAL_POINT_OF_CONTACT} as Point of Contact"
+                )
+
+
+def test_dataset_cards_follow_hf_readme_guide_major_sections():
+    for path in dataset_card_and_template_paths():
+        sections = set(_markdown_headings(path.read_text(), level=2))
+        missing_sections = HF_README_GUIDE_MAJOR_SECTIONS - sections
+        dataset_name = path.parent.name
+        legacy_missing_sections = (
+            LEGACY_DATASET_CARDS_MISSING_HF_README_GUIDE_MAJOR_SECTIONS.get(
+                dataset_name,
+                set(),
+            )
+        )
+
+        assert missing_sections == legacy_missing_sections, (
+            f"{path.relative_to(ROOT)} should include the Hugging Face README guide "
+            f"major sections; missing {sorted(missing_sections)!r}"
+        )
 
 
 def test_root_readme_uses_public_hub_repo_ids():

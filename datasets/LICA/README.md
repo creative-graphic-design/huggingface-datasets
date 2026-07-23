@@ -33,7 +33,8 @@ source_datasets:
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/LICA
 - **Paper (arXiv):** https://arxiv.org/abs/2603.16098
 - **Data:** https://storage.googleapis.com/lica-assets/websites/blog/lica-data.zip
-- **Point of Contact:** https://github.com/lica-world/lica-dataset/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/lica-world/lica-dataset/issues
 
 ### Dataset Summary
 

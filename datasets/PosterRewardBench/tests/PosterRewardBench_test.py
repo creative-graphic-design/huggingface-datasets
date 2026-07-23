@@ -134,7 +134,9 @@ def test_iter_examples_resolves_pair_paths_and_preserves_messages(
 
 
 def test_paper_reported_counts_are_consistent():
-    assert sum(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.values()) == _PAPER_EXPECTED_TOTAL_PAIRS
+    assert (
+        sum(_PAPER_EXPECTED_NUM_TEST_BY_CONFIG.values()) == _PAPER_EXPECTED_TOTAL_PAIRS
+    )
     assert _PAPER_EXPECTED_NUM_IMAGES_BY_CONFIG == {
         "basic": 1034,
         "advanced": 2446,

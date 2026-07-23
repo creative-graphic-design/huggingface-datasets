@@ -38,7 +38,8 @@ configs:
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/DEsignBench-Prompts
 - **Original Code:** https://github.com/microsoft/design-bench
 - **Paper (arXiv):** https://arxiv.org/abs/2310.15144
-- **Point of Contact:** https://github.com/microsoft/design-bench/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/microsoft/design-bench/issues
 
 ### Dataset Summary
 
