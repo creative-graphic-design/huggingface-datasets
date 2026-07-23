@@ -173,9 +173,7 @@ def test_iter_examples_resolves_images_and_preserves_metadata(
     assert example["path"] == "alignment/000_30_center_.png"
     assert example["prompt"] == "Choose the text alignment."
     assert json.loads(example["gt_json"]) == ["center-aligned"]
-    assert json.loads(example["metadata_json"]) == {
-        "alignment": ["center-aligned"]
-    }
+    assert json.loads(example["metadata_json"]) == {"alignment": ["center-aligned"]}
     assert Path(example["image"]).is_file()
     assert Path(example["image_path"]).is_file()
 

@@ -4,6 +4,8 @@
 
 # 🤗 Creative Graphic Design Datasets
 
+[![CI](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml/badge.svg)](https://github.com/creative-graphic-design/huggingface-datasets/actions/workflows/ci.yml)
+
 A collection of Hugging Face dataset loaders and dataset cards for graphic design research. This repository makes datasets for design generation, layout understanding, typography, editing, and aesthetic evaluation easier to find, load, and cite.
 
 ## Datasets

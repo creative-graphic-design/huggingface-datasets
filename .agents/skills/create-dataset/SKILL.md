@@ -39,6 +39,49 @@ Guide the user to customize the copied files. Ask them for:
 4. **license**: License (e.g., MIT, Apache-2.0, Unknown)
 5. **data_urls**: URLs to actual data files
 
+### Step 2.0: Complete Source Audit Before Writing Dataset Metadata
+
+Do not write the dataset card, schema, README, or root README entry from a GitHub URL alone.
+Before implementation, read the primary or near-primary sources that define the dataset:
+
+- arXiv abstract/html page or paper PDF
+- Official project page, if available
+- Upstream README
+- Upstream data release page or dataset/source page
+- Upstream data loading, preprocessing, or conversion code
+- License file, license section, or dataset hosting license metadata
+
+Record the audit findings in the dataset README and root README. Reflect the source evidence in:
+
+- `Summary`
+- `Dataset Description`
+- `Data Splits`
+- `Dataset Creation`
+- `Limitations`
+- `Citation`
+- Root `README.md` badges and dataset description
+
+If a source is missing or inaccessible, state that specifically in the dataset README instead of
+filling the section from assumptions.
+
+### Point of Contact Policy
+
+Use this repository's issue tracker as the dataset card `Point of Contact` by default:
+
+```markdown
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+```
+
+Do not use an upstream repository issue URL as `Point of Contact`. If upstream contact information
+is useful, keep it on a separate line such as:
+
+```markdown
+- **Original Source Contact:** https://github.com/upstream/project/issues
+```
+
+This keeps maintenance questions for the mirrored Hugging Face dataset separate from questions for
+the original data authors or upstream maintainers.
+
 **Files to customize:**
 
 1. **`{DatasetName}.py`** - Main dataset implementation:
@@ -84,7 +127,7 @@ name = "{dataset-name}"
 version = "0.1.0"
 description = "..."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "datasets[vision]>=2.0.0,<4.0.0",
 ]
@@ -216,11 +259,11 @@ BUILDER_CONFIGS = [
 ]
 ```
 
-**Advanced (with StrEnum):**
+**Advanced (string Enum):**
 
 ```python
-from enum import StrEnum, auto
 from dataclasses import dataclass
+from enum import StrEnum, auto
 
 class MyHFDatasetType(StrEnum):
     config1 = auto()
@@ -246,13 +289,13 @@ When working with multiple configurations, these patterns improve type safety, e
 - **Exhaustiveness Checking**: Type checker ensures all config cases are handled
 - **Maintainability**: Adding new configs triggers compile errors where implementation is needed
 
-**Pattern 1: StrEnum with Direct `name` Field**
+**Pattern 1: String Enum with Direct `name` Field**
 
-Define config types using StrEnum and use the enum directly in the `name` field:
+Define config types using `StrEnum` and use the enum directly in the `name` field:
 
 ```python
-from enum import StrEnum, auto
 from dataclasses import dataclass
+from enum import StrEnum, auto
 
 class MyHFDatasetType(StrEnum):
     config1 = auto()
@@ -272,9 +315,9 @@ BUILDER_CONFIGS = [
 config: MyHFDatasetConfig
 ```
 
-**Pattern 2: `match/case` with `assert_never`**
+**Pattern 2: `match/case` with Exhaustiveness Check**
 
-Use `match/case` statements with `assert_never` to ensure all config cases are handled:
+Use `match/case` statements and `assert_never` to make unexpected config names visible to type checkers:
 
 ```python
 from typing import assert_never
@@ -310,8 +353,8 @@ def _info(self) -> ds.DatasetInfo:
 **Complete Example:**
 
 ```python
-from enum import StrEnum, auto
 from dataclasses import dataclass
+from enum import StrEnum, auto
 from typing import List, assert_never
 import datasets as ds
 
@@ -387,7 +430,7 @@ class MyDataset(ds.GeneratorBasedBuilder):
 
 **When to Use:**
 
-- Use StrEnum + direct `name` field for **any multi-config dataset**
+- Use `StrEnum` + direct `name` field for **any multi-config dataset**
 - Use `match/case` with `assert_never` when **config affects behavior** in methods
 
 #### 4.5 Define Features
@@ -753,6 +796,16 @@ Review `datasets/MyHFDataset/README.md` (or your dataset name) and update any pl
 - Verify license information matches the source repository
 - Add complete citation information if available
 
+Keep the Hugging Face README guide major sections in every dataset README. The repository CI
+checks these top-level headings in `tests/test_dataset_cards.py`, so new dataset cards must
+include:
+
+- `## Dataset Description`
+- `## Dataset Structure`
+- `## Dataset Creation`
+- `## Considerations for Using the Data`
+- `## Additional Information`
+
 **Add a loading example to the Data Instances section**
 
 Every dataset README must include a concise loading example in `### Data Instances`, using
@@ -954,12 +1007,17 @@ uv run pytest -vsx datasets/MyData/tests
 
 - [ ] User info collected
 - [ ] Files generated from templates
+- [ ] Source audit completed from paper/project page/upstream README/source code/data page/license
+- [ ] Source audit findings reflected in dataset README and root README badges/description
 - [ ] \_URLS updated
 - [ ] Features defined
 - [ ] \_split_generators implemented
 - [ ] \_generate_examples implemented
 - [ ] Tests updated
 - [ ] README.md updated
+- [ ] Dataset README includes the Hugging Face README guide major sections checked by CI
+- [ ] Dataset README uses this repository's issues URL as `Point of Contact`
+- [ ] Upstream contact, if useful, is listed separately as `Original Source Contact` or `Upstream Maintainer`
 - [ ] Tests passing
 - [ ] Direct `test_load_dataset` pytest target passes with `ds.load_dataset(...)`
 - [ ] Dataset loads correctly

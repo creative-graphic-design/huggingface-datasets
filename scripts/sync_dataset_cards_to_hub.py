@@ -48,7 +48,9 @@ def split_frontmatter(text: str) -> tuple[str, str]:
 
 
 def frontmatter_has_key(frontmatter: str, key: str) -> bool:
-    return re.search(rf"^{re.escape(key)}:", frontmatter, flags=re.MULTILINE) is not None
+    return (
+        re.search(rf"^{re.escape(key)}:", frontmatter, flags=re.MULTILINE) is not None
+    )
 
 
 def extract_top_level_block(frontmatter: str, key: str) -> str:

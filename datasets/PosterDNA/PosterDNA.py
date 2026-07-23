@@ -109,7 +109,9 @@ def _extract_zip(
     return output_dir
 
 
-def _find_dataset_root(extracted_dir: str | pathlib.Path, expected_name: str) -> pathlib.Path:
+def _find_dataset_root(
+    extracted_dir: str | pathlib.Path, expected_name: str
+) -> pathlib.Path:
     root = _as_path(extracted_dir)
     if root.name == expected_name and root.is_dir():
         return root
@@ -201,7 +203,9 @@ def _row_id(row: dict[str, Any], fallback: int) -> str:
     return f"{fallback:06d}"
 
 
-def _iter_test_set_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dict[str, Any]]]:
+def _iter_test_set_examples(
+    root: str | pathlib.Path,
+) -> Iterable[tuple[str, dict[str, Any]]]:
     root = _as_path(root)
     assets = _index_files(root)
 
@@ -227,7 +231,9 @@ def _iter_test_set_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dic
         )
 
 
-def _iter_posterdna_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dict[str, Any]]]:
+def _iter_posterdna_examples(
+    root: str | pathlib.Path,
+) -> Iterable[tuple[str, dict[str, Any]]]:
     root = _as_path(root)
     assets = _index_files(root)
     jsonl_path = next(iter(sorted(assets["jsonl"].values())), None)
@@ -256,14 +262,12 @@ def _iter_posterdna_examples(root: str | pathlib.Path) -> Iterable[tuple[str, di
         for index, line in enumerate(f):
             row = json.loads(line)
             example_id = _row_id(row, index)
-            image_path = (
-                _resolve_referenced_asset(row, assets["image"], _IMAGE_EXTENSIONS)
-                or assets["image"].get(example_id)
-            )
-            html_path = (
-                _resolve_referenced_asset(row, assets["html"], {".html"})
-                or assets["html"].get(example_id)
-            )
+            image_path = _resolve_referenced_asset(
+                row, assets["image"], _IMAGE_EXTENSIONS
+            ) or assets["image"].get(example_id)
+            html_path = _resolve_referenced_asset(
+                row, assets["html"], {".html"}
+            ) or assets["html"].get(example_id)
 
             yield (
                 example_id,

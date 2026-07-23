@@ -62,7 +62,8 @@ source_datasets:
 - **Paper (Preprint):** https://arxiv.org/abs/XXXX.XXXXX <!-- TODO: Add arXiv URL if available -->
 - **Paper (Conference/Journal Name):** https://example.com/paper <!-- TODO: Add conference/journal URL when published -->
 - **Leaderboard:** [More Information Needed] <!-- TODO: If the dataset supports an active leaderboard, add link here -->
-- **Point of Contact:** More Information Needed <!-- TODO: Add a raw URL or plain-text contact; avoid empty markdown links -->
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** More Information Needed <!-- TODO: Add upstream maintainer contact only if useful; do not use it as Point of Contact -->
 
 ### Dataset Summary
 

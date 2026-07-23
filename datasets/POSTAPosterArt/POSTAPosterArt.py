@@ -149,7 +149,9 @@ def _flatten_text_layers(layers: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return flattened
 
 
-def _iter_text_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dict[str, Any]]]:
+def _iter_text_examples(
+    root: str | pathlib.Path,
+) -> Iterable[tuple[str, dict[str, Any]]]:
     root = _as_path(root)
     records: dict[str, dict[str, pathlib.Path]] = {}
 
@@ -195,7 +197,9 @@ def _iter_text_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dict[st
         )
 
 
-def _iter_design_examples(root: str | pathlib.Path) -> Iterable[tuple[str, dict[str, Any]]]:
+def _iter_design_examples(
+    root: str | pathlib.Path,
+) -> Iterable[tuple[str, dict[str, Any]]]:
     root = _as_path(root)
     background_dir = _find_first_dir(root, "background")
     poster_dir = _find_first_dir(root, "JPG")

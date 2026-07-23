@@ -3,5 +3,5 @@ name = "poster-reward-bench"
 version = "0.1.0"
 description = "PosterRewardBench preference pairs for poster reward-model evaluation"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = ["datasets[vision]>=2.0.0,<4.0.0"]
