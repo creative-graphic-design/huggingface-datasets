@@ -167,9 +167,7 @@ def test_iter_image_examples_normalizes_missing_annotations(
         "sentiments": {"10/170489.png": [["14"], ["12"]]},
         "slogans": {},
         "strategies": {},
-        "symbols": {
-            "10/170489.png": [[58.0, 14.0, 430.0, 466.0, "electronics"]]
-        },
+        "symbols": {"10/170489.png": [[58.0, 14.0, 430.0, 466.0, "electronics"]]},
         "topics": {"10/170489.png": ["2", "3"]},
     }
     for name, payload in payloads.items():

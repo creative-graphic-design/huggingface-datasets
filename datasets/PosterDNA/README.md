@@ -73,7 +73,8 @@ configs:
 - **Paper (AAAI 2026):** https://doi.org/10.1609/aaai.v40i9.37656
 - **Paper (arXiv):** https://arxiv.org/abs/2601.03993
 - **Leaderboard:** Not available in the original release.
-- **Point of Contact:** https://github.com/wuhaer/PosterVerse/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/wuhaer/PosterVerse/issues
 
 ### Dataset Summary
 

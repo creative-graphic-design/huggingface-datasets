@@ -3,7 +3,7 @@ name = "cgl-dataset-v2"
 version = "0.1.0"
 description = "CGL-Dataset v2 loader for Hugging Face Datasets"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "datasets[vision]>=2.0.0,<4.0.0",
     "gdown>=5.2.0",

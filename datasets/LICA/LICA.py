@@ -252,7 +252,9 @@ class LICA(ds.GeneratorBasedBuilder):
         return _find_lica_data_dir(archive_path)
 
     def _generate_examples(self, data_dir: pathlib.Path):
-        template_annotations_path = data_dir / "annotations" / "template_annotations.json"
+        template_annotations_path = (
+            data_dir / "annotations" / "template_annotations.json"
+        )
         template_annotations = (
             _read_json(template_annotations_path)
             if template_annotations_path.exists()
@@ -277,7 +279,9 @@ class LICA(ds.GeneratorBasedBuilder):
             template_id = row["template_id"]
 
             layout_path = data_dir / "layouts" / template_id / f"{layout_id}.json"
-            annotation_path = data_dir / "annotations" / template_id / f"{layout_id}.json"
+            annotation_path = (
+                data_dir / "annotations" / template_id / f"{layout_id}.json"
+            )
 
             layout = _read_json(layout_path)
             annotation = _annotation_or_empty(annotation_path)
@@ -311,7 +315,9 @@ class LICA(ds.GeneratorBasedBuilder):
                     "render_type": render_type,
                     "render_path": str(render_path),
                     "render_image": render_image,
-                    "render_video_path": str(render_path) if render_type == "mp4" else "",
+                    "render_video_path": str(render_path)
+                    if render_type == "mp4"
+                    else "",
                     "layout_width": _parse_px(layout.get("width")),
                     "layout_height": _parse_px(layout.get("height")),
                     "layout_background": layout.get("background", ""),

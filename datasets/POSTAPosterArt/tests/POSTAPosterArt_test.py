@@ -170,9 +170,7 @@ def test_iter_design_examples_matches_assets_by_stem(
         ],
     }
     (root / "json").mkdir(parents=True)
-    (root / "json" / "0002.json").write_text(
-        json.dumps(annotation), encoding="utf-8"
-    )
+    (root / "json" / "0002.json").write_text(json.dumps(annotation), encoding="utf-8")
 
     examples = list(dataset_module._iter_design_examples(tmp_path))
 

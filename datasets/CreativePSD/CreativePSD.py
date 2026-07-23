@@ -138,16 +138,14 @@ def _validate_zip_paths(
             len(known_invalid_names),
             ", ".join(sorted(known_invalid_names)),
         )
-        zip_paths = [
-            path for path in zip_paths if path.name not in known_invalid_names
-        ]
+        zip_paths = [path for path in zip_paths if path.name not in known_invalid_names]
 
     if is_modelscope_checkout:
         known_unavailable_names = (
             _KNOWN_UNAVAILABLE_POSTER_ARCHIVES - zip_names
         ) | known_invalid_names
-        expected_usable_zip_count = (
-            _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT - len(known_unavailable_names)
+        expected_usable_zip_count = _EXPECTED_MODELSCOPE_POSTER_ZIP_COUNT - len(
+            known_unavailable_names
         )
     else:
         expected_usable_zip_count = len(zip_paths)

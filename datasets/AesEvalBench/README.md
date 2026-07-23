@@ -66,7 +66,8 @@ task_categories:
 - **Paper (arXiv):** https://arxiv.org/abs/2603.01083
 - **Data:** https://drive.google.com/file/d/1W5ocLYW0U-znD1Aq3C2xg_TLxL80jeiJ/view?usp=sharing
 - **Leaderboard:** Not available in the original release.
-- **Point of Contact:** https://github.com/arctanxarc/AesEval-Bench/issues
+- **Point of Contact:** https://github.com/creative-graphic-design/huggingface-datasets/issues
+- **Original Source Contact:** https://github.com/arctanxarc/AesEval-Bench/issues
 
 ### Dataset Summary
 

@@ -127,9 +127,7 @@ _TASKS: dict[PosterIQType, PosterIQTask] = {
         "und_task/poster_ocr.json", 205, True, False, True, True
     ),
     PosterIQType.rotation: PosterIQTask("und_task/rotation.json", 205, True, True),
-    PosterIQType.simple_ocr: PosterIQTask(
-        "und_task/simple_ocr.json", 400, True, True
-    ),
+    PosterIQType.simple_ocr: PosterIQTask("und_task/simple_ocr.json", 400, True, True),
     PosterIQType.style_understanding: PosterIQTask(
         "und_task/style_understanding.json", 256, True, True
     ),
@@ -200,7 +198,9 @@ def _find_data_root(extracted_dir: str | pathlib.Path) -> pathlib.Path:
     raise FileNotFoundError(f"Could not find data/ under extracted archive: {root}")
 
 
-def _resolve_data_path(data_root: str | pathlib.Path, relative_path: str) -> pathlib.Path:
+def _resolve_data_path(
+    data_root: str | pathlib.Path, relative_path: str
+) -> pathlib.Path:
     path = pathlib.PurePosixPath(_normalize_path(relative_path))
     return _as_path(data_root).joinpath(*path.parts)
 
