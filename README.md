@@ -105,6 +105,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Poster understanding images, generation prompts, and design-task metadata for typography, layout, OCR, composition, style, and design intention.
     - ➡️ Input: Poster image plus task prompt, or generation prompt only.
     - ⬅️ Output: Task answer metadata, ratings, OCR/localization labels, or generation criteria.
+- **[PosterLLaVA](datasets/PosterLLaVA/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-2406.02884-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2406.02884) [![Paper](https://img.shields.io/badge/Paper-TMM%2726-blue?logo=doi&logoColor=white)](https://arxiv.org/abs/2406.02884) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/posterllava/PosterLLaVA) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PosterLLaVA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PosterLLaVA)
+  - Poster layout data with QB-Poster annotations and user constraints for CGL and PosterLayout examples.
+    - ➡️ Input: Poster/background image plus foreground element labels, or user constraint text.
+    - ⬅️ Output: Normalized layout boxes or natural-language layout constraints.
 - **[PosterRewardBench](datasets/PosterRewardBench/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2603.29855-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.29855) [![Paper](https://img.shields.io/badge/Paper-CVPR%2726-blue?logo=doi&logoColor=white)](https://openaccess.thecvf.com/content/CVPR2026/html/Lai_PosterReward_Unlocking_Accurate_Evaluation_for_High-Quality_Graphic_Design_Generation_CVPR_2026_paper.html) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/MeiGen-AI/PosterReward) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PosterRewardBench-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PosterRewardBench)
   - Poster prompts with Basic and Advanced chosen/rejected image preference pairs.
