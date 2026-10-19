@@ -34,7 +34,7 @@ configs:
 
 ### Dataset Summary
 
-This release maps 783 relative PittAds image identifiers to 10,450 image URL references (10,208 unique URLs) curated through reverse image search. It is a metadata subset associated with _Benchmarking VLMs' Reasoning About Persuasive Atypical Images_.
+This release maps 783 relative PittAds image identifiers to 10,450 image URL references (10,208 unique URLs) curated through reverse image search. It is a metadata subset associated with *Benchmarking VLMs' Reasoning About Persuasive Atypical Images*.
 
 The paper introduces multi-label atypicality classification, atypicality statement retrieval, and atypical object recognition. The released JSON contains image identifiers and URL lists only; it does not include image files, task prompts, or ground-truth labels, so it cannot reproduce the full benchmark by itself.
 
@@ -80,9 +80,9 @@ An instance contains an image identifier and its associated URL list:
 
 The upstream release is a single JSON file with 783 image identifiers and no named train, validation, or test partition. This implementation exposes the file as a `test` split because it accompanies an evaluation benchmark; that split name is a loader convention, not a split assignment documented by the upstream authors.
 
-| Split  | Image identifiers | URL references |
-| :----- | ----------------: | -------------: |
-| `test` |               783 |         10,450 |
+| Split | Image identifiers | URL references |
+|:--|--:|--:|
+| `test` | 783 | 10,450 |
 
 ## Dataset Creation
 
