@@ -7,11 +7,36 @@ from types import ModuleType
 
 import datasets as ds
 import pytest
+from huggingface_hub import HfApi
 
 
 @pytest.fixture
 def dataset_path() -> Path:
     return Path(__file__).resolve().parents[1] / "PersuasiveAdVLMBenchmark.py"
+
+
+@pytest.fixture
+def repo_id() -> str:
+    return "creative-graphic-design/PersuasiveAdVLMBenchmark"
+
+
+@pytest.fixture
+def hf_api() -> HfApi:
+    return HfApi()
+
+
+@pytest.fixture
+def build_upload_payload(dataset_path: Path):
+    script_path = dataset_path.parents[2] / "scripts" / "sync_dataset_cards_to_hub.py"
+    spec = importlib.util.spec_from_file_location(
+        "sync_dataset_cards_to_hub",
+        script_path,
+    )
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.build_upload_payload
 
 
 @pytest.fixture
@@ -99,15 +124,34 @@ def test_iter_examples_rejects_invalid_metadata(
     os.environ.get("PERSUASIVE_AD_VLM_RUN_DOWNLOAD_TESTS") != "1",
     reason="Set PERSUASIVE_AD_VLM_RUN_DOWNLOAD_TESTS=1 to download the source JSON.",
 )
-def test_load_dataset(dataset_path: Path):
+def test_load_dataset(dataset_path: Path, repo_id: str):
     dataset = ds.load_dataset(
         path=str(dataset_path),
-        split="test",
         trust_remote_code=True,
     )
 
-    assert isinstance(dataset, ds.Dataset)
-    assert dataset.num_rows == 783
-    assert set(dataset.features) == {"id", "image_path", "image_urls"}
-    assert dataset[0]["id"] == dataset[0]["image_path"]
-    assert dataset[0]["image_urls"]
+    assert isinstance(dataset, ds.DatasetDict)
+    assert list(dataset) == ["test"]
+    test_split = dataset["test"]
+    assert test_split.num_rows == 783
+    assert set(test_split.features) == {"id", "image_path", "image_urls"}
+    assert test_split[0]["id"] == test_split[0]["image_path"]
+    assert test_split[0]["image_urls"]
+
+    if os.environ.get("HF_WRITE_TESTS"):
+        dataset.push_to_hub(repo_id=repo_id, private=False)
+
+
+def test_push_readme_to_hub(hf_api: HfApi, repo_id: str, build_upload_payload):
+    if not os.environ.get("HF_WRITE_TESTS"):
+        pytest.skip("Set HF_WRITE_TESTS=1 to upload files to Hugging Face Hub.")
+
+    upload_repo_id, card_text = build_upload_payload("PersuasiveAdVLMBenchmark")
+    assert upload_repo_id == repo_id
+
+    hf_api.upload_file(
+        path_or_fileobj=card_text.encode(),
+        path_in_repo="README.md",
+        repo_id=repo_id,
+        repo_type="dataset",
+    )
