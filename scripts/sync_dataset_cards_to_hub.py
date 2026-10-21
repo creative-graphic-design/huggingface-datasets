@@ -28,6 +28,7 @@ DATASET_CARD_REPOS = {
     "Magazine": "creative-graphic-design/Magazine",
     "ObjectRemovalAlpha": "creative-graphic-design/ObjectRemovalAlpha",
     "PKUPosterLayout": "creative-graphic-design/PKU-PosterLayout",
+    "PersuasiveAdVLMBenchmark": "creative-graphic-design/PersuasiveAdVLMBenchmark",
     "PittImageVideoAdsDataset": "creative-graphic-design/PittImageVideoAdsDataset",
     "POSTAPosterArt": "creative-graphic-design/POSTAPosterArt",
     "PosterErase": "creative-graphic-design/PosterErase",

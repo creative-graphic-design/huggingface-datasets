@@ -7,7 +7,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-07-15T16:16:22.828137092Z"
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
 exclude-newer-span = "P7D"
 
 [manifest]
@@ -29,14 +29,15 @@ members = [
     "lica",
     "magazine",
     "object-removal-alpha",
+    "persuasive-ad-vlm-benchmark",
     "pitt-image-video-ads-dataset",
     "pku-poster-layout",
     "posta-poster-art",
     "poster-dna",
     "poster-erase",
     "poster-iq",
-    "poster-reward-bench",
     "poster-llava",
+    "poster-reward-bench",
     "publaynet",
     "rico",
 ]
@@ -477,34 +478,34 @@ wheels = [
 
 [package.optional-dependencies]
 cudart = [
-    { name = "nvidia-cuda-runtime", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-runtime" },
 ]
 cufft = [
-    { name = "nvidia-cufft", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cufft" },
 ]
 cufile = [
-    { name = "nvidia-cufile", marker = "sys_platform == 'linux'" },
+    { name = "nvidia-cufile" },
 ]
 cupti = [
-    { name = "nvidia-cuda-cupti", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-cupti" },
 ]
 curand = [
-    { name = "nvidia-curand", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-curand" },
 ]
 cusolver = [
-    { name = "nvidia-cusolver", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cusolver" },
 ]
 cusparse = [
-    { name = "nvidia-cusparse", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cusparse" },
 ]
 nvjitlink = [
-    { name = "nvidia-nvjitlink", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-nvjitlink" },
 ]
 nvrtc = [
-    { name = "nvidia-cuda-nvrtc", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-nvrtc" },
 ]
 nvtx = [
-    { name = "nvidia-nvtx", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-nvtx" },
 ]
 
 [[package]]
@@ -1479,6 +1480,21 @@ wheels = [
 ]
 
 [[package]]
+name = "persuasive-ad-vlm-benchmark"
+version = "0.1.0"
+source = { virtual = "datasets/PersuasiveAdVLMBenchmark" }
+dependencies = [
+    { name = "datasets" },
+    { name = "gdown" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "datasets", specifier = ">=2.0.0,<4.0.0" },
+    { name = "gdown", specifier = ">=5.2.0" },
+]
+
+[[package]]
 name = "pillow"
 version = "11.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1665,17 +1681,6 @@ dependencies = [
 requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
-name = "poster-reward-bench"
-version = "0.1.0"
-source = { virtual = "datasets/PosterRewardBench" }
-dependencies = [
-    { name = "datasets", extra = ["vision"] },
-]
-
-[package.metadata]
-requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
-
-[[package]]
 name = "poster-llava"
 version = "0.1.0"
 source = { virtual = "datasets/PosterLLaVA" }
@@ -1691,6 +1696,17 @@ requires-dist = [
     { name = "gdown", specifier = ">=5.2.0" },
     { name = "tenacity", specifier = ">=9.1.2" },
 ]
+
+[[package]]
+name = "poster-reward-bench"
+version = "0.1.0"
+source = { virtual = "datasets/PosterRewardBench" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "pre-commit"

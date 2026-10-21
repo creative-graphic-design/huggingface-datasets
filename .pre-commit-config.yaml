@@ -26,3 +26,9 @@ repos:
         entry: uv run pytest -q tests/test_dataset_cards.py
         language: system
         pass_filenames: false
+
+      - id: persuasive-ad-vlm-tests
+        name: PersuasiveAdVLMBenchmark tests
+        entry: uv run pytest -q datasets/PersuasiveAdVLMBenchmark/tests/
+        language: system
+        pass_filenames: false
