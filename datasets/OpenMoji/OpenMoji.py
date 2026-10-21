@@ -17,19 +17,24 @@ from typing import Any
 
 import datasets as ds
 
-_CITATION = """\
+_OPENMOJI_VERSION = "17.0.0"
+
+_CITATION = (
+    """\
 @misc{openmoji,
   author = {Groß, Benedikt and Utz, Daniel and The OpenMoji Contributors},
   title = {OpenMoji},
   year = {2026},
-  version = {17.0.0},
+  version = {%s},
   doi = {10.5281/zenodo.19704720},
   url = {https://doi.org/10.5281/zenodo.19704720}
 }
 """
+    % _OPENMOJI_VERSION
+)
 
-_DESCRIPTION = """\
-OpenMoji 17.0.0 contains 4,495 Unicode and custom emoji and icon entries, including \
+_DESCRIPTION = f"""\
+OpenMoji {_OPENMOJI_VERSION} contains 4,495 Unicode and custom emoji and icon entries, including \
 skin-tone variants. Each row includes upstream metadata, color and black SVG source, \
 and 618 x 618 PNG images.
 """
@@ -38,11 +43,11 @@ _HOMEPAGE = "https://github.com/hfg-gmuend/openmoji"
 _LICENSE = "cc-by-sa-4.0"
 
 _URLS = {
-    "svg_color": "https://github.com/hfg-gmuend/openmoji/releases/download/17.0.0/openmoji-svg-color.zip",
-    "svg_black": "https://github.com/hfg-gmuend/openmoji/releases/download/17.0.0/openmoji-svg-black.zip",
-    "image_color": "https://github.com/hfg-gmuend/openmoji/releases/download/17.0.0/openmoji-618x618-color.zip",
-    "image_black": "https://github.com/hfg-gmuend/openmoji/releases/download/17.0.0/openmoji-618x618-black.zip",
-    "metadata": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/17.0.0/data/openmoji.json",
+    "svg_color": f"https://github.com/hfg-gmuend/openmoji/releases/download/{_OPENMOJI_VERSION}/openmoji-svg-color.zip",
+    "svg_black": f"https://github.com/hfg-gmuend/openmoji/releases/download/{_OPENMOJI_VERSION}/openmoji-svg-black.zip",
+    "image_color": f"https://github.com/hfg-gmuend/openmoji/releases/download/{_OPENMOJI_VERSION}/openmoji-618x618-color.zip",
+    "image_black": f"https://github.com/hfg-gmuend/openmoji/releases/download/{_OPENMOJI_VERSION}/openmoji-618x618-black.zip",
+    "metadata": f"https://raw.githubusercontent.com/hfg-gmuend/openmoji/{_OPENMOJI_VERSION}/data/openmoji.json",
 }
 
 
@@ -83,7 +88,7 @@ def normalize_metadata_record(record: dict[str, Any]) -> dict[str, Any]:
 
 
 class OpenMoji(ds.GeneratorBasedBuilder):
-    VERSION = ds.Version("17.0.0")
+    VERSION = ds.Version(_OPENMOJI_VERSION)
 
     def _info(self) -> ds.DatasetInfo:
         return ds.DatasetInfo(

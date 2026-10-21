@@ -8,7 +8,7 @@ from huggingface_hub import HfApi
 
 import datasets as ds
 
-_OPENMOJI_17_0_0_EXPECTED_ROWS = 4_495
+_EXPECTED_ROWS = 4_495
 
 
 @pytest.fixture
@@ -105,14 +105,17 @@ def test_normalize_metadata_record_splits_tags_and_normalizes_mixed_types(
     os.environ.get("OPENMOJI_RUN_DOWNLOAD_TESTS") != "1",
     reason="Set OPENMOJI_RUN_DOWNLOAD_TESTS=1 to download and load the full release.",
 )
-def test_load_dataset(dataset_path: Path):
+def test_load_dataset(dataset_path: Path, dataset_module: ModuleType):
     dataset = ds.load_dataset(path=str(dataset_path), trust_remote_code=True)
 
     assert isinstance(dataset, ds.DatasetDict)
     assert set(dataset) == {"train"}
     train = dataset["train"]
-    assert train.num_rows == _OPENMOJI_17_0_0_EXPECTED_ROWS
-    assert len(set(train["hexcode"])) == _OPENMOJI_17_0_0_EXPECTED_ROWS
+    assert train.num_rows == _EXPECTED_ROWS, (
+        f"Expected {_EXPECTED_ROWS:,} rows for OpenMoji "
+        f"{dataset_module._OPENMOJI_VERSION}, found {train.num_rows:,}."
+    )
+    assert len(set(train["hexcode"])) == _EXPECTED_ROWS
     for row in train:
         assert isinstance(row["svg_color"], str) and row["svg_color"]
         assert isinstance(row["svg_black"], str) and row["svg_black"]
