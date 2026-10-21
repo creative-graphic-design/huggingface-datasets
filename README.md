@@ -90,6 +90,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Paired images, object-removal targets, and image inpainting references.
     - ➡️ Input: Source image, object-removal prompt, and removal mask.
     - ⬅️ Output: Ground-truth image after object removal.
+- **[OpenMoji](datasets/OpenMoji/)**
+  - ![Paper](https://img.shields.io/badge/Paper-not%20found-lightgrey) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/hfg-gmuend/openmoji)
+  - Emoji and icon data with Unicode metadata, color and black SVGs, and 618 × 618 PNG images.
+    - ➡️ Input: Unicode metadata, emoji tags, and matching SVG and PNG assets.
+    - ⬅️ Output: Emoji and icon rows with metadata, raw SVG source, and raster images.
 - **[PKUPosterLayout](datasets/PKUPosterLayout/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2303.15937-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2303.15937) [![Paper](https://img.shields.io/badge/Paper-CVPR%2723-blue?logo=doi&logoColor=white)](https://openaccess.thecvf.com/content/CVPR2023/html/Hsu_PosterLayout_A_New_Benchmark_and_Approach_for_Content-Aware_Visual-Textual_Presentation_CVPR_2023_paper.html) [![Original](https://img.shields.io/badge/Original-Project%20Page-0F766E?logo=homepage&logoColor=white)](http://59.108.48.34/tiki/PosterLayout/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PKU--PosterLayout-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PKU-PosterLayout)
   - Poster images, text elements, saliency maps, and visual-textual layout annotations.
