@@ -6,10 +6,6 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 
-[options]
-exclude-newer = "2026-07-15T16:16:22.828137092Z"
-exclude-newer-span = "P7D"
-
 [manifest]
 members = [
     "aes-eval-bench",
@@ -29,14 +25,15 @@ members = [
     "lica",
     "magazine",
     "object-removal-alpha",
+    "openmoji",
     "pitt-image-video-ads-dataset",
     "pku-poster-layout",
     "posta-poster-art",
     "poster-dna",
     "poster-erase",
     "poster-iq",
-    "poster-reward-bench",
     "poster-llava",
+    "poster-reward-bench",
     "publaynet",
     "rico",
 ]
@@ -477,34 +474,34 @@ wheels = [
 
 [package.optional-dependencies]
 cudart = [
-    { name = "nvidia-cuda-runtime", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-runtime" },
 ]
 cufft = [
-    { name = "nvidia-cufft", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cufft" },
 ]
 cufile = [
-    { name = "nvidia-cufile", marker = "sys_platform == 'linux'" },
+    { name = "nvidia-cufile" },
 ]
 cupti = [
-    { name = "nvidia-cuda-cupti", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-cupti" },
 ]
 curand = [
-    { name = "nvidia-curand", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-curand" },
 ]
 cusolver = [
-    { name = "nvidia-cusolver", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cusolver" },
 ]
 cusparse = [
-    { name = "nvidia-cusparse", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cusparse" },
 ]
 nvjitlink = [
-    { name = "nvidia-nvjitlink", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-nvjitlink" },
 ]
 nvrtc = [
-    { name = "nvidia-cuda-nvrtc", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-cuda-nvrtc" },
 ]
 nvtx = [
-    { name = "nvidia-nvtx", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "nvidia-nvtx" },
 ]
 
 [[package]]
@@ -1420,6 +1417,17 @@ dependencies = [
 requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
+name = "openmoji"
+version = "0.1.0"
+source = { virtual = "datasets/OpenMoji" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
+
+[[package]]
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1665,17 +1673,6 @@ dependencies = [
 requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
-name = "poster-reward-bench"
-version = "0.1.0"
-source = { virtual = "datasets/PosterRewardBench" }
-dependencies = [
-    { name = "datasets", extra = ["vision"] },
-]
-
-[package.metadata]
-requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
-
-[[package]]
 name = "poster-llava"
 version = "0.1.0"
 source = { virtual = "datasets/PosterLLaVA" }
@@ -1691,6 +1688,17 @@ requires-dist = [
     { name = "gdown", specifier = ">=5.2.0" },
     { name = "tenacity", specifier = ">=9.1.2" },
 ]
+
+[[package]]
+name = "poster-reward-bench"
+version = "0.1.0"
+source = { virtual = "datasets/PosterRewardBench" }
+dependencies = [
+    { name = "datasets", extra = ["vision"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "datasets", extras = ["vision"], specifier = ">=2.0.0,<4.0.0" }]
 
 [[package]]
 name = "pre-commit"
