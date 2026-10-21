@@ -100,6 +100,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Poster images, text elements, saliency maps, and visual-textual layout annotations.
     - ➡️ Input: Non-empty poster canvas or inpainted poster with saliency maps.
     - ⬅️ Output: Text, logo, and underlay bounding boxes.
+- **[PersuasiveAdVLMBenchmark](datasets/PersuasiveAdVLMBenchmark/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-2409.10719-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2409.10719) [![Paper](https://img.shields.io/badge/Paper-WACV%2725-blue?logo=doi&logoColor=white)](https://doi.org/10.1109/wacv61041.2025.00469) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/aysanaghazadeh/PersuasiveAdVLMBenchmark) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PersuasiveAdVLMBenchmark-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PersuasiveAdVLMBenchmark)
+  - PittAds image identifiers and reverse-image-search URL lists for a 783-image subset.
+    - ➡️ Input: Released JSON records keyed by relative PittAds image identifiers.
+    - ⬅️ Output: Image identifiers with reverse-image-search URL references.
 - **[PittImageVideoAdsDataset](datasets/PittImageVideoAdsDataset/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-1707.03067-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/1707.03067) [![Paper](https://img.shields.io/badge/Paper-CVPR%2717-blue?logo=doi&logoColor=white)](https://openaccess.thecvf.com/content_cvpr_2017/html/Hussain_Automatic_Understanding_of_CVPR_2017_paper.html) [![Original](https://img.shields.io/badge/Original-Project%20Page-0F766E?logo=homepage&logoColor=white)](https://people.cs.pitt.edu/~kovashka/ads/) [![HF Hub](https://img.shields.io/badge/HF%20Hub-PittImageVideoAdsDataset-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/PittImageVideoAdsDataset)
   - Image and video advertisement annotations with topics, sentiments, slogans, persuasive strategies, symbolic references, and action/reason Q/A.

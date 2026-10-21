@@ -6,6 +6,10 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 
+[options]
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
+exclude-newer-span = "P7D"
+
 [manifest]
 members = [
     "aes-eval-bench",
@@ -26,6 +30,7 @@ members = [
     "magazine",
     "object-removal-alpha",
     "openmoji",
+    "persuasive-ad-vlm-benchmark",
     "pitt-image-video-ads-dataset",
     "pku-poster-layout",
     "posta-poster-art",
@@ -1484,6 +1489,21 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ca/bc/f35b8446f4531a7cb215605d100cd88b7ac6f44ab3fc94870c120ab3adbf/pathspec-0.12.1.tar.gz", hash = "sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712", size = 51043, upload-time = "2023-12-10T22:30:45Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cc/20/ff623b09d963f88bfde16306a54e12ee5ea43e9b597108672ff3a408aad6/pathspec-0.12.1-py3-none-any.whl", hash = "sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08", size = 31191, upload-time = "2023-12-10T22:30:43.14Z" },
+]
+
+[[package]]
+name = "persuasive-ad-vlm-benchmark"
+version = "0.1.0"
+source = { virtual = "datasets/PersuasiveAdVLMBenchmark" }
+dependencies = [
+    { name = "datasets" },
+    { name = "gdown" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "datasets", specifier = ">=2.0.0,<4.0.0" },
+    { name = "gdown", specifier = ">=5.2.0" },
 ]
 
 [[package]]
