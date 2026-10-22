@@ -55,15 +55,12 @@ OpenMoji 17.0.0 contains 4,495 Unicode and custom emoji and icon entries, includ
 
 ### Data Instances
 
-The dataset has one configuration and one `train` split. Load the source files through the local loader:
+The dataset has one configuration and one `train` split. Load it from the Hugging Face Hub:
 
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset(
-    "datasets/OpenMoji/OpenMoji.py",
-    trust_remote_code=True,
-)
+dataset = ds.load_dataset("creative-graphic-design/OpenMoji")
 ```
 
 Each row represents one entry in the release metadata, matched to its SVG and PNG files by `hexcode`.
