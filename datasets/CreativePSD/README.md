@@ -62,7 +62,9 @@ Each row corresponds to one `poster_*.zip` archive:
   "total_layers": 18,
   "origin_psd_tree": "...",
   "tool_trajectory_json": "[...]",
-  "raw_resources": [{"filename": "raw_resource/1_asset.png", "image": "<image>"}],
+  "raw_resources": [
+    { "filename": "raw_resource/1_asset.png", "image": "<image>" }
+  ],
   "rendering_images": [
     {
       "filename": "rendering_imgs/0_total.jpg",
