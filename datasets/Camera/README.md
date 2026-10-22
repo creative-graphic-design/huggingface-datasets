@@ -51,6 +51,7 @@ task_categories:
 - **Homepage:** https://github.com/CyberAgentAILab/camera
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Camera
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/CAMERA
+- **Official Hugging Face Dataset:** https://huggingface.co/datasets/cyberagent/camera
 - **Paper (NLP2023):** https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf
 
 ### Dataset Summary
@@ -58,6 +59,8 @@ task_categories:
 From [the official README.md](https://github.com/CyberAgentAILab/camera#camera-dataset):
 
 > CAMERA (CyberAgent Multimodal Evaluation for Ad Text GeneRAtion) is the Japanese ad text generation dataset. We hope that our dataset will be useful in research for realizing more advanced ad text generation models.
+
+The data is distributed through CyberAgent's [official Hugging Face release](https://huggingface.co/datasets/cyberagent/camera). The `creative-graphic-design/CAMERA` Hub repository hosts this card only and contains no data files. This repository's loader can no longer rebuild the data because its source archives return HTTP 404.
 
 ### Supported Tasks and Leaderboards
 
@@ -79,28 +82,28 @@ The language data in CAMERA is in Japanese ([BCP-47 ja-JP](https://www.rfc-edito
 
 ### Data Instances
 
-When loading a specific configuration, users has to append a version dependent suffix:
+Load a specific configuration by passing its name to `load_dataset`:
 
 #### without-lp-images
 
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="without-lp-images")
+dataset = ds.load_dataset("cyberagent/camera", name="without-lp-images")
 
 print(dataset)
 # DatasetDict({
-#     train: Dataset({
+#     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
-#         num_rows: 12395
+#         num_rows: 872
 #     })
-#     validation: Dataset({
+#     dev: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
 #         num_rows: 3098
 #     })
-#     test: Dataset({
+#     train: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
-#         num_rows: 869
+#         num_rows: 12395
 #     })
 # })
 ```
@@ -166,21 +169,21 @@ An example of the CAMERA (w/o LP images) dataset looks as follows:
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="with-lp-images")
+dataset = ds.load_dataset("cyberagent/camera", name="with-lp-images")
 
 print(dataset)
 # DatasetDict({
-#     train: Dataset({
+#     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
-#         num_rows: 12395
+#         num_rows: 872
 #     })
-#     validation: Dataset({
+#     dev: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
 #         num_rows: 3098
 #     })
-#     test: Dataset({
+#     train: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
-#         num_rows: 869
+#         num_rows: 12395
 #     })
 # })
 ```
@@ -267,15 +270,15 @@ An example of the CAMERA (w/ LP images) dataset looks as follows:
 
 ### Data Splits
 
-From [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf):
+Both configurations have the splits and row counts below, as reported in the [official release card's `dataset_info`](https://huggingface.co/datasets/cyberagent/camera). The `with-lp-images` configuration adds the `lp_image` feature.
 
-| Split | # of data | # of reference ad text | industry domain label |
-|-------|----------:|-----------------------:|:---------------------:|
-| Train | 12,395    | 1                      | -                     |
-| Valid | 3,098     | 1                      | -                     |
-| Test  | 869       | 4                      | ✔                     |
+| Split | # of data |
+|-------|----------:|
+| Train | 12,395    |
+| Dev   | 3,098     |
+| Test  | 872       |
 
-The public Google Cloud Storage archives referenced by the original loader currently return 404, so these split sizes follow the official paper rather than a fresh download.
+Reference counts and industry-domain labels are described in [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf).
 
 ## Dataset Creation
 
