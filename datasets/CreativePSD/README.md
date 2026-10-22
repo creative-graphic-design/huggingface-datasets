@@ -62,7 +62,9 @@ Each row corresponds to one `poster_*.zip` archive:
   "total_layers": 18,
   "origin_psd_tree": "...",
   "tool_trajectory_json": "[...]",
-  "raw_resources": [{"filename": "raw_resource/1_asset.png", "image": "<image>"}],
+  "raw_resources": [
+    { "filename": "raw_resource/1_asset.png", "image": "<image>" }
+  ],
   "rendering_images": [
     {
       "filename": "rendering_imgs/0_total.jpg",
@@ -120,7 +122,19 @@ The currently unresolved 0-byte archives are:
 
 ## Usage
 
-Download the dataset with ModelScope:
+The published dataset contains about 1 TB of parquet, so this example streams it; dropping `streaming=True` downloads the full dataset.
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset("creative-graphic-design/CreativePSD", split="train", streaming=True)
+```
+
+### Rebuild from the original source with this repository's loader
+
+These steps rebuild the dataset from the original source with this repository's loader; a checkout of this repository is required.
+
+Download the original dataset with ModelScope:
 
 ```python
 from modelscope.msdatasets import MsDataset
@@ -135,7 +149,7 @@ import datasets as ds
 
 dataset = ds.load_dataset(
     "datasets/CreativePSD/CreativePSD.py",
-    data_dir="/root/ghq/www.modelscope.cn/datasets/song322/CreativePSD",
+    data_dir="/path/to/CreativePSD",
     trust_remote_code=True,
 )
 ```
