@@ -36,7 +36,7 @@ Publish generated dataset rows to the Hugging Face Hub through this repository's
    dataset = ds.load_dataset("creative-graphic-design/<HubName>")
    ```
 
-   For multi-config datasets, include `name="<config>"`. Remove `trust_remote_code`, repository-local script paths, and machine-specific `data_dir` paths from this example. Put any instructions for rebuilding from the original source with this repository's loader in a separate section clearly labeled as source-rebuild instructions.
+   For multi-config datasets, include `name="<config>"`.
 
 8. If missing or partially published, or the user explicitly requests a republish, run the write tests.
 9. Verify the Hub files again after publish.
