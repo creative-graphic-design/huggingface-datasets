@@ -270,15 +270,13 @@ An example of the CAMERA (w/ LP images) dataset looks as follows:
 
 ### Data Splits
 
-Both configurations have the splits and row counts below, as reported in the [official release card's `dataset_info`](https://huggingface.co/datasets/cyberagent/camera). The `with-lp-images` configuration adds the `lp_image` feature.
+The split names and row counts below match both configurations in the [official release card's `dataset_info`](https://huggingface.co/datasets/cyberagent/camera). The reference counts and industry-domain labels follow [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf). The `with-lp-images` configuration adds the `lp_image` feature.
 
-| Split | # of data |
-|-------|----------:|
-| Train | 12,395    |
-| Dev   | 3,098     |
-| Test  | 872       |
-
-Reference counts and industry-domain labels are described in [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf).
+| Split | # of data | # of reference ad text | industry domain label |
+|-------|----------:|-----------------------:|:---------------------:|
+| Train | 12,395    | 1                      | -                     |
+| Dev   | 3,098     | 1                      | -                     |
+| Test  | 872       | 4                      | ✔                     |
 
 ## Dataset Creation
 
