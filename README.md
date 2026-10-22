@@ -21,7 +21,7 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
     - ➡️ Input: Brand logo plus abstract or concrete English banner request.
     - ⬅️ Output: Expected banner design matching size and campaign context.
 - **[Camera](datasets/Camera/)**
-  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) [![Paper](https://img.shields.io/badge/Paper-NLP%2723-blue?logo=doi&logoColor=white)](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/CyberAgentAILab/camera) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CAMERA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CAMERA)
+  - ![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-lightgrey?logo=arxiv&logoColor=white) [![Paper](https://img.shields.io/badge/Paper-NLP%2723-blue?logo=doi&logoColor=white)](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf) [![Original](https://img.shields.io/badge/Original-HF%20Hub-0F766E?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/cyberagent/camera) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CAMERA-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CAMERA)
   - Japanese advertising landing-page images, metadata, and ad copy references.
     - ➡️ Input: Japanese keyword, landing-page text/OCR, domain, and optional LP screenshot.
     - ⬅️ Output: Japanese ad headline/title references.

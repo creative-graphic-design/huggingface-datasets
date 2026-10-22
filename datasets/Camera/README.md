@@ -1,27 +1,27 @@
 ---
 annotations_creators:
-- crowdsourced
+  - crowdsourced
 language:
-- ja
+  - ja
 language_creators:
-- found
+  - found
 license:
-- cc-by-nc-sa-4.0
+  - cc-by-nc-sa-4.0
 multilinguality:
-- monolingual
+  - monolingual
 pretty_name: CAMERA
 size_categories: []
 source_datasets:
-- original
+  - original
 tags: []
 task_categories:
-- text-generation
+  - text-generation
 ---
 
 # Dataset Card for CAMERA 📷
 
-
 ## Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [Dataset Description](#dataset-description)
   - [Dataset Summary](#dataset-summary)
@@ -51,6 +51,7 @@ task_categories:
 - **Homepage:** https://github.com/CyberAgentAILab/camera
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/Camera
 - **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/CAMERA
+- **Official Hugging Face Dataset:** https://huggingface.co/datasets/cyberagent/camera
 - **Paper (NLP2023):** https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf
 
 ### Dataset Summary
@@ -58,6 +59,8 @@ task_categories:
 From [the official README.md](https://github.com/CyberAgentAILab/camera#camera-dataset):
 
 > CAMERA (CyberAgent Multimodal Evaluation for Ad Text GeneRAtion) is the Japanese ad text generation dataset. We hope that our dataset will be useful in research for realizing more advanced ad text generation models.
+
+The data is distributed through CyberAgent's [official Hugging Face release](https://huggingface.co/datasets/cyberagent/camera). The `creative-graphic-design/CAMERA` Hub repository hosts this card only and contains no data files. This repository's loader can no longer rebuild the data because its source archives return HTTP 404.
 
 ### Supported Tasks and Leaderboards
 
@@ -79,28 +82,28 @@ The language data in CAMERA is in Japanese ([BCP-47 ja-JP](https://www.rfc-edito
 
 ### Data Instances
 
-When loading a specific configuration, users has to append a version dependent suffix:
+Load a specific configuration by passing its name to `load_dataset`:
 
 #### without-lp-images
 
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="without-lp-images")
+dataset = ds.load_dataset("cyberagent/camera", name="without-lp-images")
 
 print(dataset)
 # DatasetDict({
-#     train: Dataset({
+#     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
-#         num_rows: 12395
+#         num_rows: 872
 #     })
-#     validation: Dataset({
+#     dev: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
 #         num_rows: 3098
 #     })
-#     test: Dataset({
+#     train: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation'],
-#         num_rows: 869
+#         num_rows: 12395
 #     })
 # })
 ```
@@ -109,55 +112,28 @@ An example of the CAMERA (w/o LP images) dataset looks as follows:
 
 ```json
 {
-    "asset_id": 13861,
-    "kw": "仙台 ホテル",
-    "lp_meta_description": "仙台のホテルや旅館をお探しなら楽天トラベルへ！楽天ポイントが使えて、貯まって、とってもお得な宿泊予約サイトです。さらに割引クーポンも使える！国内ツアー・航空券・レンタカー・バス予約も！",
-    "title_org": "仙台市のホテル",
-    "title_ne1": "",
-    "title_ne2": "",
-    "title_ne3": "",
-    "domain": "",
-    "parsed_full_text_annotation": {
-        "text": [
-            "trivago",
-            "Oops...AccessDenied 可",
-            "Youarenotallowedtoviewthispage!Ifyouthinkthisisanerror,pleasecontacttrivago.",
-            "Errorcode:0.3c99e86e.1672026945.25ba640YourIP:240d:1a:4d8:2800:b9b0:ea86:2087:d141AffectedURL:https://www.trivago.jp/ja/odr/%E8%BB%92", "%E4%BB%99%E5%8F%B0-%E5%9B%BD%E5%86%85?search=20072325",
-            "Backtotrivago"
-        ],
-        "xmax": [
-            653,
-            838,
-            765,
-            773,
-            815,
-            649
-        ],
-        "xmin": [
-            547,
-            357,
-            433,
-            420,
-            378,
-            550
-        ],
-        "ymax": [
-            47,
-            390,
-            475,
-            558,
-            598,
-            663
-        ],
-        "ymin": [
-            18,
-            198,
-            439,
-            504,
-            566,
-            651
-        ]
-    }
+  "asset_id": 13861,
+  "kw": "仙台 ホテル",
+  "lp_meta_description": "仙台のホテルや旅館をお探しなら楽天トラベルへ！楽天ポイントが使えて、貯まって、とってもお得な宿泊予約サイトです。さらに割引クーポンも使える！国内ツアー・航空券・レンタカー・バス予約も！",
+  "title_org": "仙台市のホテル",
+  "title_ne1": "",
+  "title_ne2": "",
+  "title_ne3": "",
+  "domain": "",
+  "parsed_full_text_annotation": {
+    "text": [
+      "trivago",
+      "Oops...AccessDenied 可",
+      "Youarenotallowedtoviewthispage!Ifyouthinkthisisanerror,pleasecontacttrivago.",
+      "Errorcode:0.3c99e86e.1672026945.25ba640YourIP:240d:1a:4d8:2800:b9b0:ea86:2087:d141AffectedURL:https://www.trivago.jp/ja/odr/%E8%BB%92",
+      "%E4%BB%99%E5%8F%B0-%E5%9B%BD%E5%86%85?search=20072325",
+      "Backtotrivago"
+    ],
+    "xmax": [653, 838, 765, 773, 815, 649],
+    "xmin": [547, 357, 433, 420, 378, 550],
+    "ymax": [47, 390, 475, 558, 598, 663],
+    "ymin": [18, 198, 439, 504, 566, 651]
+  }
 }
 ```
 
@@ -166,21 +142,21 @@ An example of the CAMERA (w/o LP images) dataset looks as follows:
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset("creative-graphic-design/CAMERA", name="with-lp-images")
+dataset = ds.load_dataset("cyberagent/camera", name="with-lp-images")
 
 print(dataset)
 # DatasetDict({
-#     train: Dataset({
+#     test: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
-#         num_rows: 12395
+#         num_rows: 872
 #     })
-#     validation: Dataset({
+#     dev: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
 #         num_rows: 3098
 #     })
-#     test: Dataset({
+#     train: Dataset({
 #         features: ['asset_id', 'kw', 'lp_meta_description', 'title_org', 'title_ne1', 'title_ne2', 'title_ne3', 'domain', 'parsed_full_text_annotation', 'lp_image'],
-#         num_rows: 869
+#         num_rows: 12395
 #     })
 # })
 ```
@@ -267,15 +243,15 @@ An example of the CAMERA (w/ LP images) dataset looks as follows:
 
 ### Data Splits
 
-From [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf):
+The split names and row counts below match both configurations in the [official release card's `dataset_info`](https://huggingface.co/datasets/cyberagent/camera). The reference counts and industry-domain labels follow [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf). The `with-lp-images` configuration adds the `lp_image` feature.
 
 | Split | # of data | # of reference ad text | industry domain label |
-|-------|----------:|-----------------------:|:---------------------:|
-| Train | 12,395    | 1                      | -                     |
-| Valid | 3,098     | 1                      | -                     |
-| Test  | 869       | 4                      | ✔                     |
+| ----- | --------: | ---------------------: | :-------------------: |
+| Train |    12,395 |                      1 |           -           |
+| Dev   |     3,098 |                      1 |           -           |
+| Test  |       872 |                      4 |           ✔           |
 
-The public Google Cloud Storage archives referenced by the original loader currently return 404, so these split sizes follow the official paper rather than a fresh download.
+The paper reports 869 test examples; the official release contains 872.
 
 ## Dataset Creation
 
