@@ -28,7 +28,12 @@ repository.
 5. Keep `README.md` and the loader `_CITATION` in sync when both exist.
 6. Preserve Hub-generated `dataset_info` and `configs` when uploading local
    cards to Hub.
-7. Do not push to Hub until the GitHub PR has been reviewed.
+7. Before each publish or republish, ensure `### Data Instances` loads the
+   dataset by its public Hub ID; keep any local source-rebuild example in a
+   separate, clearly labeled section. Follow the
+   [publish-dataset skill](../.agents/skills/publish-dataset/SKILL.md) for the
+   exact pre-upload edit and post-publish load check.
+8. Do not push to Hub until the GitHub PR has been reviewed.
 
 ## Local Validation
 
