@@ -1,27 +1,27 @@
 ---
 annotations_creators:
-- crowdsourced
+  - crowdsourced
 language:
-- ja
+  - ja
 language_creators:
-- found
+  - found
 license:
-- cc-by-nc-sa-4.0
+  - cc-by-nc-sa-4.0
 multilinguality:
-- monolingual
+  - monolingual
 pretty_name: CAMERA
 size_categories: []
 source_datasets:
-- original
+  - original
 tags: []
 task_categories:
-- text-generation
+  - text-generation
 ---
 
 # Dataset Card for CAMERA 📷
 
-
 ## Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [Dataset Description](#dataset-description)
   - [Dataset Summary](#dataset-summary)
@@ -112,55 +112,28 @@ An example of the CAMERA (w/o LP images) dataset looks as follows:
 
 ```json
 {
-    "asset_id": 13861,
-    "kw": "仙台 ホテル",
-    "lp_meta_description": "仙台のホテルや旅館をお探しなら楽天トラベルへ！楽天ポイントが使えて、貯まって、とってもお得な宿泊予約サイトです。さらに割引クーポンも使える！国内ツアー・航空券・レンタカー・バス予約も！",
-    "title_org": "仙台市のホテル",
-    "title_ne1": "",
-    "title_ne2": "",
-    "title_ne3": "",
-    "domain": "",
-    "parsed_full_text_annotation": {
-        "text": [
-            "trivago",
-            "Oops...AccessDenied 可",
-            "Youarenotallowedtoviewthispage!Ifyouthinkthisisanerror,pleasecontacttrivago.",
-            "Errorcode:0.3c99e86e.1672026945.25ba640YourIP:240d:1a:4d8:2800:b9b0:ea86:2087:d141AffectedURL:https://www.trivago.jp/ja/odr/%E8%BB%92", "%E4%BB%99%E5%8F%B0-%E5%9B%BD%E5%86%85?search=20072325",
-            "Backtotrivago"
-        ],
-        "xmax": [
-            653,
-            838,
-            765,
-            773,
-            815,
-            649
-        ],
-        "xmin": [
-            547,
-            357,
-            433,
-            420,
-            378,
-            550
-        ],
-        "ymax": [
-            47,
-            390,
-            475,
-            558,
-            598,
-            663
-        ],
-        "ymin": [
-            18,
-            198,
-            439,
-            504,
-            566,
-            651
-        ]
-    }
+  "asset_id": 13861,
+  "kw": "仙台 ホテル",
+  "lp_meta_description": "仙台のホテルや旅館をお探しなら楽天トラベルへ！楽天ポイントが使えて、貯まって、とってもお得な宿泊予約サイトです。さらに割引クーポンも使える！国内ツアー・航空券・レンタカー・バス予約も！",
+  "title_org": "仙台市のホテル",
+  "title_ne1": "",
+  "title_ne2": "",
+  "title_ne3": "",
+  "domain": "",
+  "parsed_full_text_annotation": {
+    "text": [
+      "trivago",
+      "Oops...AccessDenied 可",
+      "Youarenotallowedtoviewthispage!Ifyouthinkthisisanerror,pleasecontacttrivago.",
+      "Errorcode:0.3c99e86e.1672026945.25ba640YourIP:240d:1a:4d8:2800:b9b0:ea86:2087:d141AffectedURL:https://www.trivago.jp/ja/odr/%E8%BB%92",
+      "%E4%BB%99%E5%8F%B0-%E5%9B%BD%E5%86%85?search=20072325",
+      "Backtotrivago"
+    ],
+    "xmax": [653, 838, 765, 773, 815, 649],
+    "xmin": [547, 357, 433, 420, 378, 550],
+    "ymax": [47, 390, 475, 558, 598, 663],
+    "ymin": [18, 198, 439, 504, 566, 651]
+  }
 }
 ```
 
@@ -273,10 +246,12 @@ An example of the CAMERA (w/ LP images) dataset looks as follows:
 The split names and row counts below match both configurations in the [official release card's `dataset_info`](https://huggingface.co/datasets/cyberagent/camera). The reference counts and industry-domain labels follow [the official paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H11-4.pdf). The `with-lp-images` configuration adds the `lp_image` feature.
 
 | Split | # of data | # of reference ad text | industry domain label |
-|-------|----------:|-----------------------:|:---------------------:|
-| Train | 12,395    | 1                      | -                     |
-| Dev   | 3,098     | 1                      | -                     |
-| Test  | 872       | 4                      | ✔                     |
+| ----- | --------: | ---------------------: | :-------------------: |
+| Train |    12,395 |                      1 |           -           |
+| Dev   |     3,098 |                      1 |           -           |
+| Test  |       872 |                      4 |           ✔           |
+
+The paper reports 869 test examples; the official release contains 872.
 
 ## Dataset Creation
 
