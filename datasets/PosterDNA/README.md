@@ -67,7 +67,6 @@ configs:
 
 - **Homepage:** https://github.com/wuhaer/PosterVerse
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/PosterDNA
-- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/PosterDNA
 - **Original Code and Data:** https://github.com/wuhaer/PosterVerse
 - **Original Hugging Face Release:** https://huggingface.co/wuhaer/PosterVerse
 - **Paper (AAAI 2026):** https://doi.org/10.1609/aaai.v40i9.37656
@@ -112,6 +111,8 @@ dataset = ds.load_dataset(
     trust_remote_code=True,
 )
 ```
+
+This dataset is not published on the Hugging Face Hub. Run the example from a checkout of this repository, whose `datasets<4.0.0` pin still supports loading scripts, with `POSTERDNA_ZIP_PASSWORD` set as described above.
 
 Each row exposes raw metadata as a JSON string plus resolved local asset paths when the corresponding background image or HTML specification can be matched.
 
