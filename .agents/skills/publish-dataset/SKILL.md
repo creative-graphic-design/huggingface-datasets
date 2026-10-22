@@ -28,9 +28,31 @@ Publish generated dataset rows to the Hugging Face Hub through this repository's
    ```
 
 6. If `README.md` and expected Parquet files/config directories already exist, report that the dataset is already published and do not republish unless the user explicitly asks.
-7. If missing or partially published, run the write tests.
-8. Verify the Hub files again after publish.
-9. Remove local `__pycache__` created under the dataset directory and confirm `git status --short`.
+7. For every publish or republish, inspect every `load_dataset(` example in the card before uploading the README. Ensure `### Data Instances` has an example that loads the published dataset by its Hub ID, adding one if needed. Convert other examples to that Hub ID and remove `trust_remote_code`, repository-local script paths, and machine-specific `data_dir` paths, or move source-rebuild examples using them to a clearly labeled `Rebuild from the original source` section:
+
+   ```python
+   import datasets as ds
+
+   dataset = ds.load_dataset("creative-graphic-design/<HubName>")
+   ```
+
+   For multi-config datasets, include `name="<config>"`.
+
+8. If missing or partially published, or the user explicitly requests a republish, run the write tests.
+9. Verify the Hub files again after publish.
+
+   Also load the dataset by the exact Hub ID and split shown in the card, using `streaming=True` and reading one row. For multi-config datasets, add `name="<config>"`:
+
+   ```python
+   import datasets as ds
+
+   dataset = ds.load_dataset("creative-graphic-design/<HubName>", split="<split>", streaming=True)
+   next(iter(dataset))
+   ```
+
+   Do not report the publish as done until this load succeeds.
+
+10. Remove local `__pycache__` created under the dataset directory and confirm `git status --short`.
 
 ## Publish Command
 
