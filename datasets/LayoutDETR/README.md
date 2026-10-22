@@ -57,7 +57,6 @@ task_categories:
 
 - **Homepage:** https://github.com/salesforce/LayoutDETR
 - **Repository:** https://github.com/creative-graphic-design/huggingface-datasets/tree/main/datasets/LayoutDETR
-- **Hugging Face Dataset:** https://huggingface.co/datasets/creative-graphic-design/LayoutDETR
 - **Original Code and Data:** https://github.com/salesforce/LayoutDETR
 - **Project Page:** https://ningyu1991.github.io/projects/LayoutDETR.html
 - **Paper (ECCV 2024):** https://doi.org/10.1007/978-3-031-72661-3_10
@@ -97,10 +96,12 @@ Load a locally downloaded copy by passing either the extracted dataset root or t
 import datasets as ds
 
 dataset = ds.load_dataset(
-    "creative-graphic-design/LayoutDETR",
+    "datasets/LayoutDETR/LayoutDETR.py",
     data_dir="/path/to/ads_banner_dataset",
+    trust_remote_code=True,
 )
 ```
+This dataset is not published on the Hugging Face Hub. Run the example from a checkout of this repository, whose `datasets<4.0.0` pin still supports loading scripts.
 
 Each row corresponds to one valid sample from the sorted raw JSON files.
 
