@@ -23,7 +23,7 @@ configs:
   - config_name: default
     data_files:
       - split: test
-        path: test-*
+        path: data/test-*
 ---
 
 # Dataset Card for DEsignBench Prompts
@@ -43,7 +43,7 @@ configs:
 
 ### Dataset Summary
 
-DEsignBench Prompts contains the prompt table released with *DEsignBench: Exploring and Benchmarking DALL-E 3 for Imagining Visual Design*. It provides visual design text-to-image prompts with original user inputs, expanded prompts, and requested aspect ratios.
+DEsignBench Prompts contains the prompt table released with _DEsignBench: Exploring and Benchmarking DALL-E 3 for Imagining Visual Design_. It provides visual design text-to-image prompts with original user inputs, expanded prompts, and requested aspect ratios.
 
 This Hugging Face loader covers the prompt TSV only. It does not include the DEsignBench gallery images or generated model outputs.
 
@@ -92,16 +92,16 @@ dataset = ds.load_dataset("creative-graphic-design/DEsignBench-Prompts")
 The dataset exposes one benchmark split:
 
 | split | rows |
-|------:|-----:|
-| test | 215 |
+| ----: | ---: |
+|  test |  215 |
 
 The source aspect-ratio counts are:
 
 | aspectratio | rows |
-|------------:|-----:|
-| wide | 173 |
-| square | 36 |
-| tall | 6 |
+| ----------: | ---: |
+|        wide |  173 |
+|      square |   36 |
+|        tall |    6 |
 
 ## Dataset Creation
 
