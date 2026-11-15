@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/teaser.png" alt="Creative Graphic Design Datasets teaser" width="100%">
+  <img src=".github/teaser.svg" alt="Creative Graphic Design Datasets teaser" width="100%">
 </p>
 
 # 🤗 Creative Graphic Design Datasets

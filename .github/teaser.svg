@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1983" height="474" viewBox="0 0 1983 474" role="img" aria-label="Creative Graphic Design Datasets teaser with a creative silhouette, data cards, a pen and teal flowing ribbons">
+<defs>
+  <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F7FBFB"/><stop offset=".53" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F6FCFC"/></linearGradient>
+  <radialGradient id="glow"><stop stop-color="#B8E0DE" stop-opacity=".45"/><stop offset="1" stop-color="#E6F5F4" stop-opacity="0"/></radialGradient>
+  <linearGradient id="dark" x1="0" y1="0" x2="1" y2=".65"><stop stop-color="#08485B"/><stop offset=".58" stop-color="#0A344E"/><stop offset="1" stop-color="#032639"/></linearGradient>
+  <linearGradient id="teal" x1="0" y1="0" x2="1" y2=".4"><stop stop-color="#176F80"/><stop offset=".58" stop-color="#188E93"/><stop offset="1" stop-color="#69C3BF"/></linearGradient>
+  <linearGradient id="surf" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#91CFCC"/><stop offset="1" stop-color="#258C96"/></linearGradient>
+  <linearGradient id="brush" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#177987"/><stop offset=".25" stop-color="#7CCAC9"/><stop offset=".45" stop-color="#CCEAE8"/><stop offset=".62" stop-color="#0F6479"/><stop offset=".8" stop-color="#2A99A0"/><stop offset="1" stop-color="#A7DDDB"/></linearGradient>
+  <linearGradient id="pencil" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#031D34"/><stop offset=".51" stop-color="#07556A"/><stop offset="1" stop-color="#0A7890"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="155%"><feDropShadow dx="1" dy="7" stdDeviation="8" flood-color="#2B8A91" flood-opacity=".17"/></filter>
+  <clipPath id="panel"><rect x="0" y="0" width="121" height="201" rx="13"/></clipPath>
+</defs>
+<rect width="1983" height="474" fill="url(#ground)"/>
+<ellipse cx="168" cy="194" rx="303" ry="267" fill="url(#glow)"/>
+<ellipse cx="1747" cy="246" rx="285" ry="208" fill="url(#glow)"/>
+<!-- Organic arc and gear, stylized and completely editable vector shapes. -->
+<path d="M-44 271C-40 142 53 68 166 78C199 79 234 94 253 116" stroke="url(#teal)" stroke-width="5" fill="none" opacity=".92"/>
+<path d="M0 302C63 335 99 337 145 305C183 276 179 199 140 159" stroke="#3AACA9" stroke-width="14" fill="none" opacity=".68"/>
+<circle cx="165" cy="200" r="123" fill="none" stroke="#86D0D0" stroke-width="3" opacity=".42"/>
+<path d="M222.0,196.0L221.8,200.4L232.6,203.9L230.1,216.8L218.5,217.1L215.2,224.9L213.3,228.5L211.0,232.3L218.5,240.7L209.9,250.6L199.7,245.0L193.0,250.1L189.5,252.3L185.6,254.4L187.9,265.4L175.5,269.7L169.5,259.8L161.1,260.9L157.0,261.0L152.6,260.8L149.1,271.6L136.2,269.1L135.9,257.5L128.1,254.2L124.5,252.3L120.7,250.0L112.3,257.5L102.4,248.9L108.0,238.7L102.9,232.0L100.7,228.5L98.6,224.6L87.6,226.9L83.3,214.5L93.2,208.5L92.1,200.1L92.0,196.0L92.2,191.6L81.4,188.1L83.9,175.2L95.5,174.9L98.8,167.1L100.7,163.5L103.0,159.7L95.5,151.3L104.1,141.4L114.3,147.0L121.0,141.9L124.5,139.7L128.4,137.6L126.1,126.6L138.5,122.3L144.5,132.2L152.9,131.1L157.0,131.0L161.4,131.2L164.9,120.4L177.8,122.9L178.1,134.5L185.9,137.8L189.5,139.7L193.3,142.0L201.7,134.5L211.6,143.1L206.0,153.3L211.1,160.0L213.3,163.5L215.4,167.4L226.4,165.1L230.7,177.5L220.8,183.5L221.9,191.9Z" fill="url(#dark)"/>
+<circle cx="157" cy="196" r="40" fill="url(#ground)"/>
+<circle cx="157" cy="196" r="17" fill="none" stroke="#2C9399" stroke-width="6"/>
+<path d="M166 207C166 176 149 168 136 176" fill="none" stroke="#2C9399" stroke-width="5" stroke-linecap="round"/>
+<!-- A simple female profile facing right, silhouette as an original Bézier drawing. -->
+<path d="M293 69C334 88 360 125 370 161C378 181 376 191 386 205L402 219C409 226 402 231 391 237L381 240C387 249 391 253 383 259C391 266 386 273 379 278C382 296 372 307 348 307L324 304C305 305 296 319 297 337C300 362 325 389 353 399C280 427 221 400 201 362C178 318 200 278 205 245C214 195 253 173 271 139C282 118 287 87 293 69Z" fill="url(#dark)"/>
+<path d="M192 245C152 289 149 346 176 383C213 432 291 419 353 399C290 417 244 377 237 336C230 295 252 258 259 226C237 224 211 232 192 245Z" fill="url(#teal)" opacity=".63"/>
+<path d="M355 190q10-9 18-3M367 218q11 4 18-1" stroke="#092E47" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/>
+<path d="M373 267Q365 272 357 268" stroke="#58B2AF" stroke-width="2" opacity=".75" fill="none"/>
+<!-- Growing leaves, one branching stem and nine filled leaves. -->
+<path d="M220 195C245 135 246 70 252 18M239 148C213 106 202 83 198 43M245 107C268 75 281 63 288 48M250 71C232 55 227 34 234 23M233 147C267 124 281 124 292 120M220 179C190 162 183 146 180 124" stroke="#268F96" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<g fill="url(#surf)">
+<path d="M251 86C234 57 236 28 274 16C282 47 267 70 251 86Z"/>
+<path d="M214 87C193 80 184 61 190 34C218 45 223 68 214 87Z"/>
+<path d="M263 115C262 89 275 79 301 81C297 105 283 117 263 115Z"/>
+<path d="M258 154C260 129 273 120 299 126C293 149 277 160 258 154Z"/>
+<path d="M204 162C192 142 183 137 170 139C170 157 187 171 204 162Z"/>
+<path d="M238 50C218 36 219 18 228 6C244 20 247 38 238 50Z"/>
+<path d="M198 117C182 112 181 97 185 88C202 94 207 106 198 117Z"/>
+</g>
+<g fill="none" stroke="#D4F2EE" stroke-width="1" opacity=".8"><path d="M252 82L268 28M210 81L198 48M263 111L292 88M263 150L290 134M239 46L228 17"/></g>
+<!-- Centered, clean title; explicit spans retain editable text. -->
+<g font-family="Arial, Helvetica, sans-serif" font-size="65" font-weight="700" letter-spacing="-1.8">
+<text x="511" y="236" fill="#062D45">Creative</text>
+<text x="784" y="236" fill="#198A91">Graphic Design</text>
+<text x="1270" y="236" fill="#062D45">Datasets</text>
+</g>
+<g transform="translate(840 299)" fill="none"><path d="M0 0h95M193 0h95" stroke="#6ABFC0" stroke-width="2"/><circle cx="119" r="7" fill="#237E8C"/><circle cx="145" r="7" fill="#58B5B5"/><circle cx="171" r="7" fill="#9AD3D1"/></g>
+<!-- Three interface cards: sample imagery, structured layout annotations, document metadata. -->
+<g filter="url(#shadow)">
+  <g transform="translate(1748 137) rotate(1 69 110)">
+    <rect width="139" height="219" rx="14" fill="#FAFFFF" stroke="#B7E2E1" stroke-width="2"/>
+    <rect x="13" y="23" width="111" height="16" rx="4" fill="#D5F0F0"/>
+    <rect x="23" y="27" width="69" height="8" rx="3" fill="#1B909A"/>
+    <rect x="15" y="54" width="47" height="49" rx="5" fill="#8BCFCE"/><rect x="70" y="54" width="54" height="9" rx="4" fill="#B7DEDF"/><rect x="70" y="71" width="48" height="7" rx="3" fill="#C7E7E7"/><rect x="70" y="88" width="50" height="6" rx="3" fill="#C7E7E7"/>
+    <rect x="15" y="120" width="107" height="8" rx="3" fill="#95D2D1"/><rect x="15" y="135" width="96" height="7" rx="3" fill="#C7E7E7"/><rect x="15" y="149" width="107" height="7" rx="3" fill="#C7E7E7"/><rect x="15" y="176" width="107" height="23" rx="5" fill="#DAF1F0"/>
+  </g>
+  <g transform="translate(1630 161)">
+    <rect width="137" height="216" rx="14" fill="#FFFFFF" stroke="#BFE5E2" stroke-width="2"/>
+    <g fill="#126779"><rect x="12" y="13" width="32" height="41" rx="4"/><rect x="50" y="13" width="32" height="41" rx="4" fill="#38A6AA"/><rect x="88" y="13" width="35" height="41" rx="4" fill="#7CCACA"/>
+    <rect x="12" y="60" width="32" height="41" rx="4" fill="#52B9B9"/><rect x="50" y="60" width="32" height="41" rx="4" fill="#13697E"/><rect x="88" y="60" width="35" height="41" rx="4" fill="#99D8D5"/>
+    <rect x="12" y="107" width="32" height="41" rx="4" fill="#268A96"/><rect x="50" y="107" width="32" height="41" rx="4" fill="#55B9B8"/><rect x="88" y="107" width="35" height="41" rx="4" fill="#BAE5E2"/></g>
+    <rect x="12" y="162" width="110" height="8" rx="4" fill="#B8E1DE"/><rect x="12" y="179" width="88" height="7" rx="3" fill="#D1EDEB"/>
+  </g>
+  <g transform="translate(1538 190)">
+    <rect width="138" height="210" rx="14" fill="#FFFFFF" stroke="#C4E9E7" stroke-width="2"/>
+    <rect x="12" y="12" width="114" height="125" rx="8" fill="#E5F6F4"/>
+    <circle cx="47" cy="43" r="14" fill="#62B4B4"/>
+    <path d="M18 116l43-48 22 28 21-34 16 26v41H18z" fill="#55B6B4"/>
+    <path d="M18 127l40-28 24 11 27-36 11 14v41H18z" fill="#11748A" opacity=".8"/>
+    <rect x="13" y="150" width="37" height="29" rx="5" fill="#16838E"/><rect x="55" y="150" width="23" height="29" rx="5" fill="#4BAEAF"/><rect x="83" y="150" width="22" height="29" rx="5" fill="#80CFCA"/><rect x="110" y="150" width="16" height="29" rx="5" fill="#C0EAE5"/>
+  </g>
+</g>
+<!-- Fountain pen tool, distinct from the dataset cards. -->
+<g transform="translate(1810 291) rotate(41)" filter="url(#shadow)">
+  <rect x="0" y="0" width="39" height="135" rx="15" fill="url(#pencil)"/>
+  <rect x="4" y="9" width="8" height="104" rx="4" fill="#74C3C0" opacity=".35"/>
+  <rect x="0" y="120" width="39" height="13" fill="#0B3D56"/>
+  <path d="M1 135L19 185L38 135Z" fill="#04263B"/><path d="M19 185L14 152L24 152Z" fill="#F6FAF8"/><circle cx="19" cy="149" r="5" fill="#DBF3EF"/>
+</g>
+<!-- Floating accents and leaves near the right-hand design cards. -->
+<path d="M24 159l2.7 6.3 6.3 2.7-6.3 2.7-2.7 6.3-2.7-6.3-6.3-2.7 6.3-2.7z" fill="#2196A0" opacity=".88"/>
+<path d="M54 277l2.0999999999999996 4.8999999999999995 4.8999999999999995 2.0999999999999996-4.8999999999999995 2.0999999999999996-2.0999999999999996 4.8999999999999995-2.0999999999999996-4.8999999999999995-4.8999999999999995-2.0999999999999996 4.8999999999999995-2.0999999999999996z" fill="#2196A0" opacity=".38"/>
+<path d="M92 357.8l2.16 5.04 5.04 2.16-5.04 2.16-2.16 5.04-2.16-5.04-5.04-2.16 5.04-2.16z" fill="#2196A0" opacity=".38"/>
+<path d="M1589 147l2.0999999999999996 4.8999999999999995 4.8999999999999995 2.0999999999999996-4.8999999999999995 2.0999999999999996-2.0999999999999996 4.8999999999999995-2.0999999999999996-4.8999999999999995-4.8999999999999995-2.0999999999999996 4.8999999999999995-2.0999999999999996z" fill="#2196A0" opacity=".3"/>
+<path d="M1690 127l2.0999999999999996 4.8999999999999995 4.8999999999999995 2.0999999999999996-4.8999999999999995 2.0999999999999996-2.0999999999999996 4.8999999999999995-2.0999999999999996-4.8999999999999995-4.8999999999999995-2.0999999999999996 4.8999999999999995-2.0999999999999996z" fill="#2196A0" opacity=".63"/>
+<path d="M1786 99l2.4000000000000004 5.6000000000000005 5.6000000000000005 2.4000000000000004-5.6000000000000005 2.4000000000000004-2.4000000000000004 5.6000000000000005-2.4000000000000004-5.6000000000000005-5.6000000000000005-2.4000000000000004 5.6000000000000005-2.4000000000000004z" fill="#2196A0" opacity=".74"/>
+<path d="M1907 292l1.7999999999999998 4.2 4.2 1.7999999999999998-4.2 1.7999999999999998-1.7999999999999998 4.2-1.7999999999999998-4.2-4.2-1.7999999999999998 4.2-1.7999999999999998z" fill="#2196A0" opacity=".8"/>
+<g fill="none" stroke="#17828D" stroke-width="3"><circle cx="1931" cy="244" r="11"/></g>
+<g stroke="#4BA9AC" stroke-width="3" fill="none"><path d="M1505 370c-20-25-19-41-22-62M1505 368c-27-6-33-23-46-40"/></g>
+<g fill="#3F9DA0"><path d="M1485 335c-24-6-30-25-32-38 25 8 30 24 32 38z"/><path d="M1499 353c15-22 27-23 37-20-10 17-21 23-37 20z"/></g>
+<!-- Three interlaced bottom ribbons echo the original teaser, SVG gradients only. -->
+<path d="M-10 316C143 432 242 318 371 305C524 291 611 413 822 429C992 444 1079 343 1197 372C1348 414 1388 443 1532 377C1720 292 1739 430 1983 354V474H-10Z" fill="#C7EBE9" opacity=".50"/>
+<path d="M-14 326C118 432 221 346 354 335C527 320 628 427 818 426C999 425 1072 347 1185 376C1323 410 1400 439 1535 381C1722 315 1784 423 1983 363" fill="none" stroke="url(#brush)" stroke-width="26" opacity=".62"/>
+<path d="M-8 350C122 441 225 357 376 347C532 333 665 429 831 431C1002 433 1063 353 1196 390C1332 428 1419 448 1553 396C1730 327 1787 448 1983 374" fill="none" stroke="url(#dark)" stroke-width="8" opacity=".95"/>
+<path d="M-8 337C132 427 221 344 365 330C531 315 635 415 824 417C1008 419 1063 345 1193 378C1340 416 1406 428 1547 382C1729 324 1804 423 1983 365" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".79"/>
+</svg>
