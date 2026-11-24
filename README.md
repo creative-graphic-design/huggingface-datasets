@@ -25,6 +25,11 @@ A collection of Hugging Face dataset loaders and dataset cards for graphic desig
   - Japanese advertising landing-page images, metadata, and ad copy references.
     - ➡️ Input: Japanese keyword, landing-page text/OCR, domain, and optional LP screenshot.
     - ⬅️ Output: Japanese ad headline/title references.
+- **[ChallengeSVG](datasets/ChallengeSVG/)**
+  - [![arXiv](https://img.shields.io/badge/arXiv-2605.30174-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2605.30174) [![Paper](https://img.shields.io/badge/Paper-SIGGRAPH%20Asia%2726-blue?logo=doi&logoColor=white)](https://arxiv.org/abs/2605.30174) [![Original](https://img.shields.io/badge/Original-Project%20Page-0F766E?logo=homepage&logoColor=white)](https://matanlevy.com/LiveSVG/)
+  - 35 SVG illustrations paired with English motion prompts for animation evaluation.
+    - ➡️ Input: SVG illustration and English motion prompt.
+    - ⬅️ Output: Original SVG source and a rendered 512 × 512 PNG preview.
 - **[CGLDataset](datasets/CGLDataset/)**
   - [![arXiv](https://img.shields.io/badge/arXiv-2205.00303-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2205.00303) [![Paper](https://img.shields.io/badge/Paper-IJCAI%2722-blue?logo=doi&logoColor=white)](https://doi.org/10.24963/ijcai.2022/692) [![Original](https://img.shields.io/badge/Original-GitHub-0F766E?logo=github&logoColor=white)](https://github.com/minzhouGithub/CGL-GAN) [![HF Hub](https://img.shields.io/badge/HF%20Hub-CGL--Dataset-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/datasets/creative-graphic-design/CGL-Dataset)
   - Advertising poster images, background assets, and layout annotations.
