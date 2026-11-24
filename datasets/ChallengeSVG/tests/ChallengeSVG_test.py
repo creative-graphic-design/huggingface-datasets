@@ -61,7 +61,8 @@ def test_load_dataset(dataset_path: Path):
     assert len(set(test_split["id"])) == _EXPECTED_ROWS
     for row in test_split:
         assert row["prompt"].strip()
-        assert row["svg"].lstrip().startswith("<svg")
+        assert row["svg"]
+        assert row["svg"].startswith("<svg")
         assert row["image"].size == (512, 512)
         assert "A" in row["image"].getbands()
 
