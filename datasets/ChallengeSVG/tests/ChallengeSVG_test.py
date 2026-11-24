@@ -47,7 +47,11 @@ def test_render_svg_creates_transparent_512px_png(dataset_module: ModuleType):
 
 
 def test_load_dataset(dataset_path: Path):
-    dataset = ds.load_dataset(path=str(dataset_path), trust_remote_code=True)
+    dataset = ds.load_dataset(
+        path=str(dataset_path),
+        trust_remote_code=True,
+        download_mode=ds.DownloadMode.FORCE_REDOWNLOAD,
+    )
 
     assert isinstance(dataset, ds.DatasetDict)
     assert set(dataset) == {"test"}
