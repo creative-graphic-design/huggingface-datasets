@@ -19,6 +19,27 @@ source_datasets:
 task_categories:
   - text-to-video
   - image-to-video
+dataset_info:
+  features:
+  - name: id
+    dtype: string
+  - name: prompt
+    dtype: string
+  - name: svg
+    dtype: string
+  - name: image
+    dtype: image
+  splits:
+  - name: test
+    num_bytes: 1631632.0
+    num_examples: 35
+  download_size: 1486930
+  dataset_size: 1631632.0
+configs:
+- config_name: default
+  data_files:
+  - split: test
+    path: data/test-*
 ---
 
 # Dataset Card for ChallengeSVG
@@ -36,15 +57,12 @@ task_categories:
 
 ### Data Instances
 
-Load the source data through the local loader:
+Load the published dataset from the Hub:
 
 ```python
 import datasets as ds
 
-dataset = ds.load_dataset(
-    "datasets/ChallengeSVG/ChallengeSVG.py",
-    trust_remote_code=True,
-)
+dataset = ds.load_dataset("creative-graphic-design/ChallengeSVG")
 ```
 
 The single `test` split contains 35 rows. Each row has an `id` (folder name), a `prompt` (trimmed text-file line), the raw UTF-8 `svg` source, and an `image` preview rendered as a transparent 512 x 512 PNG.
@@ -56,6 +74,19 @@ The single `test` split contains 35 rows. Each row has an `id` (folder name), a 
   "svg": "<svg ...>",
   "image": "<image>"
 }
+```
+
+### Rebuild from the original source
+
+Load the original source archive through the repository loader:
+
+```python
+import datasets as ds
+
+dataset = ds.load_dataset(
+    "datasets/ChallengeSVG/ChallengeSVG.py",
+    trust_remote_code=True,
+)
 ```
 
 ### Data Splits
